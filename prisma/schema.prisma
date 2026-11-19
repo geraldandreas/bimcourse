@@ -1,0 +1,164 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String      @id @default(cuid())
+  name         String
+  email        String      @unique
+  password     String
+  role         String      @default("siswa") // superadmin, admin, pengajar, siswa
+  avatar       String?
+  bio          String?
+  phone          String?
+  organization   String?
+  emailConfirmed Boolean     @default(true)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  // Role-specific relations
+  taughtCourses Course[]              @relation("InstructorCourses")
+  enrollments   Enrollment[]
+  submissions   AssignmentSubmission[]
+  transactions  Transaction[]
+  auditLogs     AuditLog[]
+}
+
+model Course {
+  id            String      @id @default(cuid())
+  title         String
+  slug          String      @unique
+  category      String      // BIM Modeler, BIM Coordinator, Computational Design, Infra
+  level         String      // Beginner, Intermediate, Advanced
+  isFree        Boolean     @default(false)
+  price         Int         @default(0)
+  originalPrice Int         @default(0)
+  durationHours Int         @default(20)
+  labsCount     Int         @default(5)
+  learningMode  String      @default("Self-Paced Online") // Self-Paced Online, Instructor-Led, Hybrid
+  language      String      @default("Bahasa Indonesia")
+  summary       String
+  overview      String?     // Rich overview / detailed description
+  thumbnail     String      // Background / cover image
+  badge         String?     @default("Course")
+  published     Boolean     @default(true)
+  attachmentUrl String?     // Course exercise / dataset file
+  attachmentName String?
+  attachmentDescription String? // Description of the project file / dataset instructions
+  hasInstructorLed Boolean  @default(false) // Toggle instructor-led option
+  instructorName   String?  // Custom instructor name
+  instructorTitle  String?  // Custom instructor title / company
+  instructorAvatar String?  // Custom instructor avatar photo URL
+  keyLearnings     String?  // JSON string array of what students will learn
+  benefits         String?  // JSON string array of graduation benefits { title, description }
+  instructorId  String
+  instructor    User        @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
+  modules       Module[]
+  enrollments   Enrollment[]
+  submissions   AssignmentSubmission[]
+  transactions  Transaction[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Module {
+  id        String   @id @default(cuid())
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title     String
+  duration  String
+  order     Int      @default(0)
+  lessons   Lesson[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Lesson {
+  id        String   @id @default(cuid())
+  moduleId  String
+  module    Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  title     String
+  duration  String
+  videoUrl  String?
+  fileUrl   String?  // Lesson exercise / slide / handout file
+  fileName  String?
+  isFree    Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Enrollment {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId   String
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  status     String   @default("ACTIVE") // ACTIVE, COMPLETED, CANCELLED
+  progress   Float    @default(0) // 0 to 100 %
+  enrolledAt DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, courseId])
+}
+
+model AssignmentSubmission {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title     String
+  fileUrl   String
+  notes     String?
+  grade     Int?     // 0 - 100
+  feedback  String?
+  status    String   @default("PENDING") // PENDING, APPROVED, REVISION
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String
+  actor     User     @relation(fields: [actorId], references: [id], onDelete: Cascade)
+  action    String   // USER_CREATED, ROLE_CHANGED, COURSE_APPROVED, etc.
+  target    String?  // Target entity / ID
+  details   String?  // Extra JSON description
+  ipAddress String?
+  createdAt DateTime @default(now())
+}
+
+model SiteSetting {
+  key       String   @id
+  value     String   // Stored JSON payload for dynamic section contents and visibility
+  updatedAt DateTime @updatedAt
+}
+
+model Transaction {
+  id              String      @id @default(cuid())
+  userId          String
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId        String
+  course          Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  amount          Int
+  paymentMethod   String      @default("QRIS") // QRIS, BANK_TRANSFER
+  proofUrl        String?     // Image proof of transfer
+  senderName      String?
+  notes           String?
+  status          String      @default("PENDING") // PENDING, APPROVED, REJECTED
+  rejectionReason String?
+  verifiedAt      DateTime?
+  verifiedById    String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}

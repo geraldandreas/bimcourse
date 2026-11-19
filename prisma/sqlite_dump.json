@@ -1,0 +1,615 @@
+{
+  "users": [
+    {
+      "id": "cmvs58z550000quytct1yortj",
+      "name": "BimCourse SuperAdmin",
+      "email": "superadmin@bimcourse.id",
+      "password": "$2b$10$KCybeM3IHNO7P/BmBpv3BOo0RsbG1vCZ/4H4VtA.FTcPuAxkQy8hW",
+      "role": "superadmin",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
+      "bio": "Chief Technology & Curriculum Officer at BimCourse AEC",
+      "phone": "+62 811-9988-771",
+      "organization": "BimCourse Core Team",
+      "createdAt": "2026-10-28T13:22:12.330Z",
+      "updatedAt": "2026-10-28T13:22:12.330Z"
+    },
+    {
+      "id": "cmvs58z590001quytxaeoi4u6",
+      "name": "BimCourse Operations Admin",
+      "email": "admin@bimcourse.id",
+      "password": "$2b$10$KCybeM3IHNO7P/BmBpv3BOo0RsbG1vCZ/4H4VtA.FTcPuAxkQy8hW",
+      "role": "admin",
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
+      "bio": "Academic Operations & Quality Assurance Manager",
+      "phone": "+62 812-4455-667",
+      "organization": "BimCourse Academic Ops",
+      "createdAt": "2026-10-28T13:22:12.333Z",
+      "updatedAt": "2026-10-28T13:22:12.333Z"
+    },
+    {
+      "id": "cmvs58z5d0002quytgtkabsv6",
+      "name": "Ir. Rian Wicaksono, M.T.",
+      "email": "pengajar@bimcourse.id",
+      "password": "$2b$10$KCybeM3IHNO7P/BmBpv3BOo0RsbG1vCZ/4H4VtA.FTcPuAxkQy8hW",
+      "role": "pengajar",
+      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
+      "bio": "BIM Manager Senior (12+ tahun pengalaman proyek high-rise & LRT)",
+      "phone": "+62 813-8822-110",
+      "organization": "PT Wijaya Karya (Persero) Tbk",
+      "createdAt": "2026-10-28T13:22:12.337Z",
+      "updatedAt": "2026-10-28T13:22:12.337Z"
+    },
+    {
+      "id": "cmvs58z5i0003quytgvlfge0p",
+      "name": "Dimas Pratama",
+      "email": "siswa@bimcourse.id",
+      "password": "$2b$10$KCybeM3IHNO7P/BmBpv3BOo0RsbG1vCZ/4H4VtA.FTcPuAxkQy8hW",
+      "role": "siswa",
+      "avatar": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=200&auto=format&fit=crop",
+      "bio": "Mahasiswa Teknik Sipil & Junior BIM Modeler",
+      "phone": "+62 857-1122-334",
+      "organization": "Universitas Indonesia",
+      "createdAt": "2026-10-28T13:22:12.343Z",
+      "updatedAt": "2026-10-28T13:22:12.343Z"
+    }
+  ],
+  "courses": [
+    {
+      "id": "cmvs58z5m0005quytt1k0u6ar",
+      "title": "Mastering Revit Architecture: Desain Konseptual ke DED & BoQ",
+      "slug": "revit-architecture-mastery",
+      "category": "BIM Modeling",
+      "level": "Beginner",
+      "isFree": false,
+      "price": 499000,
+      "originalPrice": 1250000,
+      "durationHours": 24,
+      "labsCount": 12,
+      "learningMode": "Self-Paced Online",
+      "language": "Bahasa Indonesia",
+      "summary": "Kuasai pemodelan arsitektur 3D LOD 300, scheduling material otomatis, hingga ekspor gambar kerja DED berstandar ISO 19650.",
+      "overview": "Pelajari seni pemodelan Building Information Modeling (BIM) dari dasar konseptual hingga siap cetak gambar kerja DED proyek nyata. Kursus ini mengupas tuntas teknik pembuatan dinding compound, curtain wall kustom, tangga kompleks, hingga otomasi volume BoQ (Bill of Quantities) yang akurat dan sinkron real-time.\n\nDirancang khusus agar Anda siap bersaing di proyek berskala nasional sesuai regulasi Kementerian PUPR dan standar internasional ISO 19650.",
+      "thumbnail": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop",
+      "badge": "Course",
+      "published": false,
+      "attachmentUrl": null,
+      "attachmentName": null,
+      "hasInstructorLed": false,
+      "instructorName": "Ir. Rian Wicaksono, M.T.",
+      "instructorTitle": "PT Wijaya Karya (Persero) Tbk",
+      "instructorAvatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
+      "keyLearnings": "[\"Standar pemodelan 3D arsitektur & struktur LOD 300 - 400\",\"Ekstraksi data BoQ & scheduling material otomatis tanpa manual kalkulasi\",\"Penerapan Common Data Environment (CDE) dan BEP tender BUMN\",\"Penyusunan portofolio capstone siap kerja dengan review mentor\"]",
+      "benefits": "[{\"title\":\"Sertifikat Resmi Terverifikasi\",\"description\":\"Dapat ditautkan di profil LinkedIn & portofolio tender\"},{\"title\":\"File Latihan & Template Proyek\",\"description\":\"Keluaran .rvt, .nwd, .ifc standar ISO 19650\"},{\"title\":\"Komunitas Alumni AEC\",\"description\":\"Akses grup diskusi & info lowongan kerja BUMN\"}]",
+      "instructorId": "cmvs58z5d0002quytgtkabsv6",
+      "createdAt": "2026-10-28T13:22:12.346Z",
+      "updatedAt": "2026-10-29T03:03:39.753Z",
+      "modules": [
+        {
+          "id": "cmvsyldkc000qqub2a8og5dcz",
+          "courseId": "cmvs58z5m0005quytt1k0u6ar",
+          "title": "Pengenalan Ekosistem BIM & Setup Proyek Revit",
+          "duration": "2 Jam 30 Menit",
+          "order": 1,
+          "createdAt": "2026-10-29T03:03:39.756Z",
+          "updatedAt": "2026-10-29T03:03:39.756Z",
+          "lessons": [
+            {
+              "id": "cmvsyldkc000rqub2t676xlym",
+              "moduleId": "cmvsyldkc000qqub2a8og5dcz",
+              "title": "Filosofi BIM vs CAD 2D Konvensional",
+              "duration": "18 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": true,
+              "order": 1,
+              "createdAt": "2026-10-29T03:03:39.756Z",
+              "updatedAt": "2026-10-29T03:03:39.756Z"
+            },
+            {
+              "id": "cmvsyldkc000squb28xxy1tzi",
+              "moduleId": "cmvsyldkc000qqub2a8og5dcz",
+              "title": "Setup Project Template, Grids & Levels",
+              "duration": "25 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": true,
+              "order": 2,
+              "createdAt": "2026-10-29T03:03:39.756Z",
+              "updatedAt": "2026-10-29T03:03:39.756Z"
+            },
+            {
+              "id": "cmvsyldkc000tqub2ab2r1wb6",
+              "moduleId": "cmvsyldkc000qqub2a8og5dcz",
+              "title": "Memahami Family System vs Loadable Family",
+              "duration": "32 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": false,
+              "order": 3,
+              "createdAt": "2026-10-29T03:03:39.756Z",
+              "updatedAt": "2026-10-29T03:03:39.756Z"
+            }
+          ]
+        },
+        {
+          "id": "cmvsyldkd000vqub2tce1jaj5",
+          "courseId": "cmvs58z5m0005quytt1k0u6ar",
+          "title": "Pemodelan Dinding, Pintu, Jendela & Curtain Wall",
+          "duration": "3 Jam 15 Menit",
+          "order": 2,
+          "createdAt": "2026-10-29T03:03:39.757Z",
+          "updatedAt": "2026-10-29T03:03:39.757Z",
+          "lessons": [
+            {
+              "id": "cmvsyldkd000wqub2wjq6n79w",
+              "moduleId": "cmvsyldkd000vqub2tce1jaj5",
+              "title": "Compound Walls & Layer Material Structure",
+              "duration": "30 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": false,
+              "order": 1,
+              "createdAt": "2026-10-29T03:03:39.757Z",
+              "updatedAt": "2026-10-29T03:03:39.757Z"
+            },
+            {
+              "id": "cmvsyldkd000xqub20byesujy",
+              "moduleId": "cmvsyldkd000vqub2tce1jaj5",
+              "title": "Custom Curtain Wall & Spider Fitting",
+              "duration": "45 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": false,
+              "order": 2,
+              "createdAt": "2026-10-29T03:03:39.757Z",
+              "updatedAt": "2026-10-29T03:03:39.757Z"
+            }
+          ]
+        },
+        {
+          "id": "cmvsyldke000zqub25ef0qcv5",
+          "courseId": "cmvs58z5m0005quytt1k0u6ar",
+          "title": "Otomasi BoQ (Bill of Quantities) & DED Sheet Setup",
+          "duration": "3 Jam 45 Menit",
+          "order": 3,
+          "createdAt": "2026-10-29T03:03:39.759Z",
+          "updatedAt": "2026-10-29T03:03:39.759Z",
+          "lessons": [
+            {
+              "id": "cmvsyldke0010qub2de17fm5e",
+              "moduleId": "cmvsyldke000zqub25ef0qcv5",
+              "title": "Material Takeoff & Parameter Rumus Biaya",
+              "duration": "35 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": false,
+              "order": 1,
+              "createdAt": "2026-10-29T03:03:39.759Z",
+              "updatedAt": "2026-10-29T03:03:39.759Z"
+            },
+            {
+              "id": "cmvsyldke0011qub2mu9r1baq",
+              "moduleId": "cmvsyldke000zqub25ef0qcv5",
+              "title": "Setup Title Block & Ekspor PDF Multi-sheet",
+              "duration": "40 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": false,
+              "order": 2,
+              "createdAt": "2026-10-29T03:03:39.759Z",
+              "updatedAt": "2026-10-29T03:03:39.759Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cmvs58z5o000hquyta55noe06",
+      "title": "Navisworks Manage: Clash Detection, Simulasi 4D & 5D Cost",
+      "slug": "navisworks-manage-coordination",
+      "category": "BIM Coordination",
+      "level": "Intermediate",
+      "isFree": false,
+      "price": 599000,
+      "originalPrice": 1450000,
+      "durationHours": 35,
+      "labsCount": 18,
+      "learningMode": "Instructor-Led",
+      "language": "Bahasa Indonesia",
+      "summary": "Simulasi federated model multisektor (Arsitektur, Struktur, MEP), otomatisasi clash matrix, dan integrasi time-cost Microsoft Project.",
+      "overview": "Pelajari peran krusial seorang BIM Coordinator dalam mengawal koordinasi lintas disiplin di proyek high-rise dan infrastruktur. Modul ini mengajarkan cara menyatukan file NWC/NWD/NWF, menyusun clash matrix cerdas yang membedakan clash minor dan major, mengekspor laporan koordinasi BCF, hingga menyimulasikan time schedule 4D dan pergerakan biaya 5D.",
+      "thumbnail": "https://images.unsplash.com/photo-1541888946425-d0fbb186c5f9?q=80&w=800&auto=format&fit=crop",
+      "badge": "Specialization",
+      "published": false,
+      "attachmentUrl": null,
+      "attachmentName": null,
+      "hasInstructorLed": false,
+      "instructorName": "Ir. Rian Wicaksono, M.T.",
+      "instructorTitle": "PT Wijaya Karya (Persero) Tbk",
+      "instructorAvatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
+      "keyLearnings": "[\"Standar pemodelan 3D arsitektur & struktur LOD 300 - 400\",\"Ekstraksi data BoQ & scheduling material otomatis tanpa manual kalkulasi\",\"Penerapan Common Data Environment (CDE) dan BEP tender BUMN\",\"Penyusunan portofolio capstone siap kerja dengan review mentor\"]",
+      "benefits": "[{\"title\":\"Sertifikat Resmi Terverifikasi\",\"description\":\"Dapat ditautkan di profil LinkedIn & portofolio tender\"},{\"title\":\"File Latihan & Template Proyek\",\"description\":\"Keluaran .rvt, .nwd, .ifc standar ISO 19650\"},{\"title\":\"Komunitas Alumni AEC\",\"description\":\"Akses grup diskusi & info lowongan kerja BUMN\"}]",
+      "instructorId": "cmvs58z5d0002quytgtkabsv6",
+      "createdAt": "2026-10-28T13:22:12.348Z",
+      "updatedAt": "2026-10-29T03:03:30.207Z",
+      "modules": [
+        {
+          "id": "cmvsyl67a0009qub2257gw093",
+          "courseId": "cmvs58z5o000hquyta55noe06",
+          "title": "Federated Model Setup & File Formats (NWC, NWD, NWF)",
+          "duration": "2 Jam",
+          "order": 1,
+          "createdAt": "2026-10-29T03:03:30.214Z",
+          "updatedAt": "2026-10-29T03:03:30.214Z",
+          "lessons": [
+            {
+              "id": "cmvsyl67a000aqub2skiu9h51",
+              "moduleId": "cmvsyl67a0009qub2257gw093",
+              "title": "Penyatuan Model Revit, IFC, dan DWG ke Navisworks",
+              "duration": "25 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": true,
+              "order": 1,
+              "createdAt": "2026-10-29T03:03:30.214Z",
+              "updatedAt": "2026-10-29T03:03:30.214Z"
+            },
+            {
+              "id": "cmvsyl67a000bqub2jgqxy7jz",
+              "moduleId": "cmvsyl67a0009qub2257gw093",
+              "title": "Navigation, Sectioning, dan Walkthrough Camera",
+              "duration": "30 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": false,
+              "order": 2,
+              "createdAt": "2026-10-29T03:03:30.214Z",
+              "updatedAt": "2026-10-29T03:03:30.214Z"
+            }
+          ]
+        },
+        {
+          "id": "cmvsyl67b000dqub2fkzjocaj",
+          "courseId": "cmvs58z5o000hquyta55noe06",
+          "title": "Clash Detective & Matrix Toleransi Antardisiplin",
+          "duration": "3 Jam",
+          "order": 2,
+          "createdAt": "2026-10-29T03:03:30.216Z",
+          "updatedAt": "2026-10-29T03:03:30.216Z",
+          "lessons": [
+            {
+              "id": "cmvsyl67b000equb23tue4d0e",
+              "moduleId": "cmvsyl67b000dqub2fkzjocaj",
+              "title": "Konfigurasi Rule Set Clash MEP vs Struktur",
+              "duration": "40 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": false,
+              "order": 1,
+              "createdAt": "2026-10-29T03:03:30.216Z",
+              "updatedAt": "2026-10-29T03:03:30.216Z"
+            },
+            {
+              "id": "cmvsyl67b000fqub2li4pczld",
+              "moduleId": "cmvsyl67b000dqub2fkzjocaj",
+              "title": "Export BCF Report untuk Koordinasi Lapangan",
+              "duration": "35 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": false,
+              "order": 2,
+              "createdAt": "2026-10-29T03:03:30.216Z",
+              "updatedAt": "2026-10-29T03:03:30.216Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cmvs58z5p000pquytvfyuaagd",
+      "title": "Dasar-Dasar BIM & Mandat PUPR: Pengantar Transformasi Digital AEC",
+      "slug": "pengantar-bim-dan-mandat-pupr",
+      "category": "BIM Management",
+      "level": "Beginner",
+      "isFree": true,
+      "price": 0,
+      "originalPrice": 350000,
+      "durationHours": 10,
+      "labsCount": 4,
+      "learningMode": "Self-Paced Online",
+      "language": "Bahasa Indonesia",
+      "summary": "Pahami fundamental Building Information Modeling, standardisasi ISO 19650, Common Data Environment (CDE), dan regulasi wajib BIM di Indonesia secara cuma-cuma.",
+      "overview": "Kursus pengantar gratis ini dirancang untuk mahasiswa dan profesional konstruksi pemula untuk memahami lanskap industri digital AEC saat ini. Anda akan mempelajari mengapa industri konstruksi bertransisi dari CAD ke BIM, apa itu level LOD (100-500), bagaimana siklus Common Data Environment (CDE) bekerja, serta apa saja persyaratan mandat BIM pada tender pemerintah.",
+      "thumbnail": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=800&auto=format&fit=crop",
+      "badge": "Free Course",
+      "published": false,
+      "attachmentUrl": null,
+      "attachmentName": null,
+      "hasInstructorLed": false,
+      "instructorName": "Ir. Rian Wicaksono, M.T.",
+      "instructorTitle": "PT Wijaya Karya (Persero) Tbk",
+      "instructorAvatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
+      "keyLearnings": "[\"Standar pemodelan 3D arsitektur & struktur LOD 300 - 400\",\"Ekstraksi data BoQ & scheduling material otomatis tanpa manual kalkulasi\",\"Penerapan Common Data Environment (CDE) dan BEP tender BUMN\",\"Penyusunan portofolio capstone siap kerja dengan review mentor\"]",
+      "benefits": "[{\"title\":\"Sertifikat Resmi Terverifikasi\",\"description\":\"Dapat ditautkan di profil LinkedIn & portofolio tender\"},{\"title\":\"File Latihan & Template Proyek\",\"description\":\"Keluaran .rvt, .nwd, .ifc standar ISO 19650\"},{\"title\":\"Komunitas Alumni AEC\",\"description\":\"Akses grup diskusi & info lowongan kerja BUMN\"}]",
+      "instructorId": "cmvs58z5d0002quytgtkabsv6",
+      "createdAt": "2026-10-28T13:22:12.349Z",
+      "updatedAt": "2026-10-29T03:03:34.166Z",
+      "modules": [
+        {
+          "id": "cmvsyl996000hqub249cz3za4",
+          "courseId": "cmvs58z5p000pquytvfyuaagd",
+          "title": "Evolusi Industri Konstruksi & Paradigma BIM",
+          "duration": "2 Jam",
+          "order": 1,
+          "createdAt": "2026-10-29T03:03:34.170Z",
+          "updatedAt": "2026-10-29T03:03:34.170Z",
+          "lessons": [
+            {
+              "id": "cmvsyl996000iqub2cbueedv3",
+              "moduleId": "cmvsyl996000hqub249cz3za4",
+              "title": "Apa itu Building Information Modeling?",
+              "duration": "15 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": true,
+              "order": 1,
+              "createdAt": "2026-10-29T03:03:34.170Z",
+              "updatedAt": "2026-10-29T03:03:34.170Z"
+            },
+            {
+              "id": "cmvsyl996000jqub2bkrg520c",
+              "moduleId": "cmvsyl996000hqub249cz3za4",
+              "title": "Perbedaan BIM vs 2D/3D CAD Konvensional",
+              "duration": "20 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": true,
+              "order": 2,
+              "createdAt": "2026-10-29T03:03:34.170Z",
+              "updatedAt": "2026-10-29T03:03:34.170Z"
+            },
+            {
+              "id": "cmvsyl996000kqub20u61wsbc",
+              "moduleId": "cmvsyl996000hqub249cz3za4",
+              "title": "Mengenal Dimensi BIM (3D, 4D, 5D, 6D, 7D)",
+              "duration": "25 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": true,
+              "order": 3,
+              "createdAt": "2026-10-29T03:03:34.170Z",
+              "updatedAt": "2026-10-29T03:03:34.170Z"
+            }
+          ]
+        },
+        {
+          "id": "cmvsyl997000mqub243sb9dmj",
+          "courseId": "cmvs58z5p000pquytvfyuaagd",
+          "title": "Regulasi PUPR & Standar Global ISO 19650",
+          "duration": "2 Jam 30 Menit",
+          "order": 2,
+          "createdAt": "2026-10-29T03:03:34.171Z",
+          "updatedAt": "2026-10-29T03:03:34.171Z",
+          "lessons": [
+            {
+              "id": "cmvsyl997000nqub2xeik4fog",
+              "moduleId": "cmvsyl997000mqub243sb9dmj",
+              "title": "Penerapan Mandat BIM Permen PUPR di Indonesia",
+              "duration": "30 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": true,
+              "order": 1,
+              "createdAt": "2026-10-29T03:03:34.171Z",
+              "updatedAt": "2026-10-29T03:03:34.171Z"
+            },
+            {
+              "id": "cmvsyl997000oqub2m8x1g2lp",
+              "moduleId": "cmvsyl997000mqub243sb9dmj",
+              "title": "Konsep CDE (Common Data Environment) & BEP",
+              "duration": "35 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": true,
+              "order": 2,
+              "createdAt": "2026-10-29T03:03:34.171Z",
+              "updatedAt": "2026-10-29T03:03:34.171Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cmvs58z5q000yquytb8ls3752",
+      "title": "Revit Basic",
+      "slug": "revit-basic",
+      "category": "BIM Modeling",
+      "level": "Beginner",
+      "isFree": false,
+      "price": 749000,
+      "originalPrice": 1850000,
+      "durationHours": 40,
+      "labsCount": 20,
+      "learningMode": "Self-Paced Online",
+      "language": "Bahasa Indonesia",
+      "summary": "Lalala",
+      "overview": "Yeyeye",
+      "thumbnail": "/uploads/1793198698640-Doc_and_Marty_with_Sci-Fi_Remote-removebg-preview.png",
+      "badge": "Course",
+      "published": true,
+      "attachmentUrl": "/uploads/1793198662108-ENFP.pdf",
+      "attachmentName": "ENFP.pdf",
+      "hasInstructorLed": false,
+      "instructorName": "Eddy Tuasikal, S.Ars",
+      "instructorTitle": "PT Midi Utama Indonesia",
+      "instructorAvatar": "/uploads/1793242145121-WhatsApp_Image_2026-10-29_at_09_41_33.jpeg",
+      "keyLearnings": "[\"Standar pemodelan 3D arsitektur & struktur LOD 300 - 400\",\"Ekstraksi data BoQ & scheduling material otomatis tanpa manual kalkulasi\",\"Penerapan Common Data Environment (CDE) dan BEP tender BUMN\",\"Penyusunan portofolio capstone siap kerja dengan review mentor\"]",
+      "benefits": "[{\"title\":\"Sertifikat Resmi Terverifikasi\",\"description\":\"Dapat ditautkan di profil LinkedIn & portofolio tender\"},{\"title\":\"File Latihan & Template Proyek\",\"description\":\"Keluaran .rvt, .nwd, .ifc standar ISO 19650\"},{\"title\":\"Komunitas Alumni AEC\",\"description\":\"Akses grup diskusi & info lowongan kerja BUMN\"}]",
+      "instructorId": "cmvs58z5d0002quytgtkabsv6",
+      "createdAt": "2026-10-28T13:22:12.350Z",
+      "updatedAt": "2026-10-29T02:49:06.348Z",
+      "modules": [
+        {
+          "id": "cmvsy2nn60005qub2kkfw8uic",
+          "courseId": "cmvs58z5q000yquytb8ls3752",
+          "title": "Bab 1: Pemodelan Lanjutan",
+          "duration": "2 Jam",
+          "order": 1,
+          "createdAt": "2026-10-29T02:49:06.354Z",
+          "updatedAt": "2026-10-29T02:49:06.354Z",
+          "lessons": [
+            {
+              "id": "cmvsy2nn60006qub2lkyysftc",
+              "moduleId": "cmvsy2nn60005qub2kkfw8uic",
+              "title": "Materi Pengantar",
+              "duration": "20 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": false,
+              "order": 1,
+              "createdAt": "2026-10-29T02:49:06.354Z",
+              "updatedAt": "2026-10-29T02:49:06.354Z"
+            },
+            {
+              "id": "cmvsy2nn60007qub2as6h5qb9",
+              "moduleId": "cmvsy2nn60005qub2kkfw8uic",
+              "title": "Pelajaran Baru 2",
+              "duration": "15 Menit",
+              "videoUrl": null,
+              "fileUrl": null,
+              "fileName": null,
+              "isFree": false,
+              "order": 2,
+              "createdAt": "2026-10-29T02:49:06.354Z",
+              "updatedAt": "2026-10-29T02:49:06.354Z"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "enrollments": [
+    {
+      "id": "cmvs58z5s0010quytdr1f61w7",
+      "userId": "cmvs58z5i0003quytgvlfge0p",
+      "courseId": "cmvs58z5m0005quytt1k0u6ar",
+      "status": "ACTIVE",
+      "progress": 65,
+      "enrolledAt": "2026-10-28T13:22:12.352Z",
+      "updatedAt": "2026-10-28T13:22:12.352Z"
+    },
+    {
+      "id": "cmvs58z5s0012quytnvsxss3d",
+      "userId": "cmvs58z5i0003quytgvlfge0p",
+      "courseId": "cmvs58z5o000hquyta55noe06",
+      "status": "ACTIVE",
+      "progress": 20,
+      "enrolledAt": "2026-10-28T13:22:12.353Z",
+      "updatedAt": "2026-10-28T13:22:12.353Z"
+    }
+  ],
+  "submissions": [
+    {
+      "id": "cmvs58z5t0014quytsaukdkg5",
+      "userId": "cmvs58z5i0003quytgvlfge0p",
+      "courseId": "cmvs58z5m0005quytt1k0u6ar",
+      "title": "Tugas Modul 2: Pemodelan Ruko 3 Lantai Sesuai Template BEP",
+      "fileUrl": "https://example.com/files/ruko-3-lantai-dimas-pratama.rvt",
+      "notes": "Pak Rian, mohon dicek untuk sambungan curtain wall di lantai 2 apakah sudah memenuhi kaidah LOD 300.",
+      "grade": null,
+      "feedback": null,
+      "status": "PENDING",
+      "createdAt": "2026-10-28T13:22:12.353Z",
+      "updatedAt": "2026-10-28T13:22:12.353Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "cmvs58z5t0016quytt3dyzcvp",
+      "actorId": "cmvs58z550000quytct1yortj",
+      "action": "SYSTEM_INITIALIZED",
+      "target": "SYSTEM",
+      "details": "Inisialisasi platform BimCourse dengan 4 role RBAC dan kurikulum standar PUPR.",
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-10-28T13:22:12.354Z"
+    },
+    {
+      "id": "cmvs58z5u0018quytedxzhpkn",
+      "actorId": "cmvs58z590001quytxaeoi4u6",
+      "action": "COURSE_APPROVED",
+      "target": "cmvs58z5m0005quytt1k0u6ar",
+      "details": "Persetujuan publikasi kelas 'Mastering Revit Architecture' oleh kurator.",
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-10-28T13:22:12.354Z"
+    },
+    {
+      "id": "cmvs5bvyj0003qur61gr3j9fn",
+      "actorId": "cmvs58z550000quytct1yortj",
+      "action": "USER_LOGIN",
+      "target": null,
+      "details": "User superadmin@bimcourse.id (superadmin) logged in successfully.",
+      "ipAddress": null,
+      "createdAt": "2026-10-28T13:24:28.171Z"
+    },
+    {
+      "id": "cmw6fqg8b0001qudn3b42i9ns",
+      "actorId": "cmvs58z550000quytct1yortj",
+      "action": "USER_LOGIN",
+      "target": null,
+      "details": "User superadmin@bimcourse.id (superadmin) logged in successfully.",
+      "ipAddress": null,
+      "createdAt": "2026-11-07T13:24:30.248Z"
+    },
+    {
+      "id": "cmw6g2blz0003qudnwmcve88p",
+      "actorId": "cmvs58z550000quytct1yortj",
+      "action": "SITE_CONTENT_UPDATED",
+      "target": "HOMEPAGE",
+      "details": "Superadmin updated homepage sections & content settings",
+      "ipAddress": null,
+      "createdAt": "2026-11-07T13:33:44.134Z"
+    },
+    {
+      "id": "cmw6gegz60005qudn46c6xhzl",
+      "actorId": "cmvs58z5i0003quytgvlfge0p",
+      "action": "USER_LOGIN",
+      "target": null,
+      "details": "User siswa@bimcourse.id (siswa) logged in successfully.",
+      "ipAddress": null,
+      "createdAt": "2026-11-07T13:43:10.960Z"
+    },
+    {
+      "id": "cmw6hflcx0007qudnztxbhfgr",
+      "actorId": "cmvs58z550000quytct1yortj",
+      "action": "USER_LOGIN",
+      "target": null,
+      "details": "User superadmin@bimcourse.id (superadmin) logged in successfully.",
+      "ipAddress": null,
+      "createdAt": "2026-11-07T14:12:02.912Z"
+    }
+  ],
+  "siteSettings": [
+    {
+      "key": "homepage_content",
+      "value": "{\"sectionsVisibility\":{\"hero\":true,\"features\":true,\"courses\":true,\"roadmaps\":true,\"community\":true,\"instructors\":true,\"quiz\":true,\"testimonials\":true,\"enterprise\":true,\"faq\":true,\"cta\":true},\"hero\":{\"badge\":\"Platform Edukasi BIM Terdepan • Mengacu Mandat BIM PUPR & ISO 19650\",\"titleLine1\":\"Learn Today\",\"titleLine2\":\"Build Tomorrow\",\"description\":\"Kuasai software arsitektur & rekayasa konstruksi digital dari praktisi teruji. Dari pemula hingga siap lolos tender dan berkarier di proyek berskala nasional.\",\"statsRating\":\"4.94 / 5.0\",\"statsStudents\":\"18,500+ Mahasiswa & Insinyur Telah Bergabung\",\"primaryCtaText\":\"Eksplor Semua Kelas\",\"secondaryCtaText\":\"Tonton Video Pengenalan\"},\"community\":{\"badge\":\"Ekosistem Belajar Kolaboratif\",\"title\":\"Terhubung Langsung dengan Instruktur & Komunitas AEC Terbesar\",\"subtitle\":\"Belajar BIM tidak boleh membuat Anda frustrasi sendirian saat menghadapi software crash, error family, atau standar BEP proyek. Di BimCourse, Anda didampingi langsung oleh para praktisi teruji yang siap membantu Anda berkembang.\",\"activeMembersText\":\"18.500+ Member Aktif\",\"mentorBadgeText\":\"Mentor BUMN & Konsultan\",\"cardHeading\":\"Bukan Sekadar Nonton Video, Tapi Berproses Bareng Praktisinya\",\"cardDescription\":\"Setiap member BimCourse mendapatkan akses seumur hidup ke grup diskusi eksklusif bersama instruktur. Anda bisa melampirkan file .rvt, .nwc, atau .dyn untuk dibedah solusinya.\",\"instructorsBadge\":\"TIM PENGAJAR & MENTOR PRAKTISI\",\"instructorsTitle\":\"Belajar Langsung dari Pelaku Industri Nyata\",\"instructorsSubtitle\":\"Bukan sekadar akademisi, instruktur Anda adalah engineer dan arsitek aktif yang setiap hari memegang proyek infrastruktur dan gedung berskala nasional.\"},\"instructors\":[{\"id\":\"inst-1\",\"name\":\"Ir. Hendra Wijaya, S.T., M.Eng.\",\"role\":\"Senior BIM Manager & Auditor\",\"experience\":\"12+ Tahun di Proyek Nasional & BUMN\",\"affiliation\":\"Eks Tim BIM MRT & High-Rise Specialist\",\"expertise\":[\"BIM Management\",\"ISO 19650\",\"Federated Model\",\"CDE\"],\"avatar\":\"/uploads/1794058418298-dclassic_2024-06-17_222120_661.jpg\",\"communityRole\":\"Memandu audit BEP, strategi koordinasi multidisiplin, dan review kesiapan tender BIM.\",\"isVisible\":true},{\"id\":\"inst-2\",\"name\":\"Budi Santoso, S.T., IPM\",\"role\":\"Principal Structural BIM Specialist\",\"experience\":\"10+ Tahun di Konsultan Struktur Internasional\",\"affiliation\":\"Praktisi Struktur Baja & Precast Berat\",\"expertise\":[\"Tekla Structures\",\"Revit Structure\",\"Rebar LOD 400\",\"Shop Drawing\"],\"avatar\":\"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop\",\"communityRole\":\"Mendampingi pemodelan pembesian detail LOD 400, shop drawing, dan volume rebar otomatis.\",\"isVisible\":true},{\"id\":\"inst-3\",\"name\":\"Dewi Anggraini, S.T., M.Ars.\",\"role\":\"Architectural BIM Coordinator\",\"experience\":\"8+ Tahun di Konsultan Arsitektur Global\",\"affiliation\":\"Healthcare & Masterplan BIM Lead\",\"expertise\":[\"Revit Architecture\",\"Parametric Family\",\"LOD 350\",\"Enscape\"],\"avatar\":\"https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop\",\"communityRole\":\"Membantu troubleshooting family parametrik kompleks, view template, dan standarisasi visual.\",\"isVisible\":true},{\"id\":\"inst-4\",\"name\":\"Rian Pratama, S.T.\",\"role\":\"MEP BIM Lead & Computational Specialist\",\"experience\":\"9+ Tahun di Fasilitas Industrial & MEP\",\"affiliation\":\"Industrial Plant & Data Center Specialist\",\"expertise\":[\"Revit MEP\",\"Navisworks Manage\",\"Dynamo Scripting\",\"Clash Detection\"],\"avatar\":\"https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=400&auto=format&fit=crop\",\"communityRole\":\"Memandu clash detection otomatis, routing pipa/ducting efisien, dan script Dynamo harian.\",\"isVisible\":true}],\"testimonials\":{\"badge\":\"Cerita Alumni\",\"title\":\"Dipercaya Ribuan Praktisi AEC\",\"subtitle\":\"Lihat bagaimana alumni BimCourse bertransformasi dari drafter 2D menjadi BIM Coordinator dan memenangkan tender proyek skala nasional.\",\"items\":[{\"id\":\"testi-1\",\"quote\":\"Dulu saya bingung bagaimana cara modeling rebar detail LOD 400 di Revit. Setelah ikut kelas dan bimbingan mentor BimCourse, saya berhasil menyelesaikan proyek permodelan jembatan bentang panjang dan lolos seleksi BIM Engineer BUMN.\",\"author\":\"Rizky Ramadhan, S.T.\",\"role\":\"Junior BIM Modeler\",\"company\":\"Konsultan Rekayasa Konstruksi\",\"avatar\":\"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop\",\"courseTaken\":\"Mastering Revit Architecture & Navisworks Pro\"},{\"id\":\"testi-2\",\"quote\":\"Materi ISO 19650 di sini sangat aplikatif, bukan cuma teori dokumen. Template BEP dan CDE framework yang diajarkan langsung kami terapkan di kantor untuk standar tender internasional.\",\"author\":\"Ar. Nadia Paramitha, IAI\",\"role\":\"Studio Principal & BIM Coordinator\",\"company\":\"Archipelago Design Lab\",\"avatar\":\"https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop\",\"courseTaken\":\"BIM Management Standar ISO 19650\"},{\"id\":\"testi-3\",\"quote\":\"Automasi Dynamo menghemat 70% waktu kerja rutin saya untuk renumbering sheet dan room tag. Mentornya sabar membimbing bahkan untuk script yang error saat saya kerjakan proyek kantor.\",\"author\":\"Fendi Wicaksono\",\"role\":\"Architectural Drafter & BIM Specialist\",\"company\":\"PT Total Bangun Persada (Alumni)\",\"avatar\":\"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop\",\"courseTaken\":\"Dynamo Visual Programming for Revit\"}]},\"faq\":{\"badge\":\"Pusat Bantuan\",\"title\":\"Sering Ditanyakan (FAQ)\",\"subtitle\":\"Informasi seputar spesifikasi software, sistem kelas, sertifikat, dan pendampingan.\",\"items\":[{\"id\":\"faq-1\",\"question\":\"Apakah saya perlu memiliki laptop spesifikasi tinggi untuk mulai belajar?\",\"answer\":\"Untuk kelas pemula dasar (LOD 200), laptop dengan RAM 8GB dan prosesor Intel Core i5 / AMD Ryzen 5 sudah memadai. Untuk level mahir seperti Federated Model di Navisworks atau Tekla Rebar LOD 400, kami merekomendasikan RAM minimal 16GB dengan kartu grafis (GPU) dedicated seperti NVIDIA GTX/RTX.\"},{\"id\":\"faq-2\",\"question\":\"Apakah peserta akan mendapatkan lisensi software resmi?\",\"answer\":\"Kami memberikan panduan lengkap dan berkas verifikasi resmi untuk mengaktifkan Autodesk Education License (gratis 1 tahun resmi dari Autodesk untuk mahasiswa/pengajar) serta lisensi trial praktisi industri.\"},{\"id\":\"faq-3\",\"question\":\"Apakah sertifikat BimCourse diakui di industri konstruksi?\",\"answer\":\"Ya. Sertifikat kelulusan BimCourse dilengkapi dengan Unique Credential ID, daftar kompetensi teknis LOD yang dikuasai, dan portofolio capstone model yang dapat diverifikasi langsung oleh HRD atau tim rekrutmen konsultan/kontraktor.\"},{\"id\":\"faq-4\",\"question\":\"Bagaimana sistem pendampingan jika saya mengalami error pada software?\",\"answer\":\"Anda memiliki akses tanpa batas ke grup diskusi eksklusif bersama mentor. Anda bisa screenshot atau mengirimkan file .rvt/.nwc Anda untuk dibantu solusinya dalam 24 jam kerja.\"}]}}",
+      "updatedAt": "2026-11-07T13:33:44.129Z"
+    }
+  ]
+}

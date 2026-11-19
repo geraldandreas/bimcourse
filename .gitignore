@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# large media files (>100MB exceeds GitHub push limit)
+public/Film-Saya-6.mp4
+public/hero-video.mp4
+
+# local database files
+*.db
+*.db-journal
+
