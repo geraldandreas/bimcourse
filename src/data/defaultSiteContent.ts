@@ -1,5 +1,66 @@
+export interface InstructorProject {
+  id: string;
+  title: string;
+  year: string;
+  category: string;
+  location?: string;
+  team?: string;
+  tools: string[];
+  description: string;
+  highlights?: string[];
+  image?: string;
+  gallery?: string[];
+  award?: string;
+  link?: string;
+}
+
+export interface InstructorEducation {
+  id?: string;
+  degree: string;
+  institution: string;
+  period: string;
+  gpa?: string;
+  honors?: string[];
+}
+
+export interface InstructorExperience {
+  id?: string;
+  role: string;
+  company: string;
+  period: string;
+  location?: string;
+  highlights: string[];
+}
+
+export interface InstructorAchievement {
+  id?: string;
+  year: string;
+  title: string;
+  event: string;
+  organizer: string;
+  rank?: string;
+}
+
+export interface InstructorCertificate {
+  id?: string;
+  year: string;
+  title: string;
+  issuer: string;
+  credentialUrl?: string;
+  image?: string;
+}
+
+export interface InstructorOrganization {
+  id?: string;
+  role: string;
+  organization: string;
+  period: string;
+  description?: string;
+}
+
 export interface WebInstructor {
   id: string;
+  slug?: string;
   name: string;
   role: string;
   experience: string;
@@ -8,6 +69,22 @@ export interface WebInstructor {
   avatar: string;
   communityRole: string;
   isVisible: boolean;
+  // CV & Portfolio Extensions
+  email?: string;
+  phone?: string;
+  location?: string;
+  linkedin?: string;
+  portfolioLink?: string;
+  bio?: string;
+  education?: InstructorEducation[];
+  workExperience?: InstructorExperience[];
+  projects?: InstructorProject[];
+  achievements?: InstructorAchievement[];
+  certificates?: InstructorCertificate[];
+  organizations?: InstructorOrganization[];
+  softwareSkills?: { name: string; category?: string }[];
+  technicalSkills?: string[];
+  softSkills?: string[];
 }
 
 export interface WebTestimonialItem {
@@ -112,7 +189,7 @@ export const DEFAULT_SITE_CONTENT: SiteContentConfig = {
     cardHeading: "Bukan Sekadar Nonton Video, Tapi Berproses Bareng Praktisinya",
     cardDescription:
       "Setiap member BIMCourse mendapatkan akses seumur hidup ke grup diskusi eksklusif bersama instruktur. Anda bisa melampirkan file .rvt, .nwc, atau .dyn untuk dibedah solusinya.",
-    instructorsBadge: "TIM PENGAJAR & MENTOR PRAKTISI",
+    instructorsBadge: "TIM PENGAJAR & MENTOR ",
     instructorsTitle: "Belajar Langsung dari Pelaku Industri Nyata",
     instructorsSubtitle:
       "Bukan sekadar akademisi, instruktur Anda adalah engineer dan arsitek aktif yang setiap hari memegang proyek infrastruktur dan gedung berskala nasional.",
@@ -120,29 +197,294 @@ export const DEFAULT_SITE_CONTENT: SiteContentConfig = {
   instructors: [
     {
       id: "inst-1",
-      name: "Ir. Hendra Wijaya, S.T., M.Eng.",
-      role: "Senior BIM Manager & Auditor",
-      experience: "12+ Tahun di Proyek Nasional & BUMN",
+      slug: "eddy-tuasikal",
+      name: "Eddy Tuasikal, S.Ars",
+      role: "BIM Modeller & Architectural Designer",
+      experience: "3 Tahun di Proyek Nasional & BUMN",
       affiliation: "Eks Tim BIM MRT & High-Rise Specialist",
-      expertise: ["BIM Management", "ISO 19650", "Federated Model", "CDE"],
+      expertise: [
+        "BIM Management",
+        "ISO 19650",
+        "Federated Model",
+        "CDE",
+        "Autodesk Revit",
+        "Navisworks",
+        "Enscape",
+      ],
       avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
+        "https://uybkpfcnbotlofbwzvxx.supabase.co/storage/v1/object/public/uploads/1794155212128-WhatsApp_Image_2026-10-29_at_09_41_33__1_.jpeg",
       communityRole:
         "Memandu audit BEP, strategi koordinasi multidisiplin, dan review kesiapan tender BIM.",
       isVisible: true,
+      email: "eddy.tuasikal18@gmail.com",
+      phone: "+62 813 7070 4533",
+      location: "Romang Lompoa, Kec. Bontomarannu, Kab. Gowa, Sulawesi Selatan",
+      linkedin: "https://www.linkedin.com/in/eddy-tuasikal",
+      portfolioLink:
+        "https://drive.google.com/file/d/1J5p2Ev_K4_qgxFCv89rBD6bnnKx4OI8f/view?usp=sharing",
+      bio: "Lulusan Sarjana Arsitektur Universitas Hasanuddin dengan konsentrasi studi Bahan Bangunan, Struktur, dan Konstruksi (LBE). Berfokus pada Architectural Design, Interior Design, Tropical Sustainable Architecture, dan sangat antusias terhadap teknologi BIM. Mahir mengoperasikan software desain standar industri seperti Autodesk Revit, AutoCAD, Navisworks, Enscape, SketchUp, dan D5 Render untuk menerjemahkan konsep desain konseptual menjadi gambar kerja detail (DED) berstandar tinggi.",
+      education: [
+        {
+          degree: "Bachelor of Architecture (S.Ars)",
+          institution: "Universitas Hasanuddin (Makassar, Indonesia)",
+          period: "Agu 2021 - Mei 2026",
+          gpa: "3.79 / 4.00",
+          honors: [
+            "Konsentrasi Studi Struktur & Konstruksi (LBE)",
+            "2nd Runner Up Architectural Design Week Competition Untar 2024",
+            "Top 15 Finalist Residential Texture Design Competition UTY 2024",
+            "Peserta Sayembara Desain Arsitektur Undip 2024",
+          ],
+        },
+      ],
+      workExperience: [
+        {
+          role: "BIM Estimator",
+          company: "PT Midi Utama Indonesia Tbk",
+          period: "Sep 2026 - Sekarang",
+          location: "Tangerang, Banten",
+          highlights: [
+            "Perhitungan volume material (Quantity Take-Off/BoQ) berbasis model BIM 3D",
+            "Sinkronisasi estimasi biaya proyek dengan jadwal konstruksi",
+          ],
+        },
+        {
+          role: "Principal, Conceptor & Estimator",
+          company: "Freelancer Architectural Design & BIM Coordinator",
+          period: "Jan 2025 - Sekarang",
+          location: "Makassar, Sulawesi Selatan",
+          highlights: [
+            "Menyelesaikan berbagai proyek arsitektur dan renovasi dari tahap konsep hingga gambar kerja DED",
+            "Membuat gambar teknis 2D dan visualisasi 3D fotorealistik untuk membantu klien dalam pengambilan keputusan desain",
+            "Menyusun Rencana Anggaran Biaya (RAB) akurat berdasarkan gambar kerja dan spesifikasi material teknis",
+            "Manajemen proyek secara mandiri memastikan ketepatan jadwal dan kualitas standar konstruksi",
+          ],
+        },
+        {
+          role: "Architectural Intern",
+          company: "Dinas PUTRPP Cipta Karya Kab. Maros",
+          period: "Sep 2024 - Des 2024",
+          location: "Maros, Sulawesi Selatan",
+          highlights: [
+            "Membantu penyusunan gambar desain gedung dan infrastruktur sesuai standar teknis pemerintah",
+            "Melakukan pengawasan pekerjaan konstruksi lapangan dengan membandingkan kondisi riil terhadap gambar kerja & RKS",
+            "Dokumentasi progres proyek melalui foto berkala, catatan lapangan, dan laporan monitoring fisik",
+            "Koordinasi bersama pengawas lapangan, konsultan, dan kontraktor untuk kelancaran pelaksanaan proyek",
+          ],
+        },
+      ],
+      organizations: [
+        {
+          role: "Staff Departemen Minat Ilmiah & Bakat",
+          organization:
+            "Himpunan Mahasiswa Arsitektur (HMA) Fakultas Teknik Universitas Hasanuddin",
+          period: "Agu 2023 - Mei 2024",
+          description:
+            "Mempersiapkan sarana dan mengimplementasikan program kerja pengembangan minat bakat serta keilmuan arsitektur mahasiswa.",
+        },
+        {
+          role: "Staff Divisi Publikasi & Dokumentasi",
+          organization:
+            "Kepanitiaan Archiray IX - Departemen Arsitektur Universitas Hasanuddin",
+          period: "Feb 2023 - Mei 2023",
+          description:
+            "Mengelola dokumentasi visual, materi publikasi, dan persiapan teknis event tahunan arsitektur berskala nasional.",
+        },
+      ],
+      achievements: [
+        {
+          year: "2024",
+          title: "2nd Runner Up (Juara 3)",
+          event:
+            "Architectural Design Week Competition 'Enlighted Space Light in Space'",
+          organizer: "Universitas Tarumanagara (UNTAR)",
+          rank: "Juara 3 Nasional",
+        },
+        {
+          year: "2024",
+          title: "Top 15 Finalist",
+          event:
+            "Residential Texture Design Competition 'Waste as Design'",
+          organizer: "Universitas Teknologi Yogyakarta (UTY)",
+          rank: "Top 15 Finalis",
+        },
+        {
+          year: "2024",
+          title: "Peserta Terpilih Sayembara Desain Arsitektur",
+          event:
+            "Architectural Design Competition 'Humanization of Urban Space in Industry 5.0'",
+          organizer: "Universitas Diponegoro (UNDIP)",
+          rank: "Peserta Terpilih",
+        },
+      ],
+      projects: [
+        {
+          id: "proj-aura",
+          title: "Aura Pavilion",
+          year: "2024",
+          category: "Sayembara Paviliun & Ruang Publik",
+          location: "Tebet Eco Park (Zona Community Lawn), Jakarta Selatan",
+          team: "Nurjannah, Ghifari Aulia Ramadhani, Eddy Tuasikal",
+          tools: ["Autodesk Revit", "SketchUp", "Chaos Enscape"],
+          award: "2nd Runner Up - Untar Architectural Design Week 2024",
+          description:
+            "Desain paviliun ruang publik yang mengintegrasikan aspek estetika pencahayaan alami, struktur kanopi parametrik organik ramah lingkungan, dan ruang komunal interaktif bertingkat.",
+          highlights: [
+            "Analisis pencahayaan daylight simulasi matahari posisi 22 Desember (09.00 - 16.00 WIB)",
+            "Struktur kanopi peneduh organik dengan area sirkulasi lantai dasar dan lantai layang (Lt. 1 & Lt. 2)",
+            "Detail potongan melintang, perspektif malam fotorealistik, dan denah komunal",
+          ],
+          image: "/instructors/eddy/portfolio-page-3.png",
+          gallery: [
+            "/instructors/eddy/portfolio-page-3.png",
+            "/instructors/eddy/portfolio-page-4.png",
+            "/instructors/eddy/portfolio-page-5.png",
+            "/instructors/eddy/portfolio-page-6.png",
+            "/instructors/eddy/portfolio-page-14.png",
+          ],
+        },
+        {
+          id: "proj-breathe",
+          title: "The Breathe House",
+          year: "2024",
+          category: "Co-Housing & Sustainable Residence",
+          location: "Mergangsan, Kota Yogyakarta, D.I. Yogyakarta",
+          team: "Muh. Nurul Ikhsan, Ghifari Aulia Ramadhani, Eddy Tuasikal",
+          tools: ["Autodesk Revit", "SketchUp", "Chaos Enscape"],
+          award: "Top 15 Finalist - Sayembara Texture UTY 2024",
+          description:
+            "Konsep hunian komunal ramah lingkungan perkotaan yang menjawab tantangan kepadatan kota dengan prinsip gerakan zero anorganik 5R, Rainwater Harvesting terintegrasi, dan Food Estate sayuran mandiri.",
+          highlights: [
+            "Sistem Rainwater Harvesting dengan filtrasi air tanah untuk efisiensi penggunaan sumber daya air",
+            "Ruang Food Estate hidroponik di lantai 3 (sayuran kubis, tomat, wortel, jahe) untuk ketahanan pangan keluarga",
+            "Fasad bata terakota bernafas untuk sirkulasi silang dan kenyamanan termal tropis",
+          ],
+          image: "/instructors/eddy/portfolio-page-7.png",
+          gallery: [
+            "/instructors/eddy/portfolio-page-7.png",
+            "/instructors/eddy/portfolio-page-8.png",
+            "/instructors/eddy/portfolio-page-9.png",
+          ],
+        },
+        {
+          id: "proj-ombrello",
+          title: "D' Ombrello Park",
+          year: "2024",
+          category: "Co-Park & Smart Urban Architecture",
+          location: "Jl. Selamet Riyadi, Ujung Pandang, Makassar, Sulawesi Selatan",
+          team: "Muh. Nurul Ikhsan, Diky Mukti Agung Laksoono, Eddy Tuasikal",
+          tools: ["SketchUp", "Chaos Enscape"],
+          award: "Sayembara Undip DISCO 7th 2024",
+          description:
+            "Taman publik adaptif berkonsep Sustainable Architecture yang menggabungkan kanopi payung pintar bersolar panel, mesin penetral CO2, dan air purifier mandiri energi untuk ruang hijau sehat.",
+          highlights: [
+            "Smart Umbrella Canopy dengan sel surya terbarukan dan sistem pembersih udara mandiri",
+            "Zoning sirkulasi taman: Jogging track terbuka, floral area tematik, dan reading/resting space",
+            "Orientasi tapak adaptif iklim tropis pesisir Makassar",
+          ],
+          image: "/instructors/eddy/portfolio-page-10.png",
+          gallery: [
+            "/instructors/eddy/portfolio-page-10.png",
+            "/instructors/eddy/portfolio-page-11.png",
+            "/instructors/eddy/portfolio-page-12.png",
+          ],
+        },
+      ],
+      certificates: [
+        {
+          year: "2024",
+          title: "2nd Runner Up - Architectural Design Week 2024",
+          issuer: "Universitas Tarumanagara (UNTAR)",
+          image: "/instructors/eddy/portfolio-page-16.png",
+        },
+        {
+          year: "2024",
+          title: "Top 15 Finalist - Sayembara Texture 2024 'Waste as Design'",
+          issuer: "Universitas Teknologi Yogyakarta (UTY)",
+          image: "/instructors/eddy/portfolio-page-16.png",
+        },
+        {
+          year: "2024",
+          title: "Piagam Penghargaan Peserta - DISCO 7th",
+          issuer: "Universitas Diponegoro (UNDIP)",
+          image: "/instructors/eddy/portfolio-page-16.png",
+        },
+        {
+          year: "2024",
+          title:
+            "Certificate of Participation - Innovations in Eco-Friendly Architecture",
+          issuer: "Ecobuild Indonesia",
+          image: "/instructors/eddy/portfolio-page-17.png",
+        },
+        {
+          year: "2024",
+          title: "Certificate of Appreciation - Designing the Future Heritage",
+          issuer: "Magister Arsitektur Universitas Tarumanagara",
+          image: "/instructors/eddy/portfolio-page-17.png",
+        },
+      ],
+      softwareSkills: [
+        { name: "Autodesk Revit", category: "BIM & CAD" },
+        { name: "AutoCAD", category: "BIM & CAD" },
+        { name: "Navisworks", category: "BIM & Coordination" },
+        { name: "SketchUp", category: "3D Modeling" },
+        { name: "Chaos Enscape", category: "Rendering & Visualization" },
+        { name: "D5 Render", category: "Rendering & Visualization" },
+        { name: "Canva", category: "Graphic Design" },
+        { name: "Microsoft Office", category: "Productivity" },
+      ],
+      technicalSkills: [
+        "Architectural Design",
+        "BIM Modeling LOD 300 - 350",
+        "Interior Design",
+        "Tropical Sustainable Design",
+        "Daylight Simulation",
+        "BoQ / Cost Estimation",
+        "Working Drawing (DED)",
+        "Freehand Sketching",
+      ],
+      softSkills: [
+        "Problem Solving",
+        "Adaptability",
+        "Analytical Thinking",
+        "Team Collaboration",
+        "Project Coordination",
+        "Effective Communication",
+        "Time Management",
+      ],
     },
     {
       id: "inst-2",
-      name: "Budi Santoso, S.T., IPM",
+      slug: "hazael-randy",
+      name: "Hazael Randy Aprilian, S.Ars",
       role: "Principal Structural BIM Specialist",
       experience: "10+ Tahun di Konsultan Struktur Internasional",
       affiliation: "Praktisi Struktur Baja & Precast Berat",
-      expertise: ["Tekla Structures", "Revit Structure", "Rebar LOD 400", "Shop Drawing"],
+      expertise: [
+        "Tekla Structures",
+        "Revit Structure",
+        "Rebar LOD 400",
+        "Shop Drawing",
+      ],
       avatar:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop",
+        "https://uybkpfcnbotlofbwzvxx.supabase.co/storage/v1/object/public/uploads/1794155364866-Tangkapan_Layar_2026-11-08_pukul_23_28_17.png",
       communityRole:
         "Mendampingi pemodelan pembesian detail LOD 400, shop drawing, dan volume rebar otomatis.",
       isVisible: true,
+      bio: "Praktisi dan konsultan Structural BIM Specialist dengan pengalaman mendalam pada pemodelan pembesian rebar detail LOD 400, fabrikasi struktur baja bentang panjang, dan koordinasi multidisciplinary CDE.",
+      technicalSkills: [
+        "Structural BIM LOD 400",
+        "Tekla Structures",
+        "Steel Detailing",
+        "Precast Connection",
+        "Rebar Scheduling",
+      ],
+      softwareSkills: [
+        { name: "Tekla Structures", category: "BIM Structure" },
+        { name: "Revit Structure", category: "BIM Structure" },
+        { name: "AutoCAD", category: "CAD" },
+        { name: "Navisworks Manage", category: "Coordination" },
+      ],
     },
     {
       id: "inst-3",

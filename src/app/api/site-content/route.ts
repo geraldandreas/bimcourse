@@ -37,7 +37,32 @@ export async function GET() {
         },
         instructors:
           Array.isArray(parsed.instructors) && parsed.instructors.length > 0
-            ? parsed.instructors
+            ? parsed.instructors.map((pi: any) => {
+                const def = DEFAULT_SITE_CONTENT.instructors.find(
+                  (di) => di.id === pi.id || (pi.slug && di.slug === pi.slug)
+                );
+                if (!def) return pi;
+                return {
+                  ...def,
+                  ...pi,
+                  slug: pi.slug || def.slug,
+                  email: pi.email || def.email,
+                  phone: pi.phone || def.phone,
+                  location: pi.location || def.location,
+                  linkedin: pi.linkedin || def.linkedin,
+                  portfolioLink: pi.portfolioLink || def.portfolioLink,
+                  bio: pi.bio || def.bio,
+                  projects: pi.projects && pi.projects.length > 0 ? pi.projects : def.projects,
+                  education: pi.education && pi.education.length > 0 ? pi.education : def.education,
+                  workExperience: pi.workExperience && pi.workExperience.length > 0 ? pi.workExperience : def.workExperience,
+                  certificates: pi.certificates && pi.certificates.length > 0 ? pi.certificates : def.certificates,
+                  achievements: pi.achievements && pi.achievements.length > 0 ? pi.achievements : def.achievements,
+                  organizations: pi.organizations && pi.organizations.length > 0 ? pi.organizations : def.organizations,
+                  softwareSkills: pi.softwareSkills && pi.softwareSkills.length > 0 ? pi.softwareSkills : def.softwareSkills,
+                  technicalSkills: pi.technicalSkills && pi.technicalSkills.length > 0 ? pi.technicalSkills : def.technicalSkills,
+                  softSkills: pi.softSkills && pi.softSkills.length > 0 ? pi.softSkills : def.softSkills,
+                };
+              })
             : DEFAULT_SITE_CONTENT.instructors,
         testimonials: {
           ...DEFAULT_SITE_CONTENT.testimonials,

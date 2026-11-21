@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { 
   Users, 
   MessageSquare, 
@@ -357,67 +358,86 @@ export default function CommunitySection({
             </FadeIn>
 
             <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {visibleInstructors.map((instructor) => (
-                <StaggerItem key={instructor.id}>
-                  <HoverCard lift={-4} scale={1.01} className="h-full">
-                    <div
-                      className="bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-zinc-200 dark:border-white/10 hover:border-amber-400/60 dark:hover:border-amber-400/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group h-full"
-                    >
-                      <div>
-                        {/* Avatar & Badges */}
-                        <div className="relative aspect-square rounded-2xl overflow-hidden mb-5 bg-zinc-900 shadow-inner">
-                          <img
-                            src={instructor.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop"}
-                            alt={instructor.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                          
-                          <div className="absolute bottom-3 left-3 right-3">
-                            <span className="text-[10px] font-semibold text-white bg-black/80 backdrop-blur-xs px-2 py-0.5 rounded-full border border-white/20">
-                              {instructor.experience}
-                            </span>
-                          </div>
+              {visibleInstructors.map((instructor) => {
+                const instructorHref = `/instructors/${instructor.slug || instructor.id}`;
+                return (
+                  <StaggerItem key={instructor.id}>
+                    <HoverCard lift={-4} scale={1.01} className="h-full">
+                      <div
+                        className="bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-zinc-200 dark:border-white/10 hover:border-amber-400/60 dark:hover:border-amber-400/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group h-full"
+                      >
+                        <div>
+                          {/* Avatar & Badges */}
+                          <Link href={instructorHref} className="block relative aspect-square rounded-2xl overflow-hidden mb-5 bg-zinc-900 shadow-inner group/img">
+                            <img
+                              src={instructor.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop"}
+                              alt={instructor.name}
+                              className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                            
+                            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                              <span className="text-[10px] font-semibold text-white bg-black/80 backdrop-blur-xs px-2 py-0.5 rounded-full border border-white/20">
+                                {instructor.experience}
+                              </span>
+                              <span className="text-[10px] font-bold text-amber-300 bg-black/80 px-2 py-0.5 rounded-full border border-amber-400/30">
+                                CV &amp; Karya
+                              </span>
+                            </div>
+                          </Link>
+
+                          {/* Name & Role */}
+                          <Link href={instructorHref} className="block group/title">
+                            <h4 className="text-base font-bold text-gray-950 dark:text-white group-hover/title:text-amber-600 dark:group-hover/title:text-amber-400 transition-colors leading-snug">
+                              {instructor.name}
+                            </h4>
+                          </Link>
+                          <p className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 mt-0.5">
+                            {instructor.role}
+                          </p>
+                          <p className="text-[11px] text-gray-500 dark:text-zinc-500 mt-1">
+                            {instructor.affiliation}
+                          </p>
+
+                          {/* Peran di Komunitas */}
+                          {instructor.communityRole && (
+                            <div className="mt-4 pt-3 border-t border-black/10 dark:border-white/10">
+                              <p className="text-[11px] text-gray-700 dark:text-zinc-300 italic leading-relaxed">
+                                &ldquo;{instructor.communityRole}&rdquo;
+                              </p>
+                            </div>
+                          )}
                         </div>
 
-                        {/* Name & Role */}
-                        <h4 className="text-base font-bold text-gray-950 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors leading-snug">
-                          {instructor.name}
-                        </h4>
-                        <p className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 mt-0.5">
-                          {instructor.role}
-                        </p>
-                        <p className="text-[11px] text-gray-500 dark:text-zinc-500 mt-1">
-                          {instructor.affiliation}
-                        </p>
+                        <div>
+                          {/* Software / Expertise Tags */}
+                          {Array.isArray(instructor.expertise) && instructor.expertise.length > 0 && (
+                            <div className="mt-5 pt-3 border-t border-zinc-100 dark:border-white/10 flex flex-wrap gap-1.5">
+                              {instructor.expertise.map((exp) => (
+                                <span
+                                  key={exp}
+                                  className="text-[10px] font-medium px-2 py-0.5 rounded bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-white/10 text-zinc-800 dark:text-zinc-200"
+                                >
+                                  {exp}
+                                </span>
+                              ))}
+                            </div>
+                          )}
 
-                        {/* Peran di Komunitas */}
-                        {instructor.communityRole && (
-                          <div className="mt-4 pt-3 border-t border-black/10 dark:border-white/10">
-                            <p className="text-[11px] text-gray-700 dark:text-zinc-300 italic leading-relaxed">
-                              &ldquo;{instructor.communityRole}&rdquo;
-                            </p>
-                          </div>
-                        )}
+                          {/* Direct Link to CV & Portfolio Button */}
+                          <Link
+                            href={instructorHref}
+                            className="mt-4 inline-flex items-center justify-between w-full px-3.5 py-2 rounded-xl bg-zinc-50 hover:bg-amber-400/15 text-zinc-800 dark:bg-white/5 dark:text-zinc-200 dark:hover:bg-amber-400/15 dark:hover:text-amber-300 border border-zinc-200 dark:border-white/10 hover:border-amber-400/40 text-xs font-semibold transition-all group/btn cursor-pointer"
+                          >
+                            <span>Lihat CV &amp; Portofolio Proyek</span>
+                            <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform text-amber-500" />
+                          </Link>
+                        </div>
                       </div>
-
-                      {/* Software / Expertise Tags */}
-                      {Array.isArray(instructor.expertise) && instructor.expertise.length > 0 && (
-                        <div className="mt-5 pt-3 border-t border-zinc-100 dark:border-white/10 flex flex-wrap gap-1.5">
-                          {instructor.expertise.map((exp) => (
-                            <span
-                              key={exp}
-                              className="text-[10px] font-medium px-2 py-0.5 rounded bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-white/10 text-zinc-800 dark:text-zinc-200"
-                            >
-                              {exp}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </HoverCard>
-                </StaggerItem>
-              ))}
+                    </HoverCard>
+                  </StaggerItem>
+                );
+              })}
             </StaggerContainer>
           </div>
         )}
