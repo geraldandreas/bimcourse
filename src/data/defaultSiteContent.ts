@@ -58,6 +58,14 @@ export interface InstructorOrganization {
   description?: string;
 }
 
+export interface InstructorWebinar {
+  id?: string;
+  year: string;
+  title: string;
+  organizer: string;
+  type?: string;
+}
+
 export interface WebInstructor {
   id: string;
   slug?: string;
@@ -82,6 +90,7 @@ export interface WebInstructor {
   achievements?: InstructorAchievement[];
   certificates?: InstructorCertificate[];
   organizations?: InstructorOrganization[];
+  webinars?: InstructorWebinar[];
   softwareSkills?: { name: string; category?: string }[];
   technicalSkills?: string[];
   softSkills?: string[];
@@ -289,6 +298,38 @@ export const DEFAULT_SITE_CONTENT: SiteContentConfig = {
           period: "Feb 2023 - Mei 2023",
           description:
             "Mengelola dokumentasi visual, materi publikasi, dan persiapan teknis event tahunan arsitektur berskala nasional.",
+        },
+      ],
+      webinars: [
+        {
+          year: "2024",
+          title: "Webinar 'Innovations in Eco-Friendly Architecture'",
+          organizer: "Ecobuild Indonesia",
+          type: "Webinar Nasional",
+        },
+        {
+          year: "2024",
+          title: "Webinar 'Designing the Future Heritage: Heritage and Management'",
+          organizer: "Magister Arsitektur Fakultas Teknik Universitas Tarumanagara",
+          type: "Webinar Nasional",
+        },
+        {
+          year: "2023",
+          title: "Kuliah Umum 'Prospects for Architect Professional Education (PPAR) in Indonesia'",
+          organizer: "Kampus Fakultas Teknik Universitas Hasanuddin",
+          type: "Kuliah Umum",
+        },
+        {
+          year: "2022",
+          title: "Webinar Nasional Archiray VIII 'Perception of Space: New Living Spaces'",
+          organizer: "Departemen Arsitektur Universitas Hasanuddin",
+          type: "Webinar Nasional",
+        },
+        {
+          year: "2021",
+          title: "Webinar 'Adaptive Housing'",
+          organizer: "Departemen Arsitektur Universitas Hasanuddin",
+          type: "Webinar",
         },
       ],
       achievements: [

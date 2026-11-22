@@ -58,6 +58,7 @@ export async function GET() {
                   certificates: pi.certificates && pi.certificates.length > 0 ? pi.certificates : def.certificates,
                   achievements: pi.achievements && pi.achievements.length > 0 ? pi.achievements : def.achievements,
                   organizations: pi.organizations && pi.organizations.length > 0 ? pi.organizations : def.organizations,
+                  webinars: pi.webinars && pi.webinars.length > 0 ? pi.webinars : def.webinars,
                   softwareSkills: pi.softwareSkills && pi.softwareSkills.length > 0 ? pi.softwareSkills : def.softwareSkills,
                   technicalSkills: pi.technicalSkills && pi.technicalSkills.length > 0 ? pi.technicalSkills : def.technicalSkills,
                   softSkills: pi.softSkills && pi.softSkills.length > 0 ? pi.softSkills : def.softSkills,

@@ -50,6 +50,7 @@ import {
   InstructorAchievement,
   InstructorCertificate,
   InstructorOrganization,
+  InstructorWebinar,
   WebFaqItem,
   WebTestimonialItem
 } from "@/data/defaultSiteContent";
@@ -66,7 +67,9 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
   // Modal State for Instructor
   const [instructorModalOpen, setInstructorModalOpen] = useState(false);
-  const [modalTab, setModalTab] = useState<"basic" | "contact" | "projects" | "experience" | "awards">("basic");
+  const [modalTab, setModalTab] = useState<
+    "basic" | "contact" | "education" | "experience" | "organization" | "skills" | "projects" | "awards"
+  >("basic");
   const [editingInstructor, setEditingInstructor] = useState<WebInstructor | null>(null);
   const [instructorForm, setInstructorForm] = useState<WebInstructor>({
     id: "",
@@ -91,11 +94,15 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
     achievements: [],
     certificates: [],
     organizations: [],
+    webinars: [],
     softwareSkills: [],
     technicalSkills: [],
     softSkills: [],
   });
   const [expertiseInput, setExpertiseInput] = useState("");
+  const [softwareSkillsInput, setSoftwareSkillsInput] = useState("");
+  const [technicalSkillsInput, setTechnicalSkillsInput] = useState("");
+  const [softSkillsInput, setSoftSkillsInput] = useState("");
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -173,11 +180,11 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
       slug: `instruktur-${Date.now()}`,
       name: "",
       role: "",
-      experience: "5+ Tahun di Industri AEC",
+      experience: "3+ Tahun di Industri AEC",
       affiliation: "Praktisi & Konsultan BIM",
       expertise: ["Revit", "BIM"],
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop",
-      communityRole: "Membimbing pemodelan BIM dan review portofolio.",
+      communityRole: "Membimbing pemodelan BIM dan troubleshooting teknis.",
       isVisible: true,
       email: "",
       phone: "",
@@ -185,17 +192,37 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
       linkedin: "",
       portfolioLink: "",
       bio: "",
-      education: [],
-      workExperience: [],
+      education: [
+        {
+          degree: "Sarjana Arsitektur (S.Ars)",
+          institution: "Universitas",
+          period: "2021 - 2026",
+          gpa: "3.75",
+          honors: ["Konsentrasi Studi Struktur & Konstruksi"],
+        },
+      ],
+      workExperience: [
+        {
+          role: "BIM Modeler",
+          company: "Nama Perusahaan / Konsultan",
+          period: "2025 - Sekarang",
+          location: "Jakarta, Indonesia",
+          highlights: ["Penyusunan gambar kerja DED berbasis Revit"],
+        },
+      ],
       projects: [],
       achievements: [],
       certificates: [],
       organizations: [],
-      softwareSkills: [],
-      technicalSkills: [],
-      softSkills: [],
+      webinars: [],
+      softwareSkills: [{ name: "Autodesk Revit" }, { name: "AutoCAD" }],
+      technicalSkills: ["Architectural Design", "BIM Modeling"],
+      softSkills: ["Team Collaboration", "Problem Solving"],
     });
     setExpertiseInput("Revit, BIM");
+    setSoftwareSkillsInput("Autodesk Revit, AutoCAD");
+    setTechnicalSkillsInput("Architectural Design, BIM Modeling");
+    setSoftSkillsInput("Team Collaboration, Problem Solving");
     setModalTab("basic");
     setInstructorModalOpen(true);
   };
@@ -204,14 +231,21 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
     setEditingInstructor(inst);
     setInstructorForm({
       ...inst,
-      projects: inst.projects ? [...inst.projects] : [],
-      workExperience: inst.workExperience ? [...inst.workExperience] : [],
       education: inst.education ? [...inst.education] : [],
+      workExperience: inst.workExperience ? [...inst.workExperience] : [],
+      projects: inst.projects ? [...inst.projects] : [],
       achievements: inst.achievements ? [...inst.achievements] : [],
       certificates: inst.certificates ? [...inst.certificates] : [],
       organizations: inst.organizations ? [...inst.organizations] : [],
+      webinars: inst.webinars ? [...inst.webinars] : [],
+      softwareSkills: inst.softwareSkills ? [...inst.softwareSkills] : [],
+      technicalSkills: inst.technicalSkills ? [...inst.technicalSkills] : [],
+      softSkills: inst.softSkills ? [...inst.softSkills] : [],
     });
     setExpertiseInput((inst.expertise || []).join(", "));
+    setSoftwareSkillsInput((inst.softwareSkills || []).map((s) => s.name).join(", "));
+    setTechnicalSkillsInput((inst.technicalSkills || []).join(", "));
+    setSoftSkillsInput((inst.softSkills || []).join(", "));
     setModalTab("basic");
     setInstructorModalOpen(true);
   };
@@ -247,6 +281,22 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
       .map((t) => t.trim())
       .filter((t) => t.length > 0);
 
+    const softSkills = softSkillsInput
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    const technicalSkills = technicalSkillsInput
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    const softwareSkills = softwareSkillsInput
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .map((name) => ({ name }));
+
     const slug =
       instructorForm.slug && instructorForm.slug.trim().length > 0
         ? instructorForm.slug.toLowerCase().replace(/[^a-z0-9]+/g, "-")
@@ -256,6 +306,9 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
       ...instructorForm,
       slug,
       expertise: tags.length > 0 ? tags : ["BIM"],
+      softwareSkills,
+      technicalSkills,
+      softSkills,
     };
 
     let updatedInstructors: WebInstructor[];
@@ -271,7 +324,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
     setContent(updated);
     handleSaveContent(updated);
     setInstructorModalOpen(false);
-    onShowToast(`Instruktur "${readyInstructor.name}" berhasil disimpan!`);
+    onShowToast(`Data instruktur "${readyInstructor.name}" berhasil disimpan!`);
   };
 
   // Upload Avatar
@@ -300,82 +353,14 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
     }
   };
 
-  // --- PROJECT MANAGEMENT IN MODAL ---
-  const handleAddProject = () => {
-    const newProj: InstructorProject = {
-      id: `proj-${Date.now()}`,
-      title: "Proyek Baru",
-      year: new Date().getFullYear().toString(),
-      category: "Sayembara & Konsep Arsitektur",
-      location: "",
-      team: "",
-      tools: ["Autodesk Revit", "Chaos Enscape"],
-      description: "Deskripsi konsep desain dan strategi spasial.",
-      highlights: ["Simulasi daylight", "Efisiensi sirkulasi"],
-      image: "/instructors/eddy/portfolio-page-3.png",
-      gallery: [],
-    };
-    setInstructorForm((prev) => ({
-      ...prev,
-      projects: [...(prev.projects || []), newProj],
-    }));
-  };
-
-  const handleUpdateProject = (index: number, field: keyof InstructorProject, val: any) => {
-    setInstructorForm((prev) => {
-      const updated = [...(prev.projects || [])];
-      updated[index] = { ...updated[index], [field]: val };
-      return { ...prev, projects: updated };
-    });
-  };
-
-  const handleDeleteProject = (index: number) => {
-    setInstructorForm((prev) => {
-      const updated = [...(prev.projects || [])];
-      updated.splice(index, 1);
-      return { ...prev, projects: updated };
-    });
-  };
-
-  // --- WORK EXPERIENCE MANAGEMENT IN MODAL ---
-  const handleAddExperience = () => {
-    const newExp: InstructorExperience = {
-      role: "BIM Modeler / Architectural Designer",
-      company: "Nama Perusahaan / Biro",
-      period: "2024 - Sekarang",
-      location: "Jakarta, Indonesia",
-      highlights: ["Penyusunan gambar DED berbasis Autodesk Revit", "Koordinasi multidisiplin"],
-    };
-    setInstructorForm((prev) => ({
-      ...prev,
-      workExperience: [...(prev.workExperience || []), newExp],
-    }));
-  };
-
-  const handleUpdateExperience = (index: number, field: keyof InstructorExperience, val: any) => {
-    setInstructorForm((prev) => {
-      const updated = [...(prev.workExperience || [])];
-      updated[index] = { ...updated[index], [field]: val };
-      return { ...prev, workExperience: updated };
-    });
-  };
-
-  const handleDeleteExperience = (index: number) => {
-    setInstructorForm((prev) => {
-      const updated = [...(prev.workExperience || [])];
-      updated.splice(index, 1);
-      return { ...prev, workExperience: updated };
-    });
-  };
-
-  // --- EDUCATION MANAGEMENT IN MODAL ---
+  // --- EDUCATION MANAGEMENT ---
   const handleAddEducation = () => {
     const newEdu: InstructorEducation = {
       degree: "Sarjana Arsitektur (S.Ars)",
-      institution: "Universitas",
-      period: "2020 - 2024",
-      gpa: "3.75",
-      honors: [],
+      institution: "Universitas Hasanuddin (Makassar, Indonesia)",
+      period: "2021 - 2026",
+      gpa: "3.79 / 4.00",
+      honors: ["Konsentrasi Studi Struktur & Konstruksi (LBE)"],
     };
     setInstructorForm((prev) => ({
       ...prev,
@@ -399,14 +384,146 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
     });
   };
 
+  // --- WORK EXPERIENCE MANAGEMENT ---
+  const handleAddExperience = () => {
+    const newExp: InstructorExperience = {
+      role: "BIM Estimator",
+      company: "PT Midi Utama Indonesia Tbk",
+      period: "Sep 2026 - Sekarang",
+      location: "Tangerang, Banten",
+      highlights: ["Perhitungan volume material (Quantity Take-Off/BoQ) berbasis model BIM 3D"],
+    };
+    setInstructorForm((prev) => ({
+      ...prev,
+      workExperience: [...(prev.workExperience || []), newExp],
+    }));
+  };
+
+  const handleUpdateExperience = (index: number, field: keyof InstructorExperience, val: any) => {
+    setInstructorForm((prev) => {
+      const updated = [...(prev.workExperience || [])];
+      updated[index] = { ...updated[index], [field]: val };
+      return { ...prev, workExperience: updated };
+    });
+  };
+
+  const handleDeleteExperience = (index: number) => {
+    setInstructorForm((prev) => {
+      const updated = [...(prev.workExperience || [])];
+      updated.splice(index, 1);
+      return { ...prev, workExperience: updated };
+    });
+  };
+
+  // --- ORGANIZATIONS MANAGEMENT ---
+  const handleAddOrganization = () => {
+    const newOrg: InstructorOrganization = {
+      role: "Staff Minat Ilmiah & Bakat",
+      organization: "HMA FT Universitas Hasanuddin",
+      period: "Agu 2023 - Mei 2024",
+      description: "Program kerja pengembangan keilmuan dan minat bakat arsitektur mahasiswa.",
+    };
+    setInstructorForm((prev) => ({
+      ...prev,
+      organizations: [...(prev.organizations || []), newOrg],
+    }));
+  };
+
+  const handleUpdateOrganization = (index: number, field: keyof InstructorOrganization, val: any) => {
+    setInstructorForm((prev) => {
+      const updated = [...(prev.organizations || [])];
+      updated[index] = { ...updated[index], [field]: val };
+      return { ...prev, organizations: updated };
+    });
+  };
+
+  const handleDeleteOrganization = (index: number) => {
+    setInstructorForm((prev) => {
+      const updated = [...(prev.organizations || [])];
+      updated.splice(index, 1);
+      return { ...prev, organizations: updated };
+    });
+  };
+
+  // --- WEBINARS MANAGEMENT ---
+  const handleAddWebinar = () => {
+    const newWeb: InstructorWebinar = {
+      year: new Date().getFullYear().toString(),
+      title: "Webinar Nasional Arsitektur & BIM",
+      organizer: "Penyelenggara / Kampus",
+      type: "Webinar Nasional",
+    };
+    setInstructorForm((prev) => ({
+      ...prev,
+      webinars: [...(prev.webinars || []), newWeb],
+    }));
+  };
+
+  const handleUpdateWebinar = (index: number, field: keyof InstructorWebinar, val: any) => {
+    setInstructorForm((prev) => {
+      const updated = [...(prev.webinars || [])];
+      updated[index] = { ...updated[index], [field]: val };
+      return { ...prev, webinars: updated };
+    });
+  };
+
+  const handleDeleteWebinar = (index: number) => {
+    setInstructorForm((prev) => {
+      const updated = [...(prev.webinars || [])];
+      updated.splice(index, 1);
+      return { ...prev, webinars: updated };
+    });
+  };
+
+  // --- PROJECT MANAGEMENT ---
+  const handleAddProject = () => {
+    const newProj: InstructorProject = {
+      id: `proj-${Date.now()}`,
+      title: "Aura Pavilion",
+      year: "2024",
+      category: "Sayembara Paviliun & Ruang Publik",
+      location: "Tebet Eco Park, Jakarta",
+      team: "Nurjannah, Ghifari Aulia Ramadhani, Eddy Tuasikal",
+      tools: ["Autodesk Revit", "SketchUp", "Chaos Enscape"],
+      award: "2nd Runner Up - Untar Architectural Design Week 2024",
+      description: "Desain paviliun ruang publik yang mengintegrasikan simulasi pencahayaan alami dan struktur parametrik.",
+      highlights: ["Analisis daylight 22 Desember", "Struktur kanopi organik", "Detail potongan melintang"],
+      image: "/instructors/eddy/portfolio-page-3.png",
+      gallery: [
+        "/instructors/eddy/portfolio-page-3.png",
+        "/instructors/eddy/portfolio-page-4.png",
+      ],
+    };
+    setInstructorForm((prev) => ({
+      ...prev,
+      projects: [...(prev.projects || []), newProj],
+    }));
+  };
+
+  const handleUpdateProject = (index: number, field: keyof InstructorProject, val: any) => {
+    setInstructorForm((prev) => {
+      const updated = [...(prev.projects || [])];
+      updated[index] = { ...updated[index], [field]: val };
+      return { ...prev, projects: updated };
+    });
+  };
+
+  const handleDeleteProject = (index: number) => {
+    setInstructorForm((prev) => {
+      const updated = [...(prev.projects || [])];
+      updated.splice(index, 1);
+      return { ...prev, projects: updated };
+    });
+  };
+
   // --- ACHIEVEMENTS & CERTIFICATES ---
   const handleAddAchievement = () => {
     const newAch: InstructorAchievement = {
-      year: new Date().getFullYear().toString(),
-      title: "Juara Sayembara Desain Arsitektur",
-      event: "Nama Kompetisi",
-      organizer: "Nama Penyelenggara",
-      rank: "Juara 1",
+      year: "2024",
+      title: "2nd Runner Up (Juara 3)",
+      event: "Architectural Design Week Competition Untar",
+      organizer: "Universitas Tarumanagara",
+      rank: "Juara 3 Nasional",
     };
     setInstructorForm((prev) => ({
       ...prev,
@@ -432,10 +549,10 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
   const handleAddCertificate = () => {
     const newCert: InstructorCertificate = {
-      year: new Date().getFullYear().toString(),
-      title: "Autodesk Certified Professional: Revit",
-      issuer: "Autodesk",
-      image: "/instructors/eddy/portfolio-page-16.png",
+      year: "2024",
+      title: "Certificate of Participation - Innovations in Eco-Friendly Architecture",
+      issuer: "Ecobuild Indonesia",
+      image: "/instructors/eddy/portfolio-page-17.png",
     };
     setInstructorForm((prev) => ({
       ...prev,
@@ -468,10 +585,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
     };
     setContent((prev) => ({
       ...prev,
-      faq: {
-        ...prev.faq,
-        items: [...prev.faq.items, newFaq],
-      },
+      faq: { ...prev.faq, items: [...prev.faq.items, newFaq] },
     }));
   };
 
@@ -503,10 +617,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
     };
     setContent((prev) => ({
       ...prev,
-      testimonials: {
-        ...prev.testimonials,
-        items: [...prev.testimonials.items, newTesti],
-      },
+      testimonials: { ...prev.testimonials, items: [...prev.testimonials.items, newTesti] },
     }));
   };
 
@@ -535,62 +646,54 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
     );
   }
 
-  // Section items list for visibility toggles
+  // Section list for visibility toggles
   const sectionList: {
     key: keyof SiteContentConfig["sectionsVisibility"];
     name: string;
     description: string;
     icon: any;
-    targetHref?: string;
   }[] = [
     {
       key: "hero",
       name: "Hero Banner Utama (Cinematic Video)",
       description: "Video background looping, heading 'Learn Today Build Tomorrow', tombol CTA, dan rating proof.",
       icon: Video,
-      targetHref: "/",
     },
     {
       key: "features",
       name: "3 Kartu Bento Pilar Pembelajaran",
       description: "Skills for Real Opportunities, Your Goals Our Support, dan Terhubung Instruktur.",
       icon: Layers,
-      targetHref: "/#courses",
     },
     {
       key: "courses",
       name: "Katalog Kursus & Modul BIM",
       description: "Katalog modul interaktif dengan filter kategori, harga/free, dan pendaftaran kelas.",
       icon: Layout,
-      targetHref: "/#courses",
     },
     {
       key: "roadmaps",
       name: "Jalur Karier (Career Roadmap)",
       description: "Peta jalan karier bertahap dari BIM Modeler, Coordinator, hingga BIM Manager.",
       icon: ArrowRight,
-      targetHref: "/#roadmaps",
     },
     {
       key: "community",
       name: "Section Komunitas AEC & Sesi Mentoring",
       description: "Ekosistem komunitas, 4 pilar mentoring, dan simulasi tanya-jawab live koordinasi BIM.",
       icon: Users,
-      targetHref: "/#community",
     },
     {
       key: "instructors",
       name: "Tim Pengajar & Mentor Praktisi",
       description: "Daftar kartu profil instruktur dengan tombol langsung ke halaman CV & portofolio karya.",
       icon: Award,
-      targetHref: "/#instructors",
     },
     {
       key: "quiz",
       name: "Kuis Rekomendasi Jalur BIM 30 Detik",
       description: "Interaktif mini kuis diagnostik untuk menentukan kursus yang paling sesuai dengan pengguna.",
       icon: Sparkles,
-      targetHref: "/#quiz",
     },
     {
       key: "testimonials",
@@ -603,14 +706,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
       name: "Pelatihan Perusahaan (Corporate Training)",
       description: "Section konsultasi in-house training dan implementasi standar BIM ISO 19650 untuk BUMN.",
       icon: Building,
-      targetHref: "/#enterprise",
     },
     {
       key: "faq",
       name: "Tanya Jawab Umum (FAQ)",
       description: "Accordion tanya-jawab seputar laptop, sertifikat resmi, lisensi, dan pendampingan.",
       icon: HelpCircle,
-      targetHref: "/#faq",
     },
     {
       key: "cta",
@@ -635,7 +736,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
             </h2>
           </div>
           <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-            Kelola profil instruktur, portofolio proyek &amp; CV, teks beranda, serta visibilitas section secara menyeluruh.
+            Kelola profil instruktur, data CV &amp; portofolio proyek, teks beranda, serta visibilitas section website.
           </p>
         </div>
 
@@ -716,10 +817,10 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
         </button>
       </div>
 
-      {/* SUB-TAB 1: INSTRUCTORS & MENTOR PRAKTISI (WITH CV & PORTFOLIO INTEGRATION) */}
+      {/* SUB-TAB 1: INSTRUCTORS & MENTOR PRAKTISI */}
       {activeSubTab === "instructors" && (
         <div className="space-y-6">
-          {/* Notice Banner */}
+          {/* Action Banner */}
           <div className="p-4 rounded-2xl bg-gradient-to-r from-[#B27D56]/15 via-black/40 to-black/40 border border-[#B27D56]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[#B27D56]/20 border border-[#B27D56]/40 flex items-center justify-center text-[#E0A97D] shrink-0">
@@ -728,7 +829,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-sm font-bold text-white">
-                    Kelola Instruktur, CV &amp; Portofolio Proyek
+                    Kelola Instruktur, CV &amp; Portofolio
                   </h3>
                   <span
                     className={`px-2 py-0.5 rounded text-[10px] font-bold ${
@@ -741,7 +842,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                   </span>
                 </div>
                 <p className="text-xs text-gray-400 mt-0.5">
-                  Setiap instruktur memiliki halaman publik CV &amp; portofolio mandiri yang dapat diakses oleh publik dan calon siswa.
+                  Setiap instruktur memiliki halaman web mandiri untuk menampilkan riwayat pendidikan, pengalaman kerja, keahlian, dan portofolio proyek.
                 </p>
               </div>
             </div>
@@ -780,17 +881,17 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
             </div>
           </div>
 
-          {/* Section Header Text Editor */}
+          {/* Section Heading Editor */}
           <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
             <h4 className="text-xs uppercase font-bold tracking-wider text-gray-300 flex items-center gap-2">
               <Edit3 className="w-3.5 h-3.5 text-[#B27D56]" />
-              <span>Edit Judul &amp; Deskripsi Section Instruktur di Beranda</span>
+              <span>Edit Judul Section Instruktur di Beranda</span>
             </h4>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-[11px] font-semibold text-gray-400 mb-1">
-                  Sub-Badge Teks (Huruf Kapital)
+                  Sub-Badge Teks
                 </label>
                 <input
                   type="text"
@@ -804,7 +905,6 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       },
                     })
                   }
-                  placeholder="TIM PENGAJAR & MENTOR PRAKTISI"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#B27D56]"
                 />
               </div>
@@ -825,35 +925,13 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       },
                     })
                   }
-                  placeholder="Belajar Langsung dari Pelaku Industri Nyata"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#B27D56]"
-                />
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="block text-[11px] font-semibold text-gray-400 mb-1">
-                  Deskripsi / Penjelasan Singkat
-                </label>
-                <textarea
-                  rows={2}
-                  value={content.community.instructorsSubtitle}
-                  onChange={(e) =>
-                    setContent({
-                      ...content,
-                      community: {
-                        ...content.community,
-                        instructorsSubtitle: e.target.value,
-                      },
-                    })
-                  }
-                  placeholder="Bukan sekadar akademisi, instruktur Anda adalah engineer..."
                   className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#B27D56]"
                 />
               </div>
             </div>
           </div>
 
-          {/* Instructor Cards Grid */}
+          {/* Instructor Cards List */}
           <div>
             <div className="flex items-center justify-between mb-4">
               <div>
@@ -861,7 +939,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                   Daftar Profil Instruktur ({content.instructors.length} Terdaftar)
                 </h4>
                 <p className="text-xs text-gray-400">
-                  Klik tombol &ldquo;Edit Data &amp; Portofolio CV&rdquo; untuk mengubah proyek sayembara, sertifikat, atau riwayat kerja instruktur.
+                  Klik &ldquo;Edit Data &amp; Portofolio CV&rdquo; untuk mengubah isi CV, pendidikan, pengalaman, keahlian, atau proyek sayembara.
                 </p>
               </div>
               <button
@@ -933,7 +1011,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         </div>
                       </div>
 
-                      {/* Avatar & Experience Badge */}
+                      {/* Avatar */}
                       <div className="relative aspect-square rounded-2xl overflow-hidden mb-4 bg-gray-900 border border-white/10">
                         <img
                           src={instructor.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop"}
@@ -959,15 +1037,19 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         {instructor.affiliation}
                       </p>
 
-                      {/* Portfolio & CV Summary Counts */}
-                      <div className="mt-3 grid grid-cols-2 gap-2 text-[10px] text-zinc-300">
-                        <div className="p-2 rounded-xl bg-white/5 border border-white/5">
-                          <span className="text-gray-400 block">Proyek:</span>
-                          <span className="font-bold text-amber-400">{instructor.projects?.length || 0} Karya</span>
+                      {/* Counts */}
+                      <div className="mt-3 grid grid-cols-3 gap-1.5 text-[10px] text-zinc-300">
+                        <div className="p-1.5 rounded-lg bg-white/5 border border-white/5 text-center">
+                          <span className="text-gray-400 block text-[9px]">Pendidikan:</span>
+                          <span className="font-bold text-amber-400">{instructor.education?.length || 0}</span>
                         </div>
-                        <div className="p-2 rounded-xl bg-white/5 border border-white/5">
-                          <span className="text-gray-400 block">Sertifikat:</span>
-                          <span className="font-bold text-emerald-400">{instructor.certificates?.length || 0} Dokumen</span>
+                        <div className="p-1.5 rounded-lg bg-white/5 border border-white/5 text-center">
+                          <span className="text-gray-400 block text-[9px]">Pengalaman:</span>
+                          <span className="font-bold text-emerald-400">{instructor.workExperience?.length || 0}</span>
+                        </div>
+                        <div className="p-1.5 rounded-lg bg-white/5 border border-white/5 text-center">
+                          <span className="text-gray-400 block text-[9px]">Proyek:</span>
+                          <span className="font-bold text-blue-400">{instructor.projects?.length || 0}</span>
                         </div>
                       </div>
                     </div>
@@ -979,7 +1061,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         target="_blank"
                         className="w-full py-2 px-3 rounded-xl bg-white/10 hover:bg-amber-500/20 text-white hover:text-amber-300 border border-white/10 text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer"
                       >
-                        <span>Lihat Halaman CV Publik</span>
+                        <span>Buka Halaman CV Publik</span>
                         <ExternalLink className="w-3 h-3 text-amber-400" />
                       </Link>
 
@@ -1040,11 +1122,9 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       <Icon className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="flex items-center gap-2">
-                        <h4 className="text-xs sm:text-sm font-bold text-white">
-                          {sec.name}
-                        </h4>
-                      </div>
+                      <h4 className="text-xs sm:text-sm font-bold text-white">
+                        {sec.name}
+                      </h4>
                       <p className="text-[11px] text-gray-400 mt-1 leading-relaxed">
                         {sec.description}
                       </p>
@@ -1077,14 +1157,14 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
         </div>
       )}
 
-      {/* SUB-TAB 3: OTHER CONTENT (HERO, FAQ, TESTIMONI) */}
+      {/* SUB-TAB 3: OTHER CONTENT */}
       {activeSubTab === "other" && (
         <div className="space-y-6">
           {/* Hero Banner Text Editor */}
           <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
             <h4 className="text-xs uppercase font-bold tracking-wider text-gray-300 flex items-center gap-2">
               <Video className="w-3.5 h-3.5 text-blue-400" />
-              <span>Edit Teks Hero Section (Video Loop Beranda)</span>
+              <span>Edit Teks Hero Section</span>
             </h4>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1101,13 +1181,13 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       hero: { ...content.hero, badge: e.target.value },
                     })
                   }
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
                 />
               </div>
 
               <div>
                 <label className="block text-[11px] font-semibold text-gray-400 mb-1">
-                  Judul Utama Baris 1
+                  Judul Baris 1
                 </label>
                 <input
                   type="text"
@@ -1118,13 +1198,13 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       hero: { ...content.hero, titleLine1: e.target.value },
                     })
                   }
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
                 />
               </div>
 
               <div>
                 <label className="block text-[11px] font-semibold text-gray-400 mb-1">
-                  Judul Utama Baris 2 (Aksen Kuning/Emas)
+                  Judul Baris 2 (Emas)
                 </label>
                 <input
                   type="text"
@@ -1135,13 +1215,13 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       hero: { ...content.hero, titleLine2: e.target.value },
                     })
                   }
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
                 />
               </div>
 
               <div className="md:col-span-2">
                 <label className="block text-[11px] font-semibold text-gray-400 mb-1">
-                  Deskripsi Hero
+                  Deskripsi
                 </label>
                 <textarea
                   rows={2}
@@ -1152,57 +1232,23 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       hero: { ...content.hero, description: e.target.value },
                     })
                   }
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-semibold text-gray-400 mb-1">
-                  Teks Tombol Utama
-                </label>
-                <input
-                  type="text"
-                  value={content.hero.primaryCtaText}
-                  onChange={(e) =>
-                    setContent({
-                      ...content,
-                      hero: { ...content.hero, primaryCtaText: e.target.value },
-                    })
-                  }
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-semibold text-gray-400 mb-1">
-                  Teks Tombol Sekunder
-                </label>
-                <input
-                  type="text"
-                  value={content.hero.secondaryCtaText}
-                  onChange={(e) =>
-                    setContent({
-                      ...content,
-                      hero: { ...content.hero, secondaryCtaText: e.target.value },
-                    })
-                  }
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
                 />
               </div>
             </div>
           </div>
 
-          {/* Testimonials Editor */}
+          {/* Testimonials */}
           <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
             <div className="flex items-center justify-between">
               <h4 className="text-xs uppercase font-bold tracking-wider text-gray-300 flex items-center gap-2">
                 <Star className="w-3.5 h-3.5 text-amber-400" />
-                <span>Kelola Cerita Alumni &amp; Testimoni ({content.testimonials.items.length})</span>
+                <span>Testimoni Alumni ({content.testimonials.items.length})</span>
               </h4>
               <button
                 type="button"
                 onClick={handleAddTestimonial}
-                className="px-3 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                className="px-3 py-1 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Tambah Testimoni</span>
@@ -1218,73 +1264,63 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       type="button"
                       onClick={() => handleDeleteTestimonial(i)}
                       className="text-rose-400 hover:text-rose-300 p-1"
-                      title="Hapus testimoni"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div>
-                      <label className="block text-[10px] text-gray-400 mb-1">Nama Siswa / Alumni</label>
-                      <input
-                        type="text"
-                        value={testi.author}
-                        onChange={(e) => handleUpdateTestimonial(i, "author", e.target.value)}
-                        className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] text-gray-400 mb-1">Jabatan &amp; Perusahaan</label>
-                      <input
-                        type="text"
-                        value={`${testi.role} • ${testi.company}`}
-                        onChange={(e) => {
-                          const parts = e.target.value.split("•").map((s) => s.trim());
-                          handleUpdateTestimonial(i, "role", parts[0] || "");
-                          handleUpdateTestimonial(i, "company", parts[1] || "");
-                        }}
-                        placeholder="BIM Modeler • PT Wika"
-                        className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] text-gray-400 mb-1">Kelas yang Diikuti</label>
-                      <input
-                        type="text"
-                        value={testi.courseTaken}
-                        onChange={(e) => handleUpdateTestimonial(i, "courseTaken", e.target.value)}
-                        className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-[10px] text-gray-400 mb-1">Kutipan Ulasan / Testimoni</label>
-                    <textarea
-                      rows={2}
-                      value={testi.quote}
-                      onChange={(e) => handleUpdateTestimonial(i, "quote", e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    <input
+                      type="text"
+                      value={testi.author}
+                      onChange={(e) => handleUpdateTestimonial(i, "author", e.target.value)}
+                      placeholder="Nama Alumni"
+                      className="px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                    <input
+                      type="text"
+                      value={`${testi.role} • ${testi.company}`}
+                      onChange={(e) => {
+                        const parts = e.target.value.split("•").map((s) => s.trim());
+                        handleUpdateTestimonial(i, "role", parts[0] || "");
+                        handleUpdateTestimonial(i, "company", parts[1] || "");
+                      }}
+                      placeholder="Role • Perusahaan"
+                      className="px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                    <input
+                      type="text"
+                      value={testi.courseTaken}
+                      onChange={(e) => handleUpdateTestimonial(i, "courseTaken", e.target.value)}
+                      placeholder="Kelas Diikuti"
+                      className="px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
                     />
                   </div>
+                  <textarea
+                    rows={2}
+                    value={testi.quote}
+                    onChange={(e) => handleUpdateTestimonial(i, "quote", e.target.value)}
+                    placeholder="Ulasan"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                  />
                 </div>
               ))}
             </div>
           </div>
 
-          {/* FAQ Editor */}
+          {/* FAQ */}
           <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
             <div className="flex items-center justify-between">
               <h4 className="text-xs uppercase font-bold tracking-wider text-gray-300 flex items-center gap-2">
                 <HelpCircle className="w-3.5 h-3.5 text-purple-400" />
-                <span>Kelola Tanya Jawab Umum (FAQ - {content.faq.items.length} Butir)</span>
+                <span>Tanya Jawab Umum (FAQ - {content.faq.items.length})</span>
               </h4>
               <button
                 type="button"
                 onClick={handleAddFaq}
-                className="px-3 py-1 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                className="px-3 py-1 rounded-lg bg-purple-500/20 text-purple-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>Tambah Pertanyaan FAQ</span>
+                <span>Tambah FAQ</span>
               </button>
             </div>
 
@@ -1297,29 +1333,24 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       type="button"
                       onClick={() => handleDeleteFaq(i)}
                       className="text-rose-400 hover:text-rose-300 p-1"
-                      title="Hapus FAQ"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
-                  <div>
-                    <label className="block text-[10px] text-gray-400 mb-1">Pertanyaan</label>
-                    <input
-                      type="text"
-                      value={faqItem.question}
-                      onChange={(e) => handleUpdateFaq(i, "question", e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white font-semibold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] text-gray-400 mb-1">Jawaban</label>
-                    <textarea
-                      rows={2}
-                      value={faqItem.answer}
-                      onChange={(e) => handleUpdateFaq(i, "answer", e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    value={faqItem.question}
+                    onChange={(e) => handleUpdateFaq(i, "question", e.target.value)}
+                    placeholder="Pertanyaan"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white font-semibold"
+                  />
+                  <textarea
+                    rows={2}
+                    value={faqItem.answer}
+                    onChange={(e) => handleUpdateFaq(i, "answer", e.target.value)}
+                    placeholder="Jawaban"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                  />
                 </div>
               ))}
             </div>
@@ -1327,7 +1358,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
         </div>
       )}
 
-      {/* COMPREHENSIVE MODAL: ADD / EDIT INSTRUCTOR & FULL CV / PORTFOLIO */}
+      {/* COMPREHENSIVE MODAL: EDIT / ADD INSTRUCTOR WITH COMPLETE CV SECTIONS */}
       {instructorModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-in fade-in">
           <div className="bg-[#181B22] border border-white/15 rounded-3xl w-full max-w-4xl p-6 sm:p-8 text-white shadow-2xl relative max-h-[92vh] flex flex-col">
@@ -1342,7 +1373,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     {editingInstructor ? `Edit Profil & CV: ${instructorForm.name || "Instruktur"}` : "Tambah Instruktur Baru"}
                   </h3>
                   <p className="text-xs text-gray-400">
-                    Perubahan akan langsung terbit pada kartu beranda dan halaman CV publik.
+                    Semua data pendidikan, pengalaman kerja, keahlian, dan portofolio dapat diubah langsung.
                   </p>
                 </div>
               </div>
@@ -1361,9 +1392,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                 type="button"
                 onClick={() => setModalTab("basic")}
                 className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
-                  modalTab === "basic"
-                    ? "bg-[#B27D56] text-white"
-                    : "bg-white/5 text-gray-400 hover:text-white"
+                  modalTab === "basic" ? "bg-[#B27D56] text-white" : "bg-white/5 text-gray-400 hover:text-white"
                 }`}
               >
                 <Award className="w-3.5 h-3.5" />
@@ -1374,58 +1403,83 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                 type="button"
                 onClick={() => setModalTab("contact")}
                 className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
-                  modalTab === "contact"
-                    ? "bg-[#B27D56] text-white"
-                    : "bg-white/5 text-gray-400 hover:text-white"
+                  modalTab === "contact" ? "bg-[#B27D56] text-white" : "bg-white/5 text-gray-400 hover:text-white"
                 }`}
               >
                 <Mail className="w-3.5 h-3.5" />
-                <span>2. Kontak &amp; Bio CV</span>
+                <span>2. Kontak</span>
               </button>
 
               <button
                 type="button"
-                onClick={() => setModalTab("projects")}
+                onClick={() => setModalTab("education")}
                 className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
-                  modalTab === "projects"
-                    ? "bg-[#B27D56] text-white"
-                    : "bg-white/5 text-gray-400 hover:text-white"
+                  modalTab === "education" ? "bg-[#B27D56] text-white" : "bg-white/5 text-gray-400 hover:text-white"
                 }`}
               >
-                <Briefcase className="w-3.5 h-3.5" />
-                <span>3. Portofolio Proyek ({instructorForm.projects?.length || 0})</span>
+                <GraduationCap className="w-3.5 h-3.5" />
+                <span>3. Pendidikan ({instructorForm.education?.length || 0})</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setModalTab("experience")}
                 className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
-                  modalTab === "experience"
-                    ? "bg-[#B27D56] text-white"
-                    : "bg-white/5 text-gray-400 hover:text-white"
+                  modalTab === "experience" ? "bg-[#B27D56] text-white" : "bg-white/5 text-gray-400 hover:text-white"
                 }`}
               >
-                <GraduationCap className="w-3.5 h-3.5" />
-                <span>4. Pengalaman &amp; Pendidikan</span>
+                <Briefcase className="w-3.5 h-3.5" />
+                <span>4. Pengalaman Kerja ({instructorForm.workExperience?.length || 0})</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setModalTab("organization")}
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  modalTab === "organization" ? "bg-[#B27D56] text-white" : "bg-white/5 text-gray-400 hover:text-white"
+                }`}
+              >
+                <Users className="w-3.5 h-3.5" />
+                <span>5. Organisasi &amp; Webinar</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setModalTab("skills")}
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  modalTab === "skills" ? "bg-[#B27D56] text-white" : "bg-white/5 text-gray-400 hover:text-white"
+                }`}
+              >
+                <Layers className="w-3.5 h-3.5" />
+                <span>6. Keahlian &amp; Software</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setModalTab("projects")}
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  modalTab === "projects" ? "bg-[#B27D56] text-white" : "bg-white/5 text-gray-400 hover:text-white"
+                }`}
+              >
+                <Building className="w-3.5 h-3.5" />
+                <span>7. Portofolio Proyek ({instructorForm.projects?.length || 0})</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setModalTab("awards")}
                 className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
-                  modalTab === "awards"
-                    ? "bg-[#B27D56] text-white"
-                    : "bg-white/5 text-gray-400 hover:text-white"
+                  modalTab === "awards" ? "bg-[#B27D56] text-white" : "bg-white/5 text-gray-400 hover:text-white"
                 }`}
               >
                 <FileCheck2 className="w-3.5 h-3.5" />
-                <span>5. Prestasi &amp; Sertifikat</span>
+                <span>8. Prestasi &amp; Sertifikat</span>
               </button>
             </div>
 
-            {/* Modal Body with Scrolling */}
+            {/* Modal Body */}
             <form onSubmit={handleSaveInstructor} className="flex-1 overflow-y-auto py-4 space-y-4">
-              {/* TAB 1: BASIC & HOMEPAGE CARD */}
+              {/* TAB 1: BASIC PROFILE */}
               {modalTab === "basic" && (
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1437,9 +1491,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         type="text"
                         required
                         value={instructorForm.name}
-                        onChange={(e) =>
-                          setInstructorForm({ ...instructorForm, name: e.target.value })
-                        }
+                        onChange={(e) => setInstructorForm({ ...instructorForm, name: e.target.value })}
                         placeholder="Contoh: Eddy Tuasikal, S.Ars"
                         className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-[#B27D56]"
                       />
@@ -1447,14 +1499,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
                     <div>
                       <label className="block text-xs font-semibold text-gray-300 mb-1">
-                        Slug URL Halaman CV (Otomatis)
+                        Slug URL Halaman CV
                       </label>
                       <input
                         type="text"
                         value={instructorForm.slug || ""}
-                        onChange={(e) =>
-                          setInstructorForm({ ...instructorForm, slug: e.target.value })
-                        }
+                        onChange={(e) => setInstructorForm({ ...instructorForm, slug: e.target.value })}
                         placeholder="eddy-tuasikal"
                         className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-[#B27D56]"
                       />
@@ -1468,10 +1518,8 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         type="text"
                         required
                         value={instructorForm.role}
-                        onChange={(e) =>
-                          setInstructorForm({ ...instructorForm, role: e.target.value })
-                        }
-                        placeholder="Contoh: BIM Modeller & Architectural Designer"
+                        onChange={(e) => setInstructorForm({ ...instructorForm, role: e.target.value })}
+                        placeholder="BIM Modeller & Architectural Designer"
                         className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-[#B27D56]"
                       />
                     </div>
@@ -1483,25 +1531,21 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       <input
                         type="text"
                         value={instructorForm.experience}
-                        onChange={(e) =>
-                          setInstructorForm({ ...instructorForm, experience: e.target.value })
-                        }
-                        placeholder="Contoh: 3 Tahun di Proyek Nasional & BUMN"
+                        onChange={(e) => setInstructorForm({ ...instructorForm, experience: e.target.value })}
+                        placeholder="3 Tahun di Proyek Nasional & BUMN"
                         className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-[#B27D56]"
                       />
                     </div>
 
                     <div className="sm:col-span-2">
                       <label className="block text-xs font-semibold text-gray-300 mb-1">
-                        Afiliasi / Portofolio Proyek Singkat
+                        Afiliasi / Spesialisasi Singkat
                       </label>
                       <input
                         type="text"
                         value={instructorForm.affiliation}
-                        onChange={(e) =>
-                          setInstructorForm({ ...instructorForm, affiliation: e.target.value })
-                        }
-                        placeholder="Contoh: Eks Tim BIM MRT & High-Rise Specialist"
+                        onChange={(e) => setInstructorForm({ ...instructorForm, affiliation: e.target.value })}
+                        placeholder="Eks Tim BIM MRT & High-Rise Specialist"
                         className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-[#B27D56]"
                       />
                     </div>
@@ -1544,9 +1588,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         <input
                           type="text"
                           value={instructorForm.avatar}
-                          onChange={(e) =>
-                            setInstructorForm({ ...instructorForm, avatar: e.target.value })
-                          }
+                          onChange={(e) => setInstructorForm({ ...instructorForm, avatar: e.target.value })}
                           placeholder="URL gambar (https://...) atau path unggahan"
                           className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white focus:outline-none focus:border-[#B27D56]"
                         />
@@ -1557,23 +1599,21 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                   {/* Kutipan Komunitas */}
                   <div>
                     <label className="block text-xs font-semibold text-gray-300 mb-1">
-                      Kutipan / Peran Bimbingan di Komunitas
+                      Kutipan Bimbingan di Komunitas
                     </label>
                     <textarea
                       rows={2}
                       value={instructorForm.communityRole}
-                      onChange={(e) =>
-                        setInstructorForm({ ...instructorForm, communityRole: e.target.value })
-                      }
+                      onChange={(e) => setInstructorForm({ ...instructorForm, communityRole: e.target.value })}
                       placeholder='Contoh: "Memandu audit BEP, strategi koordinasi multidisiplin, dan review kesiapan tender BIM."'
                       className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-[#B27D56]"
                     />
                   </div>
 
-                  {/* Tag Keahlian / Software */}
+                  {/* Tag Keahlian Cepat di Kartu Beranda */}
                   <div>
                     <label className="block text-xs font-semibold text-gray-300 mb-1">
-                      Tag Keahlian / Software (Pisahkan dengan koma)
+                      Tag Singkat Kartu Beranda (Pisahkan dengan koma)
                     </label>
                     <input
                       type="text"
@@ -1590,19 +1630,17 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       type="checkbox"
                       id="instVisibility"
                       checked={instructorForm.isVisible !== false}
-                      onChange={(e) =>
-                        setInstructorForm({ ...instructorForm, isVisible: e.target.checked })
-                      }
+                      onChange={(e) => setInstructorForm({ ...instructorForm, isVisible: e.target.checked })}
                       className="w-4 h-4 rounded text-[#B27D56] focus:ring-0 cursor-pointer"
                     />
                     <label htmlFor="instVisibility" className="text-xs text-gray-200 cursor-pointer">
-                      Tampilkan kartu instruktur ini di website beranda
+                      Tampilkan kartu instruktur ini di beranda
                     </label>
                   </div>
                 </div>
               )}
 
-              {/* TAB 2: CONTACT & DETAILED BIO */}
+              {/* TAB 2: CONTACT */}
               {modalTab === "contact" && (
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1613,11 +1651,9 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       <input
                         type="email"
                         value={instructorForm.email || ""}
-                        onChange={(e) =>
-                          setInstructorForm({ ...instructorForm, email: e.target.value })
-                        }
+                        onChange={(e) => setInstructorForm({ ...instructorForm, email: e.target.value })}
                         placeholder="eddy.tuasikal18@gmail.com"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-[#B27D56]"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
                       />
                     </div>
 
@@ -1628,11 +1664,9 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       <input
                         type="text"
                         value={instructorForm.phone || ""}
-                        onChange={(e) =>
-                          setInstructorForm({ ...instructorForm, phone: e.target.value })
-                        }
+                        onChange={(e) => setInstructorForm({ ...instructorForm, phone: e.target.value })}
                         placeholder="+62 813 7070 4533"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-[#B27D56]"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
                       />
                     </div>
 
@@ -1643,73 +1677,420 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       <input
                         type="text"
                         value={instructorForm.location || ""}
-                        onChange={(e) =>
-                          setInstructorForm({ ...instructorForm, location: e.target.value })
-                        }
-                        placeholder="Romang Lompoa, Kec. Bontomarannu, Kab. Gowa, Sulawesi Selatan"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-[#B27D56]"
+                        onChange={(e) => setInstructorForm({ ...instructorForm, location: e.target.value })}
+                        placeholder="Gowa, Sulawesi Selatan"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-semibold text-gray-300 mb-1">
-                        Profil LinkedIn URL
+                        LinkedIn URL
                       </label>
                       <input
                         type="url"
                         value={instructorForm.linkedin || ""}
-                        onChange={(e) =>
-                          setInstructorForm({ ...instructorForm, linkedin: e.target.value })
-                        }
+                        onChange={(e) => setInstructorForm({ ...instructorForm, linkedin: e.target.value })}
                         placeholder="https://www.linkedin.com/in/eddy-tuasikal"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-[#B27D56]"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
                       />
                     </div>
 
                     <div className="sm:col-span-2">
                       <label className="block text-xs font-semibold text-gray-300 mb-1">
-                        Tautan Google Drive Dokumen Portofolio / CV PDF
+                        Tautan Google Drive Portofolio PDF
                       </label>
                       <input
                         type="url"
                         value={instructorForm.portfolioLink || ""}
-                        onChange={(e) =>
-                          setInstructorForm({ ...instructorForm, portfolioLink: e.target.value })
-                        }
+                        onChange={(e) => setInstructorForm({ ...instructorForm, portfolioLink: e.target.value })}
                         placeholder="https://drive.google.com/file/d/.../view"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-[#B27D56]"
-                      />
-                    </div>
-
-                    <div className="sm:col-span-2">
-                      <label className="block text-xs font-semibold text-gray-300 mb-1">
-                        Bio / Ringkasan Narasi Profil
-                      </label>
-                      <textarea
-                        rows={4}
-                        value={instructorForm.bio || ""}
-                        onChange={(e) =>
-                          setInstructorForm({ ...instructorForm, bio: e.target.value })
-                        }
-                        placeholder="Jelaskan latar belakang keahlian arsitektur, penguasaan BIM, dan pengalaman proyek..."
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-[#B27D56]"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
                       />
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* TAB 3: PROJECTS & COMPETITIONS */}
+              {/* TAB 3: EDUCATION */}
+              {modalTab === "education" && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between pb-2">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+                      Riwayat Pendidikan Formal ({instructorForm.education?.length || 0})
+                    </h4>
+                    <button
+                      type="button"
+                      onClick={handleAddEducation}
+                      className="px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Tambah Pendidikan</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-4">
+                    {instructorForm.education?.map((edu, edIdx) => (
+                      <div key={edIdx} className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-amber-400">Pendidikan #{edIdx + 1}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteEducation(edIdx)}
+                            className="text-rose-400 hover:text-rose-300 p-1 cursor-pointer"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[10px] text-gray-400 mb-1">Gelar Pendidikan</label>
+                            <input
+                              type="text"
+                              value={edu.degree}
+                              onChange={(e) => handleUpdateEducation(edIdx, "degree", e.target.value)}
+                              placeholder="Bachelor of Architecture (S.Ars)"
+                              className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] text-gray-400 mb-1">Institusi / Universitas</label>
+                            <input
+                              type="text"
+                              value={edu.institution}
+                              onChange={(e) => handleUpdateEducation(edIdx, "institution", e.target.value)}
+                              placeholder="Universitas Hasanuddin (Makassar, Indonesia)"
+                              className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] text-gray-400 mb-1">Periode Studi</label>
+                            <input
+                              type="text"
+                              value={edu.period}
+                              onChange={(e) => handleUpdateEducation(edIdx, "period", e.target.value)}
+                              placeholder="Agu 2021 - Mei 2026"
+                              className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] text-gray-400 mb-1">IPK / GPA</label>
+                            <input
+                              type="text"
+                              value={edu.gpa || ""}
+                              onChange={(e) => handleUpdateEducation(edIdx, "gpa", e.target.value)}
+                              placeholder="3.79 / 4.00"
+                              className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                            />
+                          </div>
+
+                          <div className="sm:col-span-2">
+                            <label className="block text-[10px] text-gray-400 mb-1">
+                              Capaian &amp; Catatan Studi (Satu poin per baris)
+                            </label>
+                            <textarea
+                              rows={3}
+                              value={(edu.honors || []).join("\n")}
+                              onChange={(e) =>
+                                handleUpdateEducation(
+                                  edIdx,
+                                  "honors",
+                                  e.target.value.split("\n").map((s) => s.trim()).filter(Boolean)
+                                )
+                              }
+                              placeholder="Konsentrasi Studi Struktur & Konstruksi&#10;2nd Runner Up Untar ADW 2024"
+                              className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 4: WORK EXPERIENCE */}
+              {modalTab === "experience" && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between pb-2">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+                      Pengalaman Kerja &amp; Praktik Industri ({instructorForm.workExperience?.length || 0})
+                    </h4>
+                    <button
+                      type="button"
+                      onClick={handleAddExperience}
+                      className="px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Tambah Pengalaman</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-4">
+                    {instructorForm.workExperience?.map((exp, eIdx) => (
+                      <div key={eIdx} className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-amber-400">Pengalaman #{eIdx + 1}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteExperience(eIdx)}
+                            className="text-rose-400 hover:text-rose-300 p-1 cursor-pointer"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[10px] text-gray-400 mb-1">Posisi / Role</label>
+                            <input
+                              type="text"
+                              value={exp.role}
+                              onChange={(e) => handleUpdateExperience(eIdx, "role", e.target.value)}
+                              placeholder="BIM Estimator"
+                              className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] text-gray-400 mb-1">Nama Perusahaan / Biro</label>
+                            <input
+                              type="text"
+                              value={exp.company}
+                              onChange={(e) => handleUpdateExperience(eIdx, "company", e.target.value)}
+                              placeholder="PT Midi Utama Indonesia Tbk"
+                              className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] text-gray-400 mb-1">Periode</label>
+                            <input
+                              type="text"
+                              value={exp.period}
+                              onChange={(e) => handleUpdateExperience(eIdx, "period", e.target.value)}
+                              placeholder="Sep 2026 - Sekarang"
+                              className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] text-gray-400 mb-1">Lokasi</label>
+                            <input
+                              type="text"
+                              value={exp.location || ""}
+                              onChange={(e) => handleUpdateExperience(eIdx, "location", e.target.value)}
+                              placeholder="Tangerang, Banten"
+                              className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                            />
+                          </div>
+
+                          <div className="sm:col-span-2">
+                            <label className="block text-[10px] text-gray-400 mb-1">
+                              Poin Tanggung Jawab &amp; Prestasi (Satu poin per baris)
+                            </label>
+                            <textarea
+                              rows={3}
+                              value={(exp.highlights || []).join("\n")}
+                              onChange={(e) =>
+                                handleUpdateExperience(
+                                  eIdx,
+                                  "highlights",
+                                  e.target.value.split("\n").map((s) => s.trim()).filter(Boolean)
+                                )
+                              }
+                              placeholder="Perhitungan volume material berbasis BIM&#10;Koordinasi gambar kerja DED"
+                              className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 5: ORGANIZATIONS & WEBINARS */}
+              {modalTab === "organization" && (
+                <div className="space-y-6">
+                  {/* Organizations */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+                        Pengalaman Organisasi &amp; Kepanitiaan ({instructorForm.organizations?.length || 0})
+                      </h4>
+                      <button
+                        type="button"
+                        onClick={handleAddOrganization}
+                        className="px-3 py-1 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Tambah Organisasi</span>
+                      </button>
+                    </div>
+
+                    {instructorForm.organizations?.map((org, oIdx) => (
+                      <div key={oIdx} className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-gray-200">Organisasi #{oIdx + 1}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteOrganization(oIdx)}
+                            className="text-rose-400 hover:text-rose-300 p-1"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                          <input
+                            type="text"
+                            value={org.role}
+                            onChange={(e) => handleUpdateOrganization(oIdx, "role", e.target.value)}
+                            placeholder="Jabatan (contoh: Staff Minat Ilmiah)"
+                            className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                          />
+                          <input
+                            type="text"
+                            value={org.organization}
+                            onChange={(e) => handleUpdateOrganization(oIdx, "organization", e.target.value)}
+                            placeholder="Organisasi (contoh: HMA FT Unhas)"
+                            className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                          />
+                          <input
+                            type="text"
+                            value={org.period}
+                            onChange={(e) => handleUpdateOrganization(oIdx, "period", e.target.value)}
+                            placeholder="Periode (contoh: 2023 - 2024)"
+                            className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                          />
+                        </div>
+                        <input
+                          type="text"
+                          value={org.description || ""}
+                          onChange={(e) => handleUpdateOrganization(oIdx, "description", e.target.value)}
+                          placeholder="Deskripsi kegiatan atau tanggung jawab..."
+                          className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Webinars */}
+                  <div className="space-y-3 pt-4 border-t border-white/10">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+                        Webinar, Kuliah Umum &amp; Pelatihan ({instructorForm.webinars?.length || 0})
+                      </h4>
+                      <button
+                        type="button"
+                        onClick={handleAddWebinar}
+                        className="px-3 py-1 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Tambah Webinar</span>
+                      </button>
+                    </div>
+
+                    {instructorForm.webinars?.map((web, wIdx) => (
+                      <div key={wIdx} className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-gray-200">Webinar #{wIdx + 1}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteWebinar(wIdx)}
+                            className="text-rose-400 hover:text-rose-300 p-1"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                          <input
+                            type="text"
+                            value={web.year}
+                            onChange={(e) => handleUpdateWebinar(wIdx, "year", e.target.value)}
+                            placeholder="Tahun"
+                            className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                          />
+                          <input
+                            type="text"
+                            value={web.title}
+                            onChange={(e) => handleUpdateWebinar(wIdx, "title", e.target.value)}
+                            placeholder="Judul Acara / Tema Webinar"
+                            className="sm:col-span-2 px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                          />
+                          <input
+                            type="text"
+                            value={web.organizer}
+                            onChange={(e) => handleUpdateWebinar(wIdx, "organizer", e.target.value)}
+                            placeholder="Penyelenggara"
+                            className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 6: SKILLS MATRIX */}
+              {modalTab === "skills" && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-300 mb-1">
+                      Software BIM &amp; Desain (Pisahkan dengan koma)
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={softwareSkillsInput}
+                      onChange={(e) => setSoftwareSkillsInput(e.target.value)}
+                      placeholder="Autodesk Revit, AutoCAD, Navisworks, SketchUp, Chaos Enscape, D5 Render, Canva, Microsoft Office"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-300 mb-1">
+                      Keahlian Teknis Arsitektur (Pisahkan dengan koma)
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={technicalSkillsInput}
+                      onChange={(e) => setTechnicalSkillsInput(e.target.value)}
+                      placeholder="Architectural Design, BIM Modeling LOD 300 - 350, Interior Design, Tropical Sustainable Design, Daylight Simulation, BoQ / Cost Estimation, Working Drawing (DED)"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-300 mb-1">
+                      Soft Skills &amp; Kolaborasi (Pisahkan dengan koma)
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={softSkillsInput}
+                      onChange={(e) => setSoftSkillsInput(e.target.value)}
+                      placeholder="Problem Solving, Adaptability, Analytical Thinking, Team Collaboration, Project Coordination, Effective Communication, Time Management"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 7: PROJECTS */}
               {modalTab === "projects" && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between pb-2">
                     <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
-                      Daftar Karya Sayembara &amp; Proyek Arsitektur
+                      Daftar Karya Sayembara &amp; Proyek ({instructorForm.projects?.length || 0})
                     </h4>
                     <button
                       type="button"
                       onClick={handleAddProject}
-                      className="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                      className="px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>Tambah Proyek</span>
@@ -1725,7 +2106,6 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                             type="button"
                             onClick={() => handleDeleteProject(pIdx)}
                             className="text-rose-400 hover:text-rose-300 p-1 cursor-pointer"
-                            title="Hapus proyek ini"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -1797,7 +2177,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           </div>
 
                           <div className="sm:col-span-2">
-                            <label className="block text-[10px] text-gray-400 mb-1">Software / Tools (Pisahkan Koma)</label>
+                            <label className="block text-[10px] text-gray-400 mb-1">Tools / Software (Pisahkan Koma)</label>
                             <input
                               type="text"
                               value={(proj.tools || []).join(", ")}
@@ -1814,7 +2194,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           </div>
 
                           <div className="sm:col-span-2">
-                            <label className="block text-[10px] text-gray-400 mb-1">Foto Sampul Utama / Gambar</label>
+                            <label className="block text-[10px] text-gray-400 mb-1">Foto Sampul Utama / Gambar Render</label>
                             <input
                               type="text"
                               value={proj.image || ""}
@@ -1825,7 +2205,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           </div>
 
                           <div className="sm:col-span-2">
-                            <label className="block text-[10px] text-gray-400 mb-1">Galeri Lembar Gambar (Pisahkan Koma)</label>
+                            <label className="block text-[10px] text-gray-400 mb-1">Galeri Lembar Kerja (Pisahkan Koma)</label>
                             <input
                               type="text"
                               value={(proj.gallery || []).join(", ")}
@@ -1842,7 +2222,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           </div>
 
                           <div className="sm:col-span-2">
-                            <label className="block text-[10px] text-gray-400 mb-1">Deskripsi Konsep Proyek</label>
+                            <label className="block text-[10px] text-gray-400 mb-1">Deskripsi Konsep Desain</label>
                             <textarea
                               rows={2}
                               value={proj.description}
@@ -1857,148 +2237,19 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                 </div>
               )}
 
-              {/* TAB 4: EXPERIENCE & EDUCATION */}
-              {modalTab === "experience" && (
-                <div className="space-y-6">
-                  {/* Work Experience */}
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
-                        Pengalaman Kerja &amp; Praktik Industri
-                      </h4>
-                      <button
-                        type="button"
-                        onClick={handleAddExperience}
-                        className="px-3 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
-                      >
-                        <Plus className="w-3.5 h-3.5" />
-                        <span>Tambah Pengalaman</span>
-                      </button>
-                    </div>
-
-                    {instructorForm.workExperience?.map((exp, eIdx) => (
-                      <div key={eIdx} className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-gray-200">Pengalaman #{eIdx + 1}</span>
-                          <button
-                            type="button"
-                            onClick={() => handleDeleteExperience(eIdx)}
-                            className="text-rose-400 hover:text-rose-300 p-1"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                          <input
-                            type="text"
-                            value={exp.role}
-                            onChange={(e) => handleUpdateExperience(eIdx, "role", e.target.value)}
-                            placeholder="Posisi (contoh: BIM Estimator)"
-                            className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                          />
-                          <input
-                            type="text"
-                            value={exp.company}
-                            onChange={(e) => handleUpdateExperience(eIdx, "company", e.target.value)}
-                            placeholder="Perusahaan (contoh: PT Midi Utama Indonesia)"
-                            className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                          />
-                          <input
-                            type="text"
-                            value={exp.period}
-                            onChange={(e) => handleUpdateExperience(eIdx, "period", e.target.value)}
-                            placeholder="Periode (contoh: Sep 2026 - Sekarang)"
-                            className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                          />
-                          <input
-                            type="text"
-                            value={exp.location || ""}
-                            onChange={(e) => handleUpdateExperience(eIdx, "location", e.target.value)}
-                            placeholder="Lokasi (contoh: Tangerang, Banten)"
-                            className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Education */}
-                  <div className="space-y-3 pt-4 border-t border-white/10">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
-                        Riwayat Pendidikan Formal
-                      </h4>
-                      <button
-                        type="button"
-                        onClick={handleAddEducation}
-                        className="px-3 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
-                      >
-                        <Plus className="w-3.5 h-3.5" />
-                        <span>Tambah Pendidikan</span>
-                      </button>
-                    </div>
-
-                    {instructorForm.education?.map((edu, edIdx) => (
-                      <div key={edIdx} className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-gray-200">Pendidikan #{edIdx + 1}</span>
-                          <button
-                            type="button"
-                            onClick={() => handleDeleteEducation(edIdx)}
-                            className="text-rose-400 hover:text-rose-300 p-1"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                          <input
-                            type="text"
-                            value={edu.degree}
-                            onChange={(e) => handleUpdateEducation(edIdx, "degree", e.target.value)}
-                            placeholder="Gelar (contoh: Bachelor of Architecture (S.Ars))"
-                            className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                          />
-                          <input
-                            type="text"
-                            value={edu.institution}
-                            onChange={(e) => handleUpdateEducation(edIdx, "institution", e.target.value)}
-                            placeholder="Institusi (contoh: Universitas Hasanuddin)"
-                            className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                          />
-                          <input
-                            type="text"
-                            value={edu.period}
-                            onChange={(e) => handleUpdateEducation(edIdx, "period", e.target.value)}
-                            placeholder="Periode (contoh: 2021 - 2026)"
-                            className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                          />
-                          <input
-                            type="text"
-                            value={edu.gpa || ""}
-                            onChange={(e) => handleUpdateEducation(edIdx, "gpa", e.target.value)}
-                            placeholder="IPK / GPA (contoh: 3.79 / 4.00)"
-                            className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* TAB 5: AWARDS & CERTIFICATES */}
+              {/* TAB 8: AWARDS & CERTIFICATES */}
               {modalTab === "awards" && (
                 <div className="space-y-6">
                   {/* Achievements */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
-                        Penghargaan Sayembara &amp; Lomba
+                        Penghargaan Sayembara ({instructorForm.achievements?.length || 0})
                       </h4>
                       <button
                         type="button"
                         onClick={handleAddAchievement}
-                        className="px-3 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                        className="px-3 py-1 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
                       >
                         <Plus className="w-3.5 h-3.5" />
                         <span>Tambah Penghargaan</span>
@@ -2029,14 +2280,14 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                             type="text"
                             value={ach.event}
                             onChange={(e) => handleUpdateAchievement(aIdx, "event", e.target.value)}
-                            placeholder="Nama Acara / Lomba"
+                            placeholder="Nama Sayembara"
                             className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
                           />
                           <input
                             type="text"
                             value={ach.organizer}
                             onChange={(e) => handleUpdateAchievement(aIdx, "organizer", e.target.value)}
-                            placeholder="Penyelenggara (contoh: Universitas Tarumanagara)"
+                            placeholder="Penyelenggara (contoh: UNTAR)"
                             className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
                           />
                           <input
@@ -2055,12 +2306,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                   <div className="space-y-3 pt-4 border-t border-white/10">
                     <div className="flex items-center justify-between">
                       <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
-                        Sertifikat Kompetensi &amp; Piagam
+                        Sertifikat Kompetensi &amp; Piagam ({instructorForm.certificates?.length || 0})
                       </h4>
                       <button
                         type="button"
                         onClick={handleAddCertificate}
-                        className="px-3 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                        className="px-3 py-1 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
                       >
                         <Plus className="w-3.5 h-3.5" />
                         <span>Tambah Sertifikat</span>
@@ -2091,14 +2342,14 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                             type="text"
                             value={cert.issuer}
                             onChange={(e) => handleUpdateCertificate(cIdx, "issuer", e.target.value)}
-                            placeholder="Penerbit (contoh: Ecobuild Indonesia)"
+                            placeholder="Penerbit"
                             className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
                           />
                           <input
                             type="text"
                             value={cert.year}
                             onChange={(e) => handleUpdateCertificate(cIdx, "year", e.target.value)}
-                            placeholder="Tahun (contoh: 2024)"
+                            placeholder="Tahun"
                             className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
                           />
                           <input
@@ -2115,10 +2366,10 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                 </div>
               )}
 
-              {/* Bottom Footer Action */}
+              {/* Bottom Actions */}
               <div className="flex items-center justify-between pt-4 border-t border-white/10 shrink-0">
                 <span className="text-xs text-gray-400">
-                  Semua tab akan tersimpan bersama saat Anda menekan tombol di samping.
+                  Semua perubahan akan disimpan dan dipublikasikan langsung ke web.
                 </span>
 
                 <div className="flex items-center gap-3">
