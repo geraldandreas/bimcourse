@@ -31,6 +31,18 @@ export async function GET() {
           ...DEFAULT_SITE_CONTENT.hero,
           ...(parsed.hero || {}),
         },
+        features: {
+          ...DEFAULT_SITE_CONTENT.features,
+          ...(parsed.features || {}),
+        },
+        courses: {
+          ...DEFAULT_SITE_CONTENT.courses,
+          ...(parsed.courses || {}),
+        },
+        roadmaps: {
+          ...DEFAULT_SITE_CONTENT.roadmaps,
+          ...(parsed.roadmaps || {}),
+        },
         community: {
           ...DEFAULT_SITE_CONTENT.community,
           ...(parsed.community || {}),
@@ -65,6 +77,10 @@ export async function GET() {
                 };
               })
             : DEFAULT_SITE_CONTENT.instructors,
+        quiz: {
+          ...DEFAULT_SITE_CONTENT.quiz,
+          ...(parsed.quiz || {}),
+        },
         testimonials: {
           ...DEFAULT_SITE_CONTENT.testimonials,
           ...(parsed.testimonials || {}),
@@ -73,6 +89,10 @@ export async function GET() {
               ? parsed.testimonials.items
               : DEFAULT_SITE_CONTENT.testimonials.items,
         },
+        enterprise: {
+          ...DEFAULT_SITE_CONTENT.enterprise,
+          ...(parsed.enterprise || {}),
+        },
         faq: {
           ...DEFAULT_SITE_CONTENT.faq,
           ...(parsed.faq || {}),
@@ -80,6 +100,14 @@ export async function GET() {
             Array.isArray(parsed.faq?.items) && parsed.faq.items.length > 0
               ? parsed.faq.items
               : DEFAULT_SITE_CONTENT.faq.items,
+        },
+        cta: {
+          ...DEFAULT_SITE_CONTENT.cta,
+          ...(parsed.cta || {}),
+        },
+        footer: {
+          ...DEFAULT_SITE_CONTENT.footer,
+          ...(parsed.footer || {}),
         },
       };
 

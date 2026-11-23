@@ -63,7 +63,8 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
   const [content, setContent] = useState<SiteContentConfig>(DEFAULT_SITE_CONTENT);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeSubTab, setActiveSubTab] = useState<"visibility" | "instructors" | "other">("instructors");
+  const [activeSubTab, setActiveSubTab] = useState<"visibility" | "instructors" | "sections">("sections");
+  const [selectedSectionKey, setSelectedSectionKey] = useState<string>("hero");
 
   // Modal State for Instructor
   const [instructorModalOpen, setInstructorModalOpen] = useState(false);
@@ -805,15 +806,18 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
         </button>
 
         <button
-          onClick={() => setActiveSubTab("other")}
+          onClick={() => setActiveSubTab("sections")}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
-            activeSubTab === "other"
+            activeSubTab === "sections"
               ? "bg-blue-600 text-white shadow-xs"
               : "bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-white/5 dark:text-gray-400 dark:hover:text-white dark:hover:bg-white/10"
           }`}
         >
           <Edit3 className="w-4 h-4" />
-          <span>Teks Hero, Komunitas, Testimoni &amp; FAQ</span>
+          <span>Edit Teks Seluruh Section Web (CMS)</span>
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-black/20 text-blue-100">
+            12 Section
+          </span>
         </button>
       </div>
 
@@ -1105,49 +1109,69 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
               return (
                 <div
                   key={sec.key}
-                  className={`p-4 rounded-2xl border transition-all flex items-start justify-between gap-4 ${
+                  className={`p-4 rounded-2xl border transition-all flex flex-col justify-between gap-3 ${
                     isEnabled
-                      ? "bg-[#181B22] border-white/10"
-                      : "bg-[#111317] border-white/5 opacity-60"
+                      ? "bg-[#181B22] border-white/10 shadow-sm"
+                      : "bg-[#111317] border-white/5 opacity-70"
                   }`}
                 >
-                  <div className="flex items-start gap-3">
-                    <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
-                        isEnabled
-                          ? "bg-purple-500/15 text-purple-300 border-purple-500/30"
-                          : "bg-white/5 text-gray-500 border-white/10"
-                      }`}
-                    >
-                      <Icon className="w-5 h-5" />
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
+                          isEnabled
+                            ? "bg-purple-500/15 text-purple-300 border-purple-500/30"
+                            : "bg-white/5 text-gray-500 border-white/10"
+                        }`}
+                      >
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs sm:text-sm font-bold text-white">
+                          {sec.name}
+                        </h4>
+                        <p className="text-[11px] text-gray-400 mt-1 leading-relaxed">
+                          {sec.description}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="text-xs sm:text-sm font-bold text-white">
-                        {sec.name}
-                      </h4>
-                      <p className="text-[11px] text-gray-400 mt-1 leading-relaxed">
-                        {sec.description}
-                      </p>
+
+                    {/* Toggle Switch */}
+                    <div className="flex flex-col items-end gap-1.5 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => toggleSection(sec.key)}
+                        className={`w-14 h-7 rounded-full p-1 transition-colors duration-300 cursor-pointer flex items-center ${
+                          isEnabled ? "bg-emerald-600 justify-end" : "bg-gray-800 justify-start"
+                        }`}
+                      >
+                        <span className="w-5 h-5 rounded-full bg-white shadow-md transform transition-transform" />
+                      </button>
+                      <span
+                        className={`text-[10px] font-bold uppercase tracking-wider ${
+                          isEnabled ? "text-emerald-400" : "text-gray-500"
+                        }`}
+                      >
+                        {isEnabled ? "Ditampilkan" : "Disembunyikan"}
+                      </span>
                     </div>
                   </div>
 
-                  {/* Toggle Switch */}
-                  <div className="flex flex-col items-end gap-2 shrink-0">
+                  {/* Action Link to Edit Section Text */}
+                  <div className="pt-2.5 border-t border-white/10 flex items-center justify-between">
                     <button
                       type="button"
-                      onClick={() => toggleSection(sec.key)}
-                      className={`w-14 h-7 rounded-full p-1 transition-colors duration-300 cursor-pointer flex items-center ${
-                        isEnabled ? "bg-emerald-600 justify-end" : "bg-gray-800 justify-start"
-                      }`}
+                      onClick={() => {
+                        setSelectedSectionKey(sec.key);
+                        setActiveSubTab("sections");
+                      }}
+                      className="px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-400/30 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
-                      <span className="w-5 h-5 rounded-full bg-white shadow-md transform transition-transform" />
+                      <Edit3 className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Edit Teks &amp; Isi Section</span>
                     </button>
-                    <span
-                      className={`text-[10px] font-bold uppercase tracking-wider ${
-                        isEnabled ? "text-emerald-400" : "text-gray-500"
-                      }`}
-                    >
-                      {isEnabled ? "Ditampilkan" : "Disembunyikan"}
+                    <span className="text-[10px] text-gray-400 font-medium">
+                      {isEnabled ? "Aktif di beranda" : "Tersembunyi"}
                     </span>
                   </div>
                 </div>
@@ -1157,203 +1181,1992 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
         </div>
       )}
 
-      {/* SUB-TAB 3: OTHER CONTENT */}
-      {activeSubTab === "other" && (
+      {/* SUB-TAB 3: EDIT TEKS SELURUH SECTION WEB (CMS) */}
+      {activeSubTab === "sections" && (
         <div className="space-y-6">
-          {/* Hero Banner Text Editor */}
-          <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
-            <h4 className="text-xs uppercase font-bold tracking-wider text-gray-300 flex items-center gap-2">
-              <Video className="w-3.5 h-3.5 text-blue-400" />
-              <span>Edit Teks Hero Section</span>
-            </h4>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="md:col-span-2">
-                <label className="block text-[11px] font-semibold text-gray-400 mb-1">
-                  Sub-Badge Hero
-                </label>
-                <input
-                  type="text"
-                  value={content.hero.badge}
-                  onChange={(e) =>
-                    setContent({
-                      ...content,
-                      hero: { ...content.hero, badge: e.target.value },
-                    })
-                  }
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
-                />
-              </div>
-
+          {/* Section Selection Banner & Quick Navigation */}
+          <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-900/20 via-[#14171E] to-[#14171E] border border-blue-500/30">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
               <div>
-                <label className="block text-[11px] font-semibold text-gray-400 mb-1">
-                  Judul Baris 1
-                </label>
-                <input
-                  type="text"
-                  value={content.hero.titleLine1}
-                  onChange={(e) =>
-                    setContent({
-                      ...content,
-                      hero: { ...content.hero, titleLine1: e.target.value },
-                    })
-                  }
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
-                />
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Edit3 className="w-4 h-4 text-blue-400" />
+                  <span>Pilih Section yang Ingin Diedit Kata-Katanya</span>
+                </h3>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  Klik salah satu section di bawah untuk mengubah judul, sub-heading, deskripsi, teks tombol, dan badge.
+                </p>
               </div>
 
-              <div>
-                <label className="block text-[11px] font-semibold text-gray-400 mb-1">
-                  Judul Baris 2 (Emas)
-                </label>
-                <input
-                  type="text"
-                  value={content.hero.titleLine2}
-                  onChange={(e) =>
-                    setContent({
-                      ...content,
-                      hero: { ...content.hero, titleLine2: e.target.value },
-                    })
-                  }
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
-                />
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="block text-[11px] font-semibold text-gray-400 mb-1">
-                  Deskripsi
-                </label>
-                <textarea
-                  rows={2}
-                  value={content.hero.description}
-                  onChange={(e) =>
-                    setContent({
-                      ...content,
-                      hero: { ...content.hero, description: e.target.value },
-                    })
-                  }
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Testimonials */}
-          <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
-            <div className="flex items-center justify-between">
-              <h4 className="text-xs uppercase font-bold tracking-wider text-gray-300 flex items-center gap-2">
-                <Star className="w-3.5 h-3.5 text-amber-400" />
-                <span>Testimoni Alumni ({content.testimonials.items.length})</span>
-              </h4>
               <button
                 type="button"
-                onClick={handleAddTestimonial}
-                className="px-3 py-1 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                onClick={() => handleSaveContent()}
+                disabled={saving}
+                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-50 self-start sm:self-auto"
               >
-                <Plus className="w-3.5 h-3.5" />
-                <span>Tambah Testimoni</span>
+                <Save className="w-3.5 h-3.5" />
+                <span>{saving ? "Menyimpan..." : "Simpan Teks Web"}</span>
               </button>
             </div>
 
-            <div className="space-y-3">
-              {content.testimonials.items.map((testi, i) => (
-                <div key={testi.id || i} className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-amber-400">Testimoni #{i + 1}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteTestimonial(i)}
-                      className="text-rose-400 hover:text-rose-300 p-1"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
+            {/* Section Pills Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+              {[
+                { key: "hero", label: "Hero Banner", icon: Video },
+                { key: "features", label: "3 Bento Features", icon: Layers },
+                { key: "courses", label: "Katalog Kursus", icon: Layout },
+                { key: "roadmaps", label: "Jalur Karier", icon: ArrowRight },
+                { key: "community", label: "Komunitas & 4 Pilar", icon: Users },
+                { key: "instructors", label: "Header Tim Pengajar", icon: Award },
+                { key: "quiz", label: "Kuis Rekomendasi", icon: Sparkles },
+                { key: "testimonials", label: "Cerita Alumni", icon: Star },
+                { key: "enterprise", label: "Pelatihan Perusahaan", icon: Building },
+                { key: "faq", label: "Tanya Jawab (FAQ)", icon: HelpCircle },
+                { key: "cta", label: "Pre-Footer Banner", icon: ShieldCheck },
+                { key: "footer", label: "Footer & Kontak", icon: MapPin },
+              ].map((item) => {
+                const ItemIcon = item.icon;
+                const isSelected = selectedSectionKey === item.key;
+                const isVisible =
+                  item.key === "footer"
+                    ? true
+                    : content.sectionsVisibility[item.key as keyof typeof content.sectionsVisibility];
+
+                return (
+                  <button
+                    key={item.key}
+                    type="button"
+                    onClick={() => setSelectedSectionKey(item.key)}
+                    className={`p-2.5 rounded-xl text-left border transition-all flex flex-col justify-between gap-2 cursor-pointer ${
+                      isSelected
+                        ? "bg-blue-600/20 border-blue-400 text-white shadow-sm ring-1 ring-blue-400"
+                        : "bg-white/5 border-white/5 text-gray-300 hover:bg-white/10 hover:border-white/15"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <ItemIcon className={`w-4 h-4 ${isSelected ? "text-blue-400" : "text-gray-400"}`} />
+                      <span
+                        className={`w-2 h-2 rounded-full ${
+                          isVisible ? "bg-emerald-400" : "bg-rose-500"
+                        }`}
+                        title={isVisible ? "Section Aktif" : "Section Tersembunyi"}
+                      />
+                    </div>
+                    <span className="text-xs font-bold truncate leading-tight">
+                      {item.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* SECTION 1: HERO */}
+          {selectedSectionKey === "hero" && (
+            <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center">
+                    <Video className="w-4 h-4" />
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <input
-                      type="text"
-                      value={testi.author}
-                      onChange={(e) => handleUpdateTestimonial(i, "author", e.target.value)}
-                      placeholder="Nama Alumni"
-                      className="px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                    />
-                    <input
-                      type="text"
-                      value={`${testi.role} • ${testi.company}`}
-                      onChange={(e) => {
-                        const parts = e.target.value.split("•").map((s) => s.trim());
-                        handleUpdateTestimonial(i, "role", parts[0] || "");
-                        handleUpdateTestimonial(i, "company", parts[1] || "");
-                      }}
-                      placeholder="Role • Perusahaan"
-                      className="px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                    />
-                    <input
-                      type="text"
-                      value={testi.courseTaken}
-                      onChange={(e) => handleUpdateTestimonial(i, "courseTaken", e.target.value)}
-                      placeholder="Kelas Diikuti"
-                      className="px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                    />
+                  <div>
+                    <h4 className="text-sm font-bold text-white">1. Hero Banner Utama (Cinematic Video)</h4>
+                    <p className="text-xs text-gray-400">Bagian paling atas yang pertama kali dilihat pengunjung web.</p>
                   </div>
-                  <textarea
-                    rows={2}
-                    value={testi.quote}
-                    onChange={(e) => handleUpdateTestimonial(i, "quote", e.target.value)}
-                    placeholder="Ulasan"
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
-                  />
                 </div>
-              ))}
-            </div>
-          </div>
 
-          {/* FAQ */}
-          <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
-            <div className="flex items-center justify-between">
-              <h4 className="text-xs uppercase font-bold tracking-wider text-gray-300 flex items-center gap-2">
-                <HelpCircle className="w-3.5 h-3.5 text-purple-400" />
-                <span>Tanya Jawab Umum (FAQ - {content.faq.items.length})</span>
-              </h4>
-              <button
-                type="button"
-                onClick={handleAddFaq}
-                className="px-3 py-1 rounded-lg bg-purple-500/20 text-purple-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>Tambah FAQ</span>
-              </button>
-            </div>
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    content.sectionsVisibility.hero ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                  }`}>
+                    {content.sectionsVisibility.hero ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => toggleSection("hero")}
+                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white"
+                  >
+                    {content.sectionsVisibility.hero ? "Sembunyikan" : "Tampilkan"}
+                  </button>
+                </div>
+              </div>
 
-            <div className="space-y-3">
-              {content.faq.items.map((faqItem, i) => (
-                <div key={faqItem.id || i} className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-purple-300">FAQ #{i + 1}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteFaq(i)}
-                      className="text-rose-400 hover:text-rose-300 p-1"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="md:col-span-2">
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Sub-Badge Hero (Teks Mengambang di Atas Judul)
+                  </label>
                   <input
                     type="text"
-                    value={faqItem.question}
-                    onChange={(e) => handleUpdateFaq(i, "question", e.target.value)}
-                    placeholder="Pertanyaan"
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white font-semibold"
-                  />
-                  <textarea
-                    rows={2}
-                    value={faqItem.answer}
-                    onChange={(e) => handleUpdateFaq(i, "answer", e.target.value)}
-                    placeholder="Jawaban"
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    value={content.hero.badge}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        hero: { ...content.hero, badge: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-hidden focus:ring-1 focus:ring-amber-400"
                   />
                 </div>
-              ))}
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Judul Baris 1
+                  </label>
+                  <input
+                    type="text"
+                    value={content.hero.titleLine1}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        hero: { ...content.hero, titleLine1: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-hidden focus:ring-1 focus:ring-amber-400 font-bold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Judul Baris 2
+                  </label>
+                  <input
+                    type="text"
+                    value={content.hero.titleLine2}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        hero: { ...content.hero, titleLine2: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-hidden focus:ring-1 focus:ring-amber-400 font-bold"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Paragraf Deskripsi Hero
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={content.hero.description}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        hero: { ...content.hero, description: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-hidden focus:ring-1 focus:ring-amber-400 leading-relaxed"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Teks Tombol CTA Utama
+                  </label>
+                  <input
+                    type="text"
+                    value={content.hero.primaryCtaText || "Eksplor Semua Kelas"}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        hero: { ...content.hero, primaryCtaText: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-hidden focus:ring-1 focus:ring-amber-400"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Teks Tombol Video Showcase
+                  </label>
+                  <input
+                    type="text"
+                    value={content.hero.secondaryCtaText || "Tonton Video Pengenalan"}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        hero: { ...content.hero, secondaryCtaText: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-hidden focus:ring-1 focus:ring-amber-400"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Skor Rating Ulasan (Social Proof)
+                  </label>
+                  <input
+                    type="text"
+                    value={content.hero.statsRating || "4.94 / 5.0"}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        hero: { ...content.hero, statsRating: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-hidden focus:ring-1 focus:ring-amber-400"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Jumlah Peserta / Alumni (Social Proof)
+                  </label>
+                  <input
+                    type="text"
+                    value={content.hero.statsStudents || "18,500+ Mahasiswa & Insinyur Telah Bergabung"}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        hero: { ...content.hero, statsStudents: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-hidden focus:ring-1 focus:ring-amber-400"
+                  />
+                </div>
+              </div>
             </div>
+          )}
+
+          {/* SECTION 2: BENTO FEATURES */}
+          {selectedSectionKey === "features" && (
+            <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center">
+                    <Layers className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">2. Tiga Kartu Bento Pilar Keunggulan</h4>
+                    <p className="text-xs text-gray-400">Menampilkan 3 kartu utama: Kurikulum Praktik, Peta Jalan, dan Bimbingan Instruktur.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    content.sectionsVisibility.features ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                  }`}>
+                    {content.sectionsVisibility.features ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => toggleSection("features")}
+                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white"
+                  >
+                    {content.sectionsVisibility.features ? "Sembunyikan" : "Tampilkan"}
+                  </button>
+                </div>
+              </div>
+
+              {/* Kartu 1 */}
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">
+                  Kartu 1: Kurikulum &amp; Standar Industri
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Badge Kartu 1</label>
+                    <input
+                      type="text"
+                      value={content.features?.card1Badge || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card1Badge: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Judul Kartu 1</label>
+                    <input
+                      type="text"
+                      value={content.features?.card1Title || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card1Title: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white font-bold"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-[11px] text-gray-400 mb-1">Deskripsi Kartu 1</label>
+                    <textarea
+                      rows={2}
+                      value={content.features?.card1Desc || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card1Desc: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Label Tag 1 (Standar)</label>
+                    <input
+                      type="text"
+                      value={content.features?.card1Tag1 || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card1Tag1: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Label Tag 2 (LOD)</label>
+                    <input
+                      type="text"
+                      value={content.features?.card1Tag2 || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card1Tag2: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Kartu 2 */}
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">
+                  Kartu 2: Peta Jalan Karier &amp; Stepper
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Badge Kartu 2</label>
+                    <input
+                      type="text"
+                      value={content.features?.card2Badge || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card2Badge: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Judul Kartu 2</label>
+                    <input
+                      type="text"
+                      value={content.features?.card2Title || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card2Title: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white font-bold"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-[11px] text-gray-400 mb-1">Deskripsi Kartu 2</label>
+                    <textarea
+                      rows={2}
+                      value={content.features?.card2Desc || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card2Desc: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                  <div className="sm:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+                    <div>
+                      <label className="block text-[10px] text-gray-400 mb-1">Step 1</label>
+                      <input
+                        type="text"
+                        value={content.features?.card2Step1 || ""}
+                        onChange={(e) =>
+                          setContent({
+                            ...content,
+                            features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card2Step1: e.target.value },
+                          })
+                        }
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] text-gray-400 mb-1">Step 2</label>
+                      <input
+                        type="text"
+                        value={content.features?.card2Step2 || ""}
+                        onChange={(e) =>
+                          setContent({
+                            ...content,
+                            features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card2Step2: e.target.value },
+                          })
+                        }
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] text-gray-400 mb-1">Step 3</label>
+                      <input
+                        type="text"
+                        value={content.features?.card2Step3 || ""}
+                        onChange={(e) =>
+                          setContent({
+                            ...content,
+                            features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card2Step3: e.target.value },
+                          })
+                        }
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Kartu 3 */}
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">
+                  Kartu 3: Terhubung Instruktur &amp; Praktisi
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Badge Kartu 3</label>
+                    <input
+                      type="text"
+                      value={content.features?.card3Badge || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3Badge: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Judul Kartu 3</label>
+                    <input
+                      type="text"
+                      value={content.features?.card3Title || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3Title: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white font-bold"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-[11px] text-gray-400 mb-1">Deskripsi Kartu 3</label>
+                    <textarea
+                      rows={2}
+                      value={content.features?.card3Desc || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3Desc: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Nama Pengirim Pesan Chat</label>
+                    <input
+                      type="text"
+                      value={content.features?.card3ChatAuthor || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3ChatAuthor: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Jabatan / Role Pengirim Chat</label>
+                    <input
+                      type="text"
+                      value={content.features?.card3ChatRole || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3ChatRole: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-[11px] text-gray-400 mb-1">Isi Kutipan Pesan Chat Mentoring</label>
+                    <input
+                      type="text"
+                      value={content.features?.card3ChatQuote || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3ChatQuote: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SECTION 3: COURSES CATALOG */}
+          {selectedSectionKey === "courses" && (
+            <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                    <Layout className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">3. Katalog Kelas Spesialisasi BIM</h4>
+                    <p className="text-xs text-gray-400">Heading dan teks pengantar di atas daftar modul kursus.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    content.sectionsVisibility.courses ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                  }`}>
+                    {content.sectionsVisibility.courses ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => toggleSection("courses")}
+                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white"
+                  >
+                    {content.sectionsVisibility.courses ? "Sembunyikan" : "Tampilkan"}
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="md:col-span-2">
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Badge Katalog
+                  </label>
+                  <input
+                    type="text"
+                    value={content.courses?.badge || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        courses: { ...(content.courses || DEFAULT_SITE_CONTENT.courses), badge: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Judul Utama Section
+                  </label>
+                  <input
+                    type="text"
+                    value={content.courses?.title || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        courses: { ...(content.courses || DEFAULT_SITE_CONTENT.courses), title: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white font-bold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Placeholder Kotak Pencarian
+                  </label>
+                  <input
+                    type="text"
+                    value={content.courses?.searchPlaceholder || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        courses: { ...(content.courses || DEFAULT_SITE_CONTENT.courses), searchPlaceholder: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Subtitle / Paragraf Pengantar
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={content.courses?.subtitle || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        courses: { ...(content.courses || DEFAULT_SITE_CONTENT.courses), subtitle: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SECTION 4: CAREER ROADMAPS */}
+          {selectedSectionKey === "roadmaps" && (
+            <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">4. Jalur Karier BIM (Learning Path)</h4>
+                    <p className="text-xs text-gray-400">Heading dan teks pengantar pada peta jalan karier bertahap.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    content.sectionsVisibility.roadmaps ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                  }`}>
+                    {content.sectionsVisibility.roadmaps ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => toggleSection("roadmaps")}
+                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white"
+                  >
+                    {content.sectionsVisibility.roadmaps ? "Sembunyikan" : "Tampilkan"}
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Badge Roadmap
+                  </label>
+                  <input
+                    type="text"
+                    value={content.roadmaps?.badge || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        roadmaps: { ...(content.roadmaps || DEFAULT_SITE_CONTENT.roadmaps), badge: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Judul Utama Roadmap
+                  </label>
+                  <input
+                    type="text"
+                    value={content.roadmaps?.title || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        roadmaps: { ...(content.roadmaps || DEFAULT_SITE_CONTENT.roadmaps), title: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white font-bold"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Subtitle / Paragraf Pengantar
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={content.roadmaps?.subtitle || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        roadmaps: { ...(content.roadmaps || DEFAULT_SITE_CONTENT.roadmaps), subtitle: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SECTION 5: COMMUNITY & 4 PILLARS */}
+          {selectedSectionKey === "community" && (
+            <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-yellow-500/20 text-yellow-400 flex items-center justify-center">
+                    <Users className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">5. Section Komunitas AEC &amp; 4 Pilar Mentoring</h4>
+                    <p className="text-xs text-gray-400">Mengatur teks pengantar ekosistem belajar dan 4 pilar mentoring.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    content.sectionsVisibility.community ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                  }`}>
+                    {content.sectionsVisibility.community ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => toggleSection("community")}
+                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white"
+                  >
+                    {content.sectionsVisibility.community ? "Sembunyikan" : "Tampilkan"}
+                  </button>
+                </div>
+              </div>
+
+              {/* Header Komunitas */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Badge Komunitas</label>
+                  <input
+                    type="text"
+                    value={content.community.badge}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        community: { ...content.community, badge: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Judul Utama Komunitas</label>
+                  <input
+                    type="text"
+                    value={content.community.title}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        community: { ...content.community, title: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white font-bold"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Subtitle Komunitas</label>
+                  <textarea
+                    rows={2}
+                    value={content.community.subtitle}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        community: { ...content.community, subtitle: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Tag Member Aktif</label>
+                  <input
+                    type="text"
+                    value={content.community.activeMembersText}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        community: { ...content.community, activeMembersText: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Tag Mentor BUMN</label>
+                  <input
+                    type="text"
+                    value={content.community.mentorBadgeText}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        community: { ...content.community, mentorBadgeText: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Judul Kartu Diskusi</label>
+                  <input
+                    type="text"
+                    value={content.community.cardHeading}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        community: { ...content.community, cardHeading: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Deskripsi Kartu Diskusi</label>
+                  <input
+                    type="text"
+                    value={content.community.cardDescription}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        community: { ...content.community, cardDescription: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+              </div>
+
+              {/* 4 Pilar Mentoring */}
+              <div className="space-y-4 pt-2">
+                <h5 className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                  4 Pilar Mentoring Eksklusif
+                </h5>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Pilar 1 */}
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                    <span className="text-[11px] font-bold text-gray-300">Pilar 1: Q&amp;A Kendala Modeling</span>
+                    <input
+                      type="text"
+                      placeholder="Badge Pilar 1"
+                      value={content.community?.pillar1Badge || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          community: { ...content.community, pillar1Badge: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Judul Pilar 1"
+                      value={content.community?.pillar1Title || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          community: { ...content.community, pillar1Title: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white font-semibold"
+                    />
+                    <textarea
+                      rows={2}
+                      placeholder="Deskripsi Pilar 1"
+                      value={content.community?.pillar1Desc || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          community: { ...content.community, pillar1Desc: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+
+                  {/* Pilar 2 */}
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                    <span className="text-[11px] font-bold text-gray-300">Pilar 2: Live Mentoring Rutin</span>
+                    <input
+                      type="text"
+                      placeholder="Badge Pilar 2"
+                      value={content.community?.pillar2Badge || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          community: { ...content.community, pillar2Badge: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Judul Pilar 2"
+                      value={content.community?.pillar2Title || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          community: { ...content.community, pillar2Title: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white font-semibold"
+                    />
+                    <textarea
+                      rows={2}
+                      placeholder="Deskripsi Pilar 2"
+                      value={content.community?.pillar2Desc || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          community: { ...content.community, pillar2Desc: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+
+                  {/* Pilar 3 */}
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                    <span className="text-[11px] font-bold text-gray-300">Pilar 3: Feedback 1-on-1 Mentor</span>
+                    <input
+                      type="text"
+                      placeholder="Badge Pilar 3"
+                      value={content.community?.pillar3Badge || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          community: { ...content.community, pillar3Badge: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Judul Pilar 3"
+                      value={content.community?.pillar3Title || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          community: { ...content.community, pillar3Title: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white font-semibold"
+                    />
+                    <textarea
+                      rows={2}
+                      placeholder="Deskripsi Pilar 3"
+                      value={content.community?.pillar3Desc || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          community: { ...content.community, pillar3Desc: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+
+                  {/* Pilar 4 */}
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                    <span className="text-[11px] font-bold text-gray-300">Pilar 4: Aset &amp; Info Loker</span>
+                    <input
+                      type="text"
+                      placeholder="Badge Pilar 4"
+                      value={content.community?.pillar4Badge || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          community: { ...content.community, pillar4Badge: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Judul Pilar 4"
+                      value={content.community?.pillar4Title || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          community: { ...content.community, pillar4Title: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white font-semibold"
+                    />
+                    <textarea
+                      rows={2}
+                      placeholder="Deskripsi Pilar 4"
+                      value={content.community?.pillar4Desc || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          community: { ...content.community, pillar4Desc: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SECTION 6: INSTRUCTORS HEADER */}
+          {selectedSectionKey === "instructors" && (
+            <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                    <Award className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">6. Header Tim Pengajar &amp; Mentor di Beranda</h4>
+                    <p className="text-xs text-gray-400">Judul dan pengantar yang muncul tepat di atas deretan kartu pengajar.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    content.sectionsVisibility.instructors ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                  }`}>
+                    {content.sectionsVisibility.instructors ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => toggleSection("instructors")}
+                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white"
+                  >
+                    {content.sectionsVisibility.instructors ? "Sembunyikan" : "Tampilkan"}
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Badge Pengajar
+                  </label>
+                  <input
+                    type="text"
+                    value={content.community.instructorsBadge}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        community: { ...content.community, instructorsBadge: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Judul Section Pengajar
+                  </label>
+                  <input
+                    type="text"
+                    value={content.community.instructorsTitle}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        community: { ...content.community, instructorsTitle: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white font-bold"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Subtitle Pengajar
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={content.community.instructorsSubtitle}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        community: { ...content.community, instructorsSubtitle: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+              </div>
+
+              {/* Action Banner to Instructors CRUD Sub-tab */}
+              <div className="p-4 rounded-xl bg-[#B27D56]/15 border border-[#B27D56]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-4">
+                <div className="flex items-center gap-2.5">
+                  <Award className="w-5 h-5 text-[#E0A97D] shrink-0" />
+                  <p className="text-xs text-gray-300">
+                    Untuk menambah instruktur baru atau mengedit riwayat CV &amp; portofolio proyek lengkap, gunakan tab khusus pengajar.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveSubTab("instructors")}
+                  className="px-4 py-2 rounded-xl bg-[#B27D56] hover:bg-[#B27D56]/80 text-white text-xs font-bold whitespace-nowrap cursor-pointer shadow-xs"
+                >
+                  Buka Data Instruktur &amp; CV &rarr;
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* SECTION 7: QUIZ RECOMMENDER */}
+          {selectedSectionKey === "quiz" && (
+            <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-pink-500/20 text-pink-400 flex items-center justify-center">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">7. Kuis Rekomendasi Jalur BIM 30 Detik</h4>
+                    <p className="text-xs text-gray-400">Heading dan panduan langkah kuis rekomendasi interaktif.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    content.sectionsVisibility.quiz ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                  }`}>
+                    {content.sectionsVisibility.quiz ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => toggleSection("quiz")}
+                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white"
+                  >
+                    {content.sectionsVisibility.quiz ? "Sembunyikan" : "Tampilkan"}
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Badge Kuis</label>
+                  <input
+                    type="text"
+                    value={content.quiz?.badge || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), badge: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Judul Utama Kuis</label>
+                  <input
+                    type="text"
+                    value={content.quiz?.title || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), title: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white font-bold"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Subtitle Kuis</label>
+                  <textarea
+                    rows={2}
+                    value={content.quiz?.subtitle || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), subtitle: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Judul Langkah 1 (Latar Belakang)</label>
+                  <input
+                    type="text"
+                    value={content.quiz?.step1Heading || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), step1Heading: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Judul Langkah 2 (Target Karier)</label>
+                  <input
+                    type="text"
+                    value={content.quiz?.step2Heading || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), step2Heading: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SECTION 8: TESTIMONIALS */}
+          {selectedSectionKey === "testimonials" && (
+            <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                    <Star className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">8. Cerita Alumni &amp; Testimoni Industri</h4>
+                    <p className="text-xs text-gray-400">Heading dan daftar ulasan alumni yang tampil di beranda.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    content.sectionsVisibility.testimonials ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                  }`}>
+                    {content.sectionsVisibility.testimonials ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => toggleSection("testimonials")}
+                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white"
+                  >
+                    {content.sectionsVisibility.testimonials ? "Sembunyikan" : "Tampilkan"}
+                  </button>
+                </div>
+              </div>
+
+              {/* Headings */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Badge Testimoni</label>
+                  <input
+                    type="text"
+                    value={content.testimonials.badge}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        testimonials: { ...content.testimonials, badge: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Judul Utama Testimoni</label>
+                  <input
+                    type="text"
+                    value={content.testimonials.title}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        testimonials: { ...content.testimonials, title: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white font-bold"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Subtitle Testimoni</label>
+                  <textarea
+                    rows={2}
+                    value={content.testimonials.subtitle}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        testimonials: { ...content.testimonials, subtitle: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+              </div>
+
+              {/* Testimonials Items List */}
+              <div className="pt-2 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                    Daftar Kartu Ulasan ({content.testimonials.items.length})
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleAddTestimonial}
+                    className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Tambah Testimoni</span>
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {content.testimonials.items.map((testi, i) => (
+                    <div key={testi.id || i} className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-amber-400">Testimoni #{i + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteTestimonial(i)}
+                          className="text-rose-400 hover:text-rose-300 p-1"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <input
+                          type="text"
+                          value={testi.author}
+                          onChange={(e) => handleUpdateTestimonial(i, "author", e.target.value)}
+                          placeholder="Nama Alumni"
+                          className="px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white font-semibold"
+                        />
+                        <input
+                          type="text"
+                          value={`${testi.role} • ${testi.company}`}
+                          onChange={(e) => {
+                            const parts = e.target.value.split("•").map((s) => s.trim());
+                            handleUpdateTestimonial(i, "role", parts[0] || "");
+                            handleUpdateTestimonial(i, "company", parts[1] || "");
+                          }}
+                          placeholder="Role • Perusahaan"
+                          className="px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                        />
+                        <input
+                          type="text"
+                          value={testi.courseTaken}
+                          onChange={(e) => handleUpdateTestimonial(i, "courseTaken", e.target.value)}
+                          placeholder="Kelas Diikuti"
+                          className="px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                        />
+                      </div>
+                      <textarea
+                        rows={2}
+                        value={testi.quote}
+                        onChange={(e) => handleUpdateTestimonial(i, "quote", e.target.value)}
+                        placeholder="Kutipan ulasan alumni..."
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SECTION 9: ENTERPRISE */}
+          {selectedSectionKey === "enterprise" && (
+            <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center">
+                    <Building className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">9. Pelatihan Perusahaan (Corporate Training)</h4>
+                    <p className="text-xs text-gray-400">Solusi B2B untuk korporasi, kontraktor BUMN, dan konsultasi tender.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    content.sectionsVisibility.enterprise ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                  }`}>
+                    {content.sectionsVisibility.enterprise ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => toggleSection("enterprise")}
+                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white"
+                  >
+                    {content.sectionsVisibility.enterprise ? "Sembunyikan" : "Tampilkan"}
+                  </button>
+                </div>
+              </div>
+
+              {/* Headings */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Badge Enterprise</label>
+                  <input
+                    type="text"
+                    value={content.enterprise?.badge || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), badge: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Judul Utama</label>
+                  <input
+                    type="text"
+                    value={content.enterprise?.title || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), title: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white font-bold"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Subtitle / Pengantar</label>
+                  <textarea
+                    rows={2}
+                    value={content.enterprise?.subtitle || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), subtitle: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+              </div>
+
+              {/* 3 Benefits */}
+              <div className="space-y-3 pt-2">
+                <h5 className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                  3 Manfaat Korporasi (Benefit Cards)
+                </h5>
+
+                <div className="space-y-3">
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                    <label className="block text-[11px] font-bold text-gray-300">Benefit 1</label>
+                    <input
+                      type="text"
+                      placeholder="Judul Benefit 1"
+                      value={content.enterprise?.benefit1Title || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), benefit1Title: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white font-semibold"
+                    />
+                    <textarea
+                      rows={2}
+                      placeholder="Deskripsi Benefit 1"
+                      value={content.enterprise?.benefit1Desc || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), benefit1Desc: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                    <label className="block text-[11px] font-bold text-gray-300">Benefit 2</label>
+                    <input
+                      type="text"
+                      placeholder="Judul Benefit 2"
+                      value={content.enterprise?.benefit2Title || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), benefit2Title: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white font-semibold"
+                    />
+                    <textarea
+                      rows={2}
+                      placeholder="Deskripsi Benefit 2"
+                      value={content.enterprise?.benefit2Desc || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), benefit2Desc: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                    <label className="block text-[11px] font-bold text-gray-300">Benefit 3</label>
+                    <input
+                      type="text"
+                      placeholder="Judul Benefit 3"
+                      value={content.enterprise?.benefit3Title || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), benefit3Title: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white font-semibold"
+                    />
+                    <textarea
+                      rows={2}
+                      placeholder="Deskripsi Benefit 3"
+                      value={content.enterprise?.benefit3Desc || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), benefit3Desc: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Form Texts */}
+              <div className="pt-2 space-y-3">
+                <h5 className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                  Teks Kartu Formulir Konsultasi
+                </h5>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Judul Formulir</label>
+                    <input
+                      type="text"
+                      value={content.enterprise?.formTitle || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), formTitle: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Subtitle Formulir</label>
+                    <input
+                      type="text"
+                      value={content.enterprise?.formSubtitle || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), formSubtitle: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Teks Tombol Kirim</label>
+                    <input
+                      type="text"
+                      value={content.enterprise?.formBtnText || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), formBtnText: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SECTION 10: FAQ */}
+          {selectedSectionKey === "faq" && (
+            <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center">
+                    <HelpCircle className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">10. Tanya Jawab Umum (FAQ)</h4>
+                    <p className="text-xs text-gray-400">Heading dan daftar pertanyaan yang sering diajukan calon peserta.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    content.sectionsVisibility.faq ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                  }`}>
+                    {content.sectionsVisibility.faq ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => toggleSection("faq")}
+                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white"
+                  >
+                    {content.sectionsVisibility.faq ? "Sembunyikan" : "Tampilkan"}
+                  </button>
+                </div>
+              </div>
+
+              {/* Headings */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Badge FAQ</label>
+                  <input
+                    type="text"
+                    value={content.faq.badge}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        faq: { ...content.faq, badge: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Judul Utama FAQ</label>
+                  <input
+                    type="text"
+                    value={content.faq.title}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        faq: { ...content.faq, title: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white font-bold"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">Subtitle FAQ</label>
+                  <textarea
+                    rows={2}
+                    value={content.faq.subtitle}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        faq: { ...content.faq, subtitle: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+              </div>
+
+              {/* FAQ Items */}
+              <div className="pt-2 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-purple-300 uppercase tracking-wider">
+                    Daftar Pertanyaan &amp; Jawaban ({content.faq.items.length})
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleAddFaq}
+                    className="px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Tambah FAQ</span>
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {content.faq.items.map((faqItem, i) => (
+                    <div key={faqItem.id || i} className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-purple-300">FAQ #{i + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteFaq(i)}
+                          className="text-rose-400 hover:text-rose-300 p-1"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <input
+                        type="text"
+                        value={faqItem.question}
+                        onChange={(e) => handleUpdateFaq(i, "question", e.target.value)}
+                        placeholder="Pertanyaan"
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white font-semibold"
+                      />
+                      <textarea
+                        rows={2}
+                        value={faqItem.answer}
+                        onChange={(e) => handleUpdateFaq(i, "answer", e.target.value)}
+                        placeholder="Jawaban"
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SECTION 11: PRE-FOOTER CTA */}
+          {selectedSectionKey === "cta" && (
+            <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">11. Pre-Footer Banner CTA (Penutup)</h4>
+                    <p className="text-xs text-gray-400">Banner ajakan bergabung terakhir di atas footer dengan garansi kepuasan.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    content.sectionsVisibility.cta ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                  }`}>
+                    {content.sectionsVisibility.cta ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => toggleSection("cta")}
+                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white"
+                  >
+                    {content.sectionsVisibility.cta ? "Sembunyikan" : "Tampilkan"}
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Badge Garansi / Highlight
+                  </label>
+                  <input
+                    type="text"
+                    value={content.cta?.badge || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        cta: { ...(content.cta || DEFAULT_SITE_CONTENT.cta), badge: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Judul Utama CTA
+                  </label>
+                  <input
+                    type="text"
+                    value={content.cta?.title || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        cta: { ...(content.cta || DEFAULT_SITE_CONTENT.cta), title: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white font-bold"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Paragraf Subtitle / Ajakan
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={content.cta?.subtitle || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        cta: { ...(content.cta || DEFAULT_SITE_CONTENT.cta), subtitle: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Teks Tombol CTA Utama
+                  </label>
+                  <input
+                    type="text"
+                    value={content.cta?.primaryBtnText || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        cta: { ...(content.cta || DEFAULT_SITE_CONTENT.cta), primaryBtnText: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Teks Tombol CTA Sekunder
+                  </label>
+                  <input
+                    type="text"
+                    value={content.cta?.secondaryBtnText || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        cta: { ...(content.cta || DEFAULT_SITE_CONTENT.cta), secondaryBtnText: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SECTION 12: FOOTER */}
+          {selectedSectionKey === "footer" && (
+            <div className="p-5 rounded-2xl bg-[#14171E] border border-white/10 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-zinc-500/20 text-zinc-300 flex items-center justify-center">
+                    <MapPin className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">12. Footer &amp; Informasi Kontak Resmi</h4>
+                    <p className="text-xs text-gray-400">Tagline brand di footer, alamat kantor, email, dan WhatsApp advisor.</p>
+                  </div>
+                </div>
+
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300">
+                  SELALU DITAMPILKAN
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="md:col-span-2">
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Tagline Brand di Footer
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={content.footer?.tagline || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), tagline: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Alamat Kantor / Studio
+                  </label>
+                  <input
+                    type="text"
+                    value={content.footer?.address || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), address: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Email Kontak / Dukungan
+                  </label>
+                  <input
+                    type="text"
+                    value={content.footer?.email || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), email: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-[11px] font-semibold text-gray-300 mb-1">
+                    Nomor WhatsApp / Phone Student Advisor
+                  </label>
+                  <input
+                    type="text"
+                    value={content.footer?.phone || ""}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), phone: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Bottom Global Save Floating Card */}
+          <div className="p-4 rounded-2xl bg-[#181B22] border border-white/15 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xl">
+            <div className="flex items-center gap-2.5">
+              <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+              <p className="text-xs text-gray-300">
+                Perubahan pada teks akan langsung diterapkan ke seluruh halaman website BIMCourse setelah disimpan.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => handleSaveContent()}
+              disabled={saving}
+              className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md active:scale-95 flex items-center gap-2 cursor-pointer disabled:opacity-50 shrink-0"
+            >
+              <Save className="w-4 h-4" />
+              <span>{saving ? "Menyimpan..." : "Publikasikan Perubahan Sekarang"}</span>
+            </button>
           </div>
         </div>
       )}

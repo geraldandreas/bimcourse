@@ -6,8 +6,13 @@ import { MapPin, Briefcase, DollarSign, Clock, CheckCircle2, ArrowRight } from "
 import { motion } from "framer-motion";
 import { FadeIn, StaggerContainer, StaggerItem, HoverCard } from "@/components/animations/MotionWrappers";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { SiteContentConfig } from "@/data/defaultSiteContent";
 
-export default function CareerRoadmap() {
+interface CareerRoadmapProps {
+  content?: SiteContentConfig["roadmaps"];
+}
+
+export default function CareerRoadmap({ content }: CareerRoadmapProps) {
   const { language, t } = useLanguage();
   const [selectedRoadmapId, setSelectedRoadmapId] = useState("modeler");
 
@@ -20,7 +25,7 @@ export default function CareerRoadmap() {
         <div className="flex items-center gap-3 mb-10 pb-4 border-b border-black/10 dark:border-white/10">
           <span className="font-mono text-xs font-black px-2.5 py-1 rounded-md bg-gradient-to-r from-amber-400 to-yellow-500 text-black shadow-xs">02</span>
           <span className="text-xs font-mono font-bold uppercase tracking-widest text-zinc-700 dark:text-zinc-300">
-            {language === "en" ? "CAREER ROADMAP (LEARNING PATH)" : "PETA JALAN KARIER (ROADMAP)"}
+            {language === "en" ? "CAREER ROADMAP (LEARNING PATH)" : (content?.badge ? content.badge.toUpperCase() : "PETA JALAN KARIER (ROADMAP)")}
           </span>
           <div className="h-px flex-1 bg-black/10 dark:border-white/10" />
           <span className="text-xs font-mono text-gray-400 dark:text-zinc-500 hidden sm:inline">SECTION 02 / 07</span>
@@ -30,15 +35,15 @@ export default function CareerRoadmap() {
         <FadeIn direction="up">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/15 to-yellow-500/15 text-amber-700 dark:text-amber-300 border border-amber-400/35 text-xs font-bold uppercase tracking-wider mb-3 shadow-xs">
-              {language === "en" ? t.roadmaps.badge : "Roadmap Spesialisasi Karier"}
+              {language === "en" ? t.roadmaps.badge : (content?.badge || "Roadmap Spesialisasi Karier")}
             </div>
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-950 dark:text-white mb-4">
-              {language === "en" ? t.roadmaps.title : "Peta Jalan Karier BIM Terstruktur"}
+              {language === "en" ? t.roadmaps.title : (content?.title || "Peta Jalan Karier BIM Terstruktur")}
             </h2>
             <p className="text-gray-600 dark:text-zinc-400 text-sm md:text-base leading-relaxed">
               {language === "en"
                 ? t.roadmaps.subtitle
-                : "Jangan buang waktu belajar tanpa arah. Pilih jalur yang sesuai dengan latar belakang dan target posisi impian Anda di industri arsitektur & konstruksi."}
+                : (content?.subtitle || "Jangan buang waktu belajar tanpa arah. Pilih jalur yang sesuai dengan latar belakang dan target posisi impian Anda di industri arsitektur & konstruksi.")}
             </p>
           </div>
         </FadeIn>

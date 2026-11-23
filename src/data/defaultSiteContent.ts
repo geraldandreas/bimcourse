@@ -136,6 +136,40 @@ export interface SiteContentConfig {
     primaryCtaText: string;
     secondaryCtaText: string;
   };
+  features: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    card1Badge: string;
+    card1Title: string;
+    card1Desc: string;
+    card1Tag1: string;
+    card1Tag2: string;
+    card2Badge: string;
+    card2Title: string;
+    card2Desc: string;
+    card2Step1: string;
+    card2Step2: string;
+    card2Step3: string;
+    card3Badge: string;
+    card3Title: string;
+    card3Desc: string;
+    card3ChatAuthor: string;
+    card3ChatRole: string;
+    card3ChatQuote: string;
+    card3LinkText: string;
+  };
+  courses: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    searchPlaceholder: string;
+  };
+  roadmaps: {
+    badge: string;
+    title: string;
+    subtitle: string;
+  };
   community: {
     badge: string;
     title: string;
@@ -144,22 +178,68 @@ export interface SiteContentConfig {
     mentorBadgeText: string;
     cardHeading: string;
     cardDescription: string;
+    pillar1Badge: string;
+    pillar1Title: string;
+    pillar1Desc: string;
+    pillar2Badge: string;
+    pillar2Title: string;
+    pillar2Desc: string;
+    pillar3Badge: string;
+    pillar3Title: string;
+    pillar3Desc: string;
+    pillar4Badge: string;
+    pillar4Title: string;
+    pillar4Desc: string;
     instructorsBadge: string;
     instructorsTitle: string;
     instructorsSubtitle: string;
   };
   instructors: WebInstructor[];
+  quiz: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    step1Heading: string;
+    step2Heading: string;
+  };
   testimonials: {
     badge: string;
     title: string;
     subtitle: string;
     items: WebTestimonialItem[];
   };
+  enterprise: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    benefit1Title: string;
+    benefit1Desc: string;
+    benefit2Title: string;
+    benefit2Desc: string;
+    benefit3Title: string;
+    benefit3Desc: string;
+    formTitle: string;
+    formSubtitle: string;
+    formBtnText: string;
+  };
   faq: {
     badge: string;
     title: string;
     subtitle: string;
     items: WebFaqItem[];
+  };
+  cta: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    primaryBtnText: string;
+    secondaryBtnText: string;
+  };
+  footer: {
+    tagline: string;
+    address: string;
+    email: string;
+    phone: string;
   };
 }
 
@@ -188,6 +268,47 @@ export const DEFAULT_SITE_CONTENT: SiteContentConfig = {
     primaryCtaText: "Eksplor Semua Kelas",
     secondaryCtaText: "Tonton Video Pengenalan",
   },
+  features: {
+    badge: "Keunggulan Ekosistem BIMCourse",
+    title: "Metode Teruji untuk Akselerasi Karier Konstruksi Digital",
+    subtitle:
+      "Kurikulum praktis, roadmap terarah, dan bimbingan langsung dari praktisi industri.",
+    card1Badge: "Standar Industri Terkini",
+    card1Title: "Skills for Real Opportunities",
+    card1Desc:
+      "Kurikulum kami mengacu langsung pada Permen PUPR No. 22/2018 dan ISO 19650. Anda tidak hanya belajar klik software, tapi memahami alur kerja tender riil.",
+    card1Tag1: "ISO 19650 & Mandat PUPR",
+    card1Tag2: "LOD 200 - 400",
+    card2Badge: "Jalur Karier Spesifik",
+    card2Title: "Your Goals, Our Support",
+    card2Desc:
+      "Dapatkan panduan langkah demi langkah dari pemula hingga siap lolos uji kompetensi atau promosi jabatan sebagai BIM Coordinator & Manager.",
+    card2Step1: "BIM Modeler (Dasar s/d LOD 300)",
+    card2Step2: "BIM Coordinator (Clash & 4D Time)",
+    card2Step3: "BIM Manager (BEP & ISO 19650)",
+    card3Badge: "Bimbingan Mentor Aktif",
+    card3Title: "Terhubung Bersama Instruktur & Praktisi",
+    card3Desc:
+      "Tanya jawab langsung saat error modeling atau butuh review portfolio. Mentor kami adalah engineer dan arsitek aktif dari konsultan ternama.",
+    card3ChatAuthor: "Eddy Tuasikal, S.Ars",
+    card3ChatRole: "Lead BIM Specialist",
+    card3ChatQuote:
+      "Family Revit kamu sudah rapi parameternya, tinggal perbaiki penamaan sub-kategori sesuai BEP tender.",
+    card3LinkText: "Gabung Komunitas",
+  },
+  courses: {
+    badge: "Kurikulum Praktisi Terakreditasi",
+    title: "Katalog Kelas Spesialisasi BIM",
+    subtitle:
+      "Dari pemula hingga BIM Manager. Kurikulum berbasis proyek nyata, standar ISO 19650, dan studi kasus kontraktor terkemuka.",
+    searchPlaceholder: "Cari Revit, Navisworks, Dynamo...",
+  },
+  roadmaps: {
+    badge: "Roadmap Spesialisasi Karier",
+    title: "Peta Jalan Karier BIM Terstruktur",
+    subtitle:
+      "Jangan buang waktu belajar tanpa arah. Pilih jalur yang sesuai dengan latar belakang dan target posisi impian Anda di industri arsitektur & konstruksi.",
+  },
   community: {
     badge: "Ekosistem Belajar Kolaboratif",
     title: "Terhubung Langsung dengan Instruktur & Komunitas AEC Terbesar",
@@ -198,10 +319,68 @@ export const DEFAULT_SITE_CONTENT: SiteContentConfig = {
     cardHeading: "Bukan Sekadar Nonton Video, Tapi Berproses Bareng Praktisinya",
     cardDescription:
       "Setiap member BIMCourse mendapatkan akses seumur hidup ke grup diskusi eksklusif bersama instruktur. Anda bisa melampirkan file .rvt, .nwc, atau .dyn untuk dibedah solusinya.",
+    pillar1Badge: "Q&A Tanpa Batas",
+    pillar1Title: "Diskusi & Troubleshooting Kendala Modeling",
+    pillar1Desc:
+      "Mengalami error family Revit, kendala export IFC, atau crash script Dynamo? Tanyakan langsung di forum. Instruktur dan mentor aktif merespon dengan screenshot, tips, dan file solusi nyata.",
+    pillar2Badge: "Live Mentoring Rutin",
+    pillar2Title: "Sesi Bedah Model & Sharing Proyek Nyata",
+    pillar2Desc:
+      "Ikuti webinar live dan sesi bedah model rutin setiap bulan. Instruktur membongkar studi kasus asli dari proyek infrastruktur, gedung tinggi, dan bandara langsung di software BIM.",
+    pillar3Badge: "Feedback 1-on-1",
+    pillar3Title: "Review Portofolio & Capstone Langsung Mentor",
+    pillar3Desc:
+      "Pastikan hasil model dan gambar kerja Anda siap diajukan ke perusahaan impian atau klien tender. Dapatkan feedback konstruktif atas ketepatan LOD, parameter, dan kerapian model Anda.",
+    pillar4Badge: "Aset & Peluang",
+    pillar4Title: "Library Family BIM, Template & Info Loker Eksklusif",
+    pillar4Desc:
+      "Akses ratusan family Revit terstandar, template proyek siap pakai, serta jejaring loker BIM Modeler dan Coordinator yang dibagikan secara eksklusif antar member & relasi instruktur.",
     instructorsBadge: "TIM PENGAJAR & MENTOR ",
     instructorsTitle: "Belajar Langsung dari Pelaku Industri Nyata",
     instructorsSubtitle:
       "Bukan sekadar akademisi, instruktur Anda adalah engineer dan arsitek aktif yang setiap hari memegang proyek infrastruktur dan gedung berskala nasional.",
+  },
+  quiz: {
+    badge: "AI Career Pathfinder",
+    title: "Bingung Mulai Belajar dari Mana?",
+    subtitle:
+      "Jawab 2 pertanyaan singkat ini. Kami rekomendasikan kelas yang paling efektif untuk target karier Anda.",
+    step1Heading: "Pilih Latar Belakang / Profesi Anda Saat Ini:",
+    step2Heading: "Apa Target Utama Anda?",
+  },
+  enterprise: {
+    badge: "Solusi Korporasi & Kontraktor",
+    title: "BIMCourse for Enterprise",
+    subtitle:
+      "Akselerasi kesiapan digital tim teknik Anda menyambut mandat BIM dari Kementerian PUPR dan BUMN. Latih tim arsitektur, struktur, dan MEP dalam satu ekosistem kolaboratif standar ISO 19650.",
+    benefit1Title: "In-House Training & Custom Case Study",
+    benefit1Desc:
+      "Materi disesuaikan dengan template Revit, standard family, dan proyek riil yang sedang ditangani perusahaan Anda.",
+    benefit2Title: "ISO 19650 BEP & CDE Framework Audit",
+    benefit2Desc:
+      "Konsultasi penyusunan dokumen tender BIM Execution Plan dan standardisasi penamaan file multi-disiplin.",
+    benefit3Title: "Corporate Analytics Dashboard",
+    benefit3Desc:
+      "Pantau progress belajar tim engineer & drafter dengan laporan kelulusan dan evaluasi portfolio berkala.",
+    formTitle: "Diskusikan Kebutuhan Tim Anda",
+    formSubtitle:
+      "Tim konsultan kami akan menghubungi Anda dalam waktu 1x24 jam untuk demo kurikulum dan penawaran khusus.",
+    formBtnText: "Kirim Permintaan Konsultasi",
+  },
+  cta: {
+    badge: "Garansi Kepuasan Belajar",
+    title: "Siap Naik Level di Era Konstruksi Digital?",
+    subtitle:
+      "Bergabung sekarang dan dapatkan akses seumur hidup ke materi, update software berkala, dan komunitas alumni terbaik di Indonesia.",
+    primaryBtnText: "Mulai Belajar Sekarang",
+    secondaryBtnText: "Lihat Peta Jalan Karier",
+  },
+  footer: {
+    tagline:
+      "Platform edukasi teknologi BIM terdepan di Indonesia. Berstandar ISO 19650 dan didampingi langsung oleh praktisi berpengalaman.",
+    address: "Jakarta Selatan & BSD City, Indonesia",
+    email: "halo@bimcourse.id",
+    phone: "+62 821 1900 8890 (WhatsApp Student Advisor)",
   },
   instructors: [
     {

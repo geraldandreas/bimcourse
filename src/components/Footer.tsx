@@ -5,8 +5,13 @@ import Image from "next/image";
 import { ArrowRight, Check, Mail, Phone, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { SiteContentConfig } from "@/data/defaultSiteContent";
 
-export default function Footer() {
+interface FooterProps {
+  content?: SiteContentConfig["footer"];
+}
+
+export default function Footer({ content }: FooterProps) {
   const { language, t } = useLanguage();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
@@ -40,21 +45,21 @@ export default function Footer() {
             </div>
 
             <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
-              {t.footer.tagline}
+              {language === "en" ? t.footer.tagline : (content?.tagline || t.footer.tagline)}
             </p>
 
             <div className="pt-2 text-xs text-gray-400 space-y-1.5">
               <p className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-amber-400/70" />
-                Jakarta Selatan &amp; BSD City, Indonesia
+                {content?.address || "Jakarta Selatan & BSD City, Indonesia"}
               </p>
               <p className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-amber-400/70" />
-                halo@bimcourse.id
+                {content?.email || "halo@bimcourse.id"}
               </p>
               <p className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-amber-400/70" />
-                +62 821 1900 8890 (WhatsApp Student Advisor)
+                {content?.phone || "+62 821 1900 8890 (WhatsApp Student Advisor)"}
               </p>
             </div>
           </div>

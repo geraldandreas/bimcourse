@@ -180,7 +180,7 @@ export default function Home() {
                   <div className="flex items-center justify-between mb-5">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-400/35 text-[11px] font-bold uppercase tracking-wider text-amber-300 shadow-xs">
                       <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-                      {t.features.card1Badge}
+                      {language === "en" ? t.features.card1Badge : (siteContent.features?.card1Badge || t.features.card1Badge)}
                     </span>
                     <span className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-gray-400 group-hover:bg-gradient-to-r group-hover:from-amber-400 group-hover:to-yellow-500 group-hover:text-black group-hover:border-amber-400 transition-all shadow-md">
                       <ArrowUpRight className="w-4 h-4" />
@@ -189,10 +189,10 @@ export default function Home() {
 
                   {/* Title & Description with Clear Contrast & Breathing Room */}
                   <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-white leading-snug mb-3">
-                    Skills for<br />Real Opportunities
+                    {language === "en" ? <>Skills for<br />Real Opportunities</> : (siteContent.features?.card1Title || "Skills for Real Opportunities")}
                   </h3>
                   <p className="text-xs sm:text-sm text-gray-300 leading-relaxed font-normal">
-                    {t.features.card1Desc}
+                    {language === "en" ? t.features.card1Desc : (siteContent.features?.card1Desc || t.features.card1Desc)}
                   </p>
                 </div>
 
@@ -207,10 +207,10 @@ export default function Home() {
 
                   <div className="relative z-10 flex items-center justify-between">
                     <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-black/60 backdrop-blur-xs border border-white/15 text-gray-200">
-                      {language === "en" ? "ISO 19650 & Mandate" : "ISO 19650 & Mandat PUPR"}
+                      {language === "en" ? "ISO 19650 & Mandate" : (siteContent.features?.card1Tag1 || "ISO 19650 & Mandat PUPR")}
                     </span>
                     <span className="text-[10px] font-extrabold text-black bg-gradient-to-r from-amber-400 to-yellow-500 px-2.5 py-0.5 rounded-full shadow-xs">
-                      LOD 200 - 400
+                      {siteContent.features?.card1Tag2 || "LOD 200 - 400"}
                     </span>
                   </div>
 
@@ -241,7 +241,7 @@ export default function Home() {
                   {/* Top Header Row */}
                   <div className="flex items-center justify-between mb-5">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 dark:bg-amber-400/15 border border-amber-500/25 text-[11px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300 shadow-xs">
-                      {t.features.card2Badge}
+                      {language === "en" ? t.features.card2Badge : (siteContent.features?.card2Badge || t.features.card2Badge)}
                     </span>
                     <span className="w-10 h-10 rounded-full border border-black/15 dark:border-white/15 flex items-center justify-center text-gray-700 dark:text-zinc-300 group-hover:bg-gradient-to-r group-hover:from-amber-400 group-hover:to-yellow-500 group-hover:text-black group-hover:border-amber-400 transition-all shadow-md">
                       <ArrowUpRight className="w-4 h-4" />
@@ -250,10 +250,10 @@ export default function Home() {
 
                   {/* Title & Description */}
                   <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-950 dark:text-white leading-snug mb-3">
-                    Your Goals<br />Our Support
+                    {language === "en" ? <>Your Goals<br />Our Support</> : (siteContent.features?.card2Title || "Your Goals, Our Support")}
                   </h3>
                   <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400 leading-relaxed font-normal">
-                    {t.features.card2Desc}
+                    {language === "en" ? t.features.card2Desc : (siteContent.features?.card2Desc || t.features.card2Desc)}
                   </p>
                 </div>
 
@@ -272,27 +272,28 @@ export default function Home() {
                     <div className="flex items-center justify-between text-xs bg-zinc-50 dark:bg-zinc-900 p-2 rounded-xl border border-black/5 dark:border-white/5">
                       <div className="flex items-center gap-2">
                         <span className="w-5 h-5 rounded-full bg-black dark:bg-white text-white dark:text-black flex items-center justify-center text-[10px] font-bold">1</span>
-                        <span className="font-semibold text-gray-800 dark:text-zinc-200">BIM Modeler</span>
+                        <span className="font-semibold text-gray-800 dark:text-zinc-200">
+                          {siteContent.features?.card2Step1 || "BIM Modeler (Dasar s/d LOD 300)"}
+                        </span>
                       </div>
-                      <span className="text-[10px] font-mono text-gray-500 dark:text-zinc-400">
-                        {language === "en" ? "Basics to LOD 300" : "Dasar s/d LOD 300"}
-                      </span>
                     </div>
 
                     <div className="flex items-center justify-between text-xs bg-zinc-50 dark:bg-zinc-900 p-2 rounded-xl border border-black/5 dark:border-white/5">
                       <div className="flex items-center gap-2">
                         <span className="w-5 h-5 rounded-full bg-black dark:bg-white text-white dark:text-black flex items-center justify-center text-[10px] font-bold">2</span>
-                        <span className="font-semibold text-gray-800 dark:text-zinc-200">BIM Coordinator</span>
+                        <span className="font-semibold text-gray-800 dark:text-zinc-200">
+                          {siteContent.features?.card2Step2 || "BIM Coordinator (Clash & 4D Time)"}
+                        </span>
                       </div>
-                      <span className="text-[10px] font-mono text-zinc-700 dark:text-zinc-300 font-semibold">Clash &amp; 4D Time</span>
                     </div>
 
                     <div className="flex items-center justify-between text-xs bg-zinc-50 dark:bg-zinc-900 p-2 rounded-xl border border-black/5 dark:border-white/5">
                       <div className="flex items-center gap-2">
                         <span className="w-5 h-5 rounded-full bg-zinc-800 dark:bg-zinc-200 text-white dark:text-black flex items-center justify-center text-[10px] font-bold">3</span>
-                        <span className="font-semibold text-gray-800 dark:text-zinc-200">BIM Manager</span>
+                        <span className="font-semibold text-gray-800 dark:text-zinc-200">
+                          {siteContent.features?.card2Step3 || "BIM Manager (BEP & ISO 19650)"}
+                        </span>
                       </div>
-                      <span className="text-[10px] font-mono text-gray-500 dark:text-zinc-400">BEP &amp; ISO 19650</span>
                     </div>
                   </div>
                 </div>
@@ -312,7 +313,7 @@ export default function Home() {
                   <div className="flex items-center justify-between mb-5">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-400/35 text-[11px] font-bold uppercase tracking-wider text-amber-300 shadow-xs">
                       <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-                      {t.features.card3Badge}
+                      {language === "en" ? t.features.card3Badge : (siteContent.features?.card3Badge || t.features.card3Badge)}
                     </span>
                     <span className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-gray-400 group-hover:bg-gradient-to-r group-hover:from-amber-400 group-hover:to-yellow-500 group-hover:text-black group-hover:border-amber-400 transition-all shadow-md">
                       <ArrowUpRight className="w-4 h-4" />
@@ -321,10 +322,10 @@ export default function Home() {
 
                   {/* Title & Description Focused on Connecting with BIMCourse Community & Instructors */}
                   <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-white leading-snug mb-3">
-                    {language === "en" ? <>Connect with<br />Instructors &amp; Experts</> : <>Terhubung Bersama<br />Instruktur &amp; Praktisi</>}
+                    {language === "en" ? <>Connect with<br />Instructors &amp; Experts</> : (siteContent.features?.card3Title || "Terhubung Bersama Instruktur & Praktisi")}
                   </h3>
                   <p className="text-xs sm:text-sm text-gray-300 leading-relaxed font-normal">
-                    {t.features.card3Desc}
+                    {language === "en" ? t.features.card3Desc : (siteContent.features?.card3Desc || t.features.card3Desc)}
                   </p>
                 </div>
 
@@ -361,12 +362,12 @@ export default function Home() {
                   {/* Chat Simulation Snippet */}
                   <div className="bg-black/40 rounded-xl p-2.5 border border-white/5 my-auto">
                     <div className="flex items-center gap-1.5 text-[10px] text-gray-400 mb-1">
-                      <span className="font-bold text-white">{t.features.chatAuthor}</span>
+                      <span className="font-bold text-white">{siteContent.features?.card3ChatAuthor || t.features.chatAuthor}</span>
                       <span>•</span>
-                      <span>{t.features.chatRole}</span>
+                      <span>{siteContent.features?.card3ChatRole || t.features.chatRole}</span>
                     </div>
                     <p className="text-[11px] text-gray-200 line-clamp-2 leading-relaxed">
-                      &ldquo;{t.features.chatQuote}&rdquo;
+                      &ldquo;{siteContent.features?.card3ChatQuote || t.features.chatQuote}&rdquo;
                     </p>
                   </div>
 
@@ -374,7 +375,7 @@ export default function Home() {
                   <div className="flex items-center justify-between text-[10px] text-gray-400 pt-1">
                     <span>{t.features.membersTag}</span>
                     <span className="text-amber-400 group-hover:text-amber-300 font-bold flex items-center gap-1 transition-colors">
-                      {t.features.card3Link} <ArrowRight className="w-3 h-3" />
+                      {siteContent.features?.card3LinkText || t.features.card3Link} <ArrowRight className="w-3 h-3" />
                     </span>
                   </div>
                 </div>
@@ -387,12 +388,15 @@ export default function Home() {
 
       {/* Interactive Course Catalog with Filter & Modal */}
       {siteContent.sectionsVisibility.courses !== false && (
-        <CourseCatalog onEnrollSuccess={handleEnrollSuccess} />
+        <CourseCatalog
+          content={siteContent.courses}
+          onEnrollSuccess={handleEnrollSuccess}
+        />
       )}
 
       {/* Interactive Career Roadmaps */}
       {siteContent.sectionsVisibility.roadmaps !== false && (
-        <CareerRoadmap />
+        <CareerRoadmap content={siteContent.roadmaps} />
       )}
 
       {/* Section 03: Komunitas BIMCourse Bersama Instruktur & Praktisi */}
@@ -406,7 +410,7 @@ export default function Home() {
 
       {/* Interactive 30-Second Quiz Recommender */}
       {siteContent.sectionsVisibility.quiz !== false && (
-        <QuizRecommender />
+        <QuizRecommender content={siteContent.quiz} />
       )}
 
       {/* Testimonials */}
@@ -416,7 +420,7 @@ export default function Home() {
 
       {/* Enterprise Training Section */}
       {siteContent.sectionsVisibility.enterprise !== false && (
-        <EnterpriseSection />
+        <EnterpriseSection content={siteContent.enterprise} />
       )}
 
       {/* FAQ Section */}
@@ -433,13 +437,13 @@ export default function Home() {
                 <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-amber-400/25 via-yellow-500/15 to-transparent rounded-full blur-[90px] pointer-events-none" />
                 <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-500/15 to-yellow-500/15 text-xs font-semibold text-amber-200 mb-4 border border-amber-400/35">
                   <ShieldCheck className="w-4 h-4 text-amber-400" />
-                  {t.cta.guarantee}
+                  {language === "en" ? t.cta.guarantee : (siteContent.cta?.badge || t.cta.guarantee)}
                 </div>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4 max-w-2xl">
-                  {t.cta.title}
+                  {language === "en" ? t.cta.title : (siteContent.cta?.title || t.cta.title)}
                 </h2>
                 <p className="text-gray-300 text-sm md:text-base max-w-xl mb-8 leading-relaxed">
-                  {t.cta.desc}
+                  {language === "en" ? t.cta.desc : (siteContent.cta?.subtitle || t.cta.desc)}
                 </p>
                 <div className="flex flex-col sm:flex-row items-center gap-4">
                   <motion.a
@@ -449,7 +453,7 @@ export default function Home() {
                     onClick={scrollToCourses}
                     className="px-8 py-4 rounded-full bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-300 hover:to-yellow-400 text-black font-black text-sm transition-all shadow-[0_4px_25px_rgba(245,180,50,0.35)] hover:shadow-[0_6px_35px_rgba(245,180,50,0.55)] flex items-center gap-2 cursor-pointer"
                   >
-                    {t.cta.primaryBtn}
+                    {language === "en" ? t.cta.primaryBtn : (siteContent.cta?.primaryBtnText || t.cta.primaryBtn)}
                     <ArrowRight className="w-4 h-4" />
                   </motion.a>
                   <motion.a
@@ -458,7 +462,7 @@ export default function Home() {
                     href="#roadmaps"
                     className="px-8 py-4 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-sm transition-all border border-white/10 cursor-pointer"
                   >
-                    {t.cta.secondaryBtn}
+                    {language === "en" ? t.cta.secondaryBtn : (siteContent.cta?.secondaryBtnText || t.cta.secondaryBtn)}
                   </motion.a>
                 </div>
               </div>
@@ -468,7 +472,7 @@ export default function Home() {
       )}
 
       {/* Footer */}
-      <Footer />
+      <Footer content={siteContent.footer} />
 
       {/* Hero Video Preview Modal */}
       {heroVideoOpen && (

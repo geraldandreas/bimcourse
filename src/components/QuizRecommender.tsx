@@ -5,8 +5,13 @@ import { Sparkles, ArrowRight, RotateCcw, CheckCircle, Tag } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeIn } from "@/components/animations/MotionWrappers";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { SiteContentConfig } from "@/data/defaultSiteContent";
 
-export default function QuizRecommender() {
+interface QuizRecommenderProps {
+  content?: SiteContentConfig["quiz"];
+}
+
+export default function QuizRecommender({ content }: QuizRecommenderProps) {
   const { language, t } = useLanguage();
   const [background, setBackground] = useState<string | null>(null);
   const [goal, setGoal] = useState<string | null>(null);
@@ -131,15 +136,15 @@ export default function QuizRecommender() {
             <div className="relative z-10 max-w-3xl mx-auto text-center mb-10">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/15 to-yellow-500/15 text-amber-300 text-xs font-semibold uppercase tracking-wider mb-4 border border-amber-400/35 shadow-xs">
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                AI Career Pathfinder
+                {content?.badge || "AI Career Pathfinder"}
               </div>
               <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
-                {language === "en" ? t.quiz.title : "Bingung Mulai Belajar dari Mana?"}
+                {language === "en" ? t.quiz.title : (content?.title || "Bingung Mulai Belajar dari Mana?")}
               </h2>
               <p className="text-gray-400 text-sm md:text-base">
                 {language === "en"
                   ? t.quiz.subtitle
-                  : "Jawab 2 pertanyaan singkat ini. Kami rekomendasikan kelas yang paling efektif untuk target karier Anda."}
+                  : (content?.subtitle || "Jawab 2 pertanyaan singkat ini. Kami rekomendasikan kelas yang paling efektif untuk target karier Anda.")}
               </p>
             </div>
 
@@ -157,7 +162,7 @@ export default function QuizRecommender() {
                   <div>
                     <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
                       <span className="w-6 h-6 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-black flex items-center justify-center text-xs shadow-xs">1</span>
-                      {language === "en" ? "Select Your Current Background / Profession:" : "Pilih Latar Belakang / Profesi Anda Saat Ini:"}
+                      {language === "en" ? "Select Your Current Background / Profession:" : (content?.step1Heading || "Pilih Latar Belakang / Profesi Anda Saat Ini:")}
                     </p>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                       {backgrounds.map((b) => {
@@ -186,7 +191,7 @@ export default function QuizRecommender() {
                   <div>
                     <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
                       <span className="w-6 h-6 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-black flex items-center justify-center text-xs shadow-xs">2</span>
-                      {language === "en" ? "What is Your Priority Goal in the Next 3 Months?" : "Apa Target Prioritas Anda Dalam 3 Bulan ke Depan?"}
+                      {language === "en" ? "What is Your Priority Goal in the Next 3 Months?" : (content?.step2Heading || "Apa Target Prioritas Anda Dalam 3 Bulan ke Depan?")}
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {goals.map((g) => {

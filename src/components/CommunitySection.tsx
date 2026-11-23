@@ -73,30 +73,30 @@ export default function CommunitySection({
   const localizedPillars = [
     {
       icon: MessageSquare,
-      badge: t.community.pillar1Badge,
-      title: t.community.pillar1Title,
-      description: t.community.pillar1Desc,
+      badge: language === "en" ? t.community.pillar1Badge : (content?.pillar1Badge || t.community.pillar1Badge),
+      title: language === "en" ? t.community.pillar1Title : (content?.pillar1Title || t.community.pillar1Title),
+      description: language === "en" ? t.community.pillar1Desc : (content?.pillar1Desc || t.community.pillar1Desc),
       tagColor: "bg-zinc-100 text-zinc-900 border-zinc-200"
     },
     {
       icon: Video,
-      badge: t.community.pillar2Badge,
-      title: t.community.pillar2Title,
-      description: t.community.pillar2Desc,
+      badge: language === "en" ? t.community.pillar2Badge : (content?.pillar2Badge || t.community.pillar2Badge),
+      title: language === "en" ? t.community.pillar2Title : (content?.pillar2Title || t.community.pillar2Title),
+      description: language === "en" ? t.community.pillar2Desc : (content?.pillar2Desc || t.community.pillar2Desc),
       tagColor: "bg-zinc-100 text-zinc-900 border-zinc-200"
     },
     {
       icon: Award,
-      badge: t.community.pillar3Badge,
-      title: t.community.pillar3Title,
-      description: t.community.pillar3Desc,
+      badge: language === "en" ? t.community.pillar3Badge : (content?.pillar3Badge || t.community.pillar3Badge),
+      title: language === "en" ? t.community.pillar3Title : (content?.pillar3Title || t.community.pillar3Title),
+      description: language === "en" ? t.community.pillar3Desc : (content?.pillar3Desc || t.community.pillar3Desc),
       tagColor: "bg-black text-white border-black"
     },
     {
       icon: FolderGit2,
-      badge: t.community.pillar4Badge,
-      title: t.community.pillar4Title,
-      description: t.community.pillar4Desc,
+      badge: language === "en" ? t.community.pillar4Badge : (content?.pillar4Badge || t.community.pillar4Badge),
+      title: language === "en" ? t.community.pillar4Title : (content?.pillar4Title || t.community.pillar4Title),
+      description: language === "en" ? t.community.pillar4Desc : (content?.pillar4Desc || t.community.pillar4Desc),
       tagColor: "bg-zinc-100 text-zinc-900 border-zinc-200"
     }
   ];

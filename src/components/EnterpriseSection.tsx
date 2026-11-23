@@ -5,8 +5,13 @@ import { Building2, Users, FileCheck, CheckCircle2, ArrowRight } from "lucide-re
 import { motion } from "framer-motion";
 import { FadeIn, StaggerContainer, StaggerItem, HoverCard } from "@/components/animations/MotionWrappers";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { SiteContentConfig } from "@/data/defaultSiteContent";
 
-export default function EnterpriseSection() {
+interface EnterpriseSectionProps {
+  content?: SiteContentConfig["enterprise"];
+}
+
+export default function EnterpriseSection({ content }: EnterpriseSectionProps) {
   const { language, t } = useLanguage();
   const [inquirySent, setInquirySent] = useState(false);
   const [companyName, setCompanyName] = useState("");
@@ -22,27 +27,27 @@ export default function EnterpriseSection() {
   const benefits = [
     {
       icon: Building2,
-      title: language === "en" ? "In-House Training & Custom Case Study" : "In-House Training & Custom Case Study",
+      title: language === "en" ? "In-House Training & Custom Case Study" : (content?.benefit1Title || "In-House Training & Custom Case Study"),
       desc:
         language === "en"
           ? "Materials tailored to your company's Revit templates, standard families, and active projects."
-          : "Materi disesuaikan dengan template Revit, standard family, dan proyek riil yang sedang ditangani perusahaan Anda.",
+          : (content?.benefit1Desc || "Materi disesuaikan dengan template Revit, standard family, dan proyek riil yang sedang ditangani perusahaan Anda."),
     },
     {
       icon: FileCheck,
-      title: language === "en" ? "ISO 19650 BEP & CDE Framework Audit" : "ISO 19650 BEP & CDE Framework Audit",
+      title: language === "en" ? "ISO 19650 BEP & CDE Framework Audit" : (content?.benefit2Title || "ISO 19650 BEP & CDE Framework Audit"),
       desc:
         language === "en"
           ? "Consulting for BIM Execution Plan tender docs and multi-disciplinary naming standardization."
-          : "Konsultasi penyusunan dokumen tender BIM Execution Plan dan standardisasi penamaan file multi-disiplin.",
+          : (content?.benefit2Desc || "Konsultasi penyusunan dokumen tender BIM Execution Plan dan standardisasi penamaan file multi-disiplin."),
     },
     {
       icon: Users,
-      title: language === "en" ? "Corporate Analytics Dashboard" : "Corporate Analytics Dashboard",
+      title: language === "en" ? "Corporate Analytics Dashboard" : (content?.benefit3Title || "Corporate Analytics Dashboard"),
       desc:
         language === "en"
           ? "Monitor your engineering team's progress with graduation reports and periodic portfolio evaluations."
-          : "Pantau progress belajar tim engineer & drafter dengan laporan kelulusan dan evaluasi portfolio berkala.",
+          : (content?.benefit3Desc || "Pantau progress belajar tim engineer & drafter dengan laporan kelulusan dan evaluasi portfolio berkala."),
     },
   ];
 
@@ -65,15 +70,15 @@ export default function EnterpriseSection() {
               {/* Left Text */}
               <div className="lg:col-span-7">
                 <span className="px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/15 to-yellow-500/15 border border-amber-400/35 text-amber-700 dark:text-amber-300 text-xs font-bold uppercase tracking-wider inline-block mb-4 shadow-xs">
-                  {t.enterprise.badge}
+                  {language === "en" ? t.enterprise.badge : (content?.badge || "Solusi Korporasi & Kontraktor")}
                 </span>
                 <h2 className="text-3xl md:text-5xl font-black tracking-tight text-gray-950 dark:text-white mb-4">
-                  {language === "en" ? t.enterprise.title : "BIMCourse for Enterprise"}
+                  {language === "en" ? t.enterprise.title : (content?.title || "BIMCourse for Enterprise")}
                 </h2>
                 <p className="text-gray-700 dark:text-zinc-300 text-sm md:text-base leading-relaxed mb-8">
                   {language === "en"
                     ? t.enterprise.subtitle
-                    : "Akselerasi kesiapan digital tim teknik Anda menyambut mandat BIM dari Kementerian PUPR dan BUMN. Latih tim arsitektur, struktur, dan MEP dalam satu ekosistem kolaboratif standar ISO 19650."}
+                    : (content?.subtitle || "Akselerasi kesiapan digital tim teknik Anda menyambut mandat BIM dari Kementerian PUPR dan BUMN. Latih tim arsitektur, struktur, dan MEP dalam satu ekosistem kolaboratif standar ISO 19650.")}
                 </p>
 
                 <div className="space-y-4">
@@ -98,12 +103,12 @@ export default function EnterpriseSection() {
               <div className="lg:col-span-5">
                 <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-zinc-200 dark:border-white/10 shadow-lg">
                   <h3 className="text-xl font-bold text-gray-950 dark:text-white mb-2">
-                    {language === "en" ? "In-House Training Inquiry" : "Konsultasi In-House Training"}
+                    {language === "en" ? "In-House Training Inquiry" : (content?.formTitle || "Konsultasi In-House Training")}
                   </h3>
                   <p className="text-xs text-gray-500 dark:text-zinc-400 mb-6">
                     {language === "en"
                       ? "Receive a customized curriculum proposal and pricing for teams of 5 or more."
-                      : "Dapatkan proposal kurikulum khusus dan simulasi paket harga untuk tim minimal 5 orang."}
+                      : (content?.formSubtitle || "Dapatkan proposal kurikulum khusus dan simulasi paket harga untuk tim minimal 5 orang.")}
                   </p>
 
                   {inquirySent ? (
@@ -173,7 +178,7 @@ export default function EnterpriseSection() {
                         type="submit"
                         className="w-full py-3.5 rounded-full bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-300 hover:to-yellow-400 text-black font-extrabold text-sm transition-all flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(245,180,50,0.35)] cursor-pointer"
                       >
-                        {language === "en" ? "Request Proposal & Discuss Syllabus" : "Minta Proposal & Diskusi Silabus"}
+                        {language === "en" ? "Request Proposal & Discuss Syllabus" : (content?.formBtnText || "Minta Proposal & Diskusi Silabus")}
                         <ArrowRight className="w-4 h-4" />
                       </motion.button>
                     </form>

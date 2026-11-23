@@ -10,10 +10,12 @@ import { COURSES, CATEGORIES, type Course } from "@/data/courses";
 import CourseDetailModal from "./CourseDetailModal";
 import CheckoutModal from "./CheckoutModal";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { SiteContentConfig } from "@/data/defaultSiteContent";
 
 interface CourseCatalogProps {
   onEnrollSuccess?: (course: Course) => void;
   searchQueryProp?: string;
+  content?: SiteContentConfig["courses"];
 }
 
 const normalizeCategory = (cat: string) => {
@@ -26,7 +28,7 @@ const normalizeCategory = (cat: string) => {
   return lower;
 };
 
-export default function CourseCatalog({ onEnrollSuccess, searchQueryProp = "" }: CourseCatalogProps) {
+export default function CourseCatalog({ onEnrollSuccess, searchQueryProp = "", content }: CourseCatalogProps) {
   const { language, t } = useLanguage();
   const [coursesList, setCoursesList] = useState<Course[]>(COURSES);
   const [activeCategory, setActiveCategory] = useState<string>("all");
@@ -196,15 +198,15 @@ export default function CourseCatalog({ onEnrollSuccess, searchQueryProp = "" }:
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/15 to-yellow-500/15 text-amber-700 dark:text-amber-300 border border-amber-400/35 text-xs font-bold uppercase tracking-wider mb-3 shadow-xs">
                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                {language === "en" ? t.courses.badge : "Kurikulum Praktisi Terakreditasi"}
+                {language === "en" ? t.courses.badge : (content?.badge || "Kurikulum Praktisi Terakreditasi")}
               </div>
               <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-950 dark:text-white">
-                {language === "en" ? t.courses.title : "Katalog Kelas Spesialisasi BIM"}
+                {language === "en" ? t.courses.title : (content?.title || "Katalog Kelas Spesialisasi BIM")}
               </h2>
               <p className="text-gray-600 dark:text-zinc-400 text-base md:text-lg max-w-2xl mt-2">
                 {language === "en"
                   ? t.courses.subtitle
-                  : "Dari pemula hingga BIM Manager. Kurikulum berbasis proyek nyata, standar ISO 19650, dan studi kasus kontraktor terkemuka."}
+                  : (content?.subtitle || "Dari pemula hingga BIM Manager. Kurikulum berbasis proyek nyata, standar ISO 19650, dan studi kasus kontraktor terkemuka.")}
               </p>
             </div>
 
@@ -212,7 +214,7 @@ export default function CourseCatalog({ onEnrollSuccess, searchQueryProp = "" }:
             <div className="w-full md:w-80 relative">
               <input
                 type="text"
-                placeholder={language === "en" ? t.courses.searchPlaceholder : "Cari Revit, Navisworks, Dynamo..."}
+                placeholder={language === "en" ? t.courses.searchPlaceholder : (content?.searchPlaceholder || "Cari Revit, Navisworks, Dynamo...")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 rounded-full bg-white dark:bg-zinc-900 border border-amber-200/60 dark:border-white/15 focus:outline-hidden focus:ring-2 focus:ring-amber-400 dark:focus:ring-amber-400 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-zinc-500 shadow-xs transition-colors"
