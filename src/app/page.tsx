@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Play, ArrowRight, ArrowUpRight, Star, ShieldCheck, X } from "lucide-react";
+import { Play, ArrowRight, ArrowUpRight, ShieldCheck, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeIn, StaggerContainer, StaggerItem, FloatElement, HoverCard } from "@/components/animations/MotionWrappers";
 import Navbar from "@/components/Navbar";
@@ -119,43 +119,6 @@ export default function Home() {
               </div>
             </FadeIn>
 
-            {/* Hero Social Proof Avatars */}
-            <FadeIn delay={0.35} direction="up">
-              <div className="mt-10 md:mt-12 flex flex-col sm:flex-row items-center gap-4 text-xs text-gray-300">
-                <div className="flex -space-x-2 overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=100&auto=format&fit=crop"
-                    alt="Alumni"
-                    className="inline-block h-8 w-8 rounded-full ring-2 ring-black object-cover"
-                  />
-                  <img
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop"
-                    alt="Alumni"
-                    className="inline-block h-8 w-8 rounded-full ring-2 ring-black object-cover"
-                  />
-                  <img
-                    src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=100&auto=format&fit=crop"
-                    alt="Alumni"
-                    className="inline-block h-8 w-8 rounded-full ring-2 ring-black object-cover"
-                  />
-                  <img
-                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=100&auto=format&fit=crop"
-                    alt="Alumni"
-                    className="inline-block h-8 w-8 rounded-full ring-2 ring-black object-cover"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center text-amber-400">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                    ))}
-                  </div>
-                  <span className="font-bold text-amber-300">{siteContent.hero.statsRating || t.hero.ratingScore}</span>
-                  <span className="text-gray-400">•</span>
-                  <span>{language === "en" ? t.hero.studentsCount : (siteContent.hero.statsStudents || t.hero.studentsCount)}</span>
-                </div>
-              </div>
-            </FadeIn>
           </div>
         </section>
       )}

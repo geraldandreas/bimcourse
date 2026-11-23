@@ -20,7 +20,6 @@ import {
   Check,
   Printer,
   X,
-  Sparkles,
   Building2,
   Phone,
   Mail,

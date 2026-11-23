@@ -14,7 +14,6 @@ import {
   DollarSign,
   CheckCircle2,
   Clock,
-  Sparkles,
   BarChart3,
   FlaskConical,
   MonitorPlay,
@@ -1228,7 +1227,7 @@ export default function SuperAdminDashboard() {
                       className="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-500/10 dark:hover:bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-500/30 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
                       title="Buka Editor Kurikulum & Modul Interaktif"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
+                      <Layers className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
                       <span>Kelola Silabus &amp; Topik</span>
                     </button>
 
@@ -1831,7 +1830,7 @@ export default function SuperAdminDashboard() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="border-b border-gray-200 dark:border-white/10 text-gray-400 uppercase text-[10px] tracking-wider">
+                    <tr className="border-b border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 bg-gray-50/80 dark:bg-transparent uppercase text-[10px] tracking-wider">
                       <th className="py-3 px-4">Siswa</th>
                       <th className="py-3 px-4">Judul Tugas &amp; Kelas</th>
                       <th className="py-3 px-4">Catatan Siswa</th>

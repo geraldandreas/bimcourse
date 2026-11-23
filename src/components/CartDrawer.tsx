@@ -10,7 +10,6 @@ import {
   Trash2,
   ArrowRight,
   ShieldCheck,
-  Sparkles,
   BookOpen,
   Lock,
   Plus,

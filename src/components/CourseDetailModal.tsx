@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { X, Play, Clock, BookOpen, Star, Users, CheckCircle, ChevronDown, ChevronUp, ShieldCheck, ArrowRight, ArrowUpRight } from "lucide-react";
+import { X, Play, Clock, BookOpen, Users, CheckCircle, ChevronDown, ChevronUp, ShieldCheck, ArrowRight, ArrowUpRight } from "lucide-react";
 import type { Course } from "@/data/courses";
 
 interface CourseDetailModalProps {
@@ -76,7 +76,6 @@ export default function CourseDetailModal({ course, onClose, onEnroll }: CourseD
             {/* Quick Metrics */}
             <div className="flex flex-wrap items-center gap-4 mt-4 text-xs md:text-sm text-gray-600 dark:text-zinc-400">
               <span className="flex items-center gap-1 font-semibold text-black dark:text-white">
-                <Star className="w-4 h-4 fill-black text-black dark:fill-white dark:text-white" />
                 {course.rating} ({course.reviewsCount} review)
               </span>
               <span className="flex items-center gap-1">

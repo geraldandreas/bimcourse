@@ -23,8 +23,6 @@ import {
   MessageSquare,
   Phone,
   Share2,
-  Sparkles,
-  Star,
   Users,
   X,
   ZoomIn,
@@ -213,8 +211,7 @@ export default function InstructorCvPortfolioPage({ params }: PageProps) {
                   className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 text-black text-[11px] font-black uppercase tracking-wider shadow-lg flex items-center gap-1">
-                <Sparkles className="w-3 h-3" />
+              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 text-black text-[11px] font-black uppercase tracking-wider shadow-lg flex items-center">
                 <span>{instructor.experience || "BIM Specialist"}</span>
               </div>
             </div>
@@ -475,8 +472,7 @@ export default function InstructorCvPortfolioPage({ params }: PageProps) {
                       {/* Highlights / Technical Analyses */}
                       {proj.highlights && proj.highlights.length > 0 && (
                         <div className="mt-5 p-4 sm:p-5 rounded-2xl bg-white dark:bg-black/40 border border-zinc-200 dark:border-white/10">
-                          <h4 className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 mb-2.5 flex items-center gap-1.5">
-                            <Sparkles className="w-3.5 h-3.5" />
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 mb-2.5 flex items-center">
                             <span>Poin Keunggulan &amp; Simulasi Teknis:</span>
                           </h4>
                           <ul className="space-y-2">
@@ -938,7 +934,6 @@ export default function InstructorCvPortfolioPage({ params }: PageProps) {
                       </p>
 
                       <div className="flex items-center gap-1.5 mt-3 text-xs font-bold text-amber-500">
-                        <Star className="w-3.5 h-3.5 fill-current" />
                         <span>{c.rating}</span>
                         <span className="text-zinc-400 font-normal">({c.reviewsCount} review)</span>
                       </div>

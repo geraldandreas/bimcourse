@@ -13,7 +13,6 @@ import {
   Clock,
   AlertCircle,
   ExternalLink,
-  Sparkles,
 } from "lucide-react";
 import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
 

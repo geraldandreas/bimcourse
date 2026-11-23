@@ -13,7 +13,6 @@ import {
   ShieldCheck,
   ArrowRight,
   Clock,
-  Sparkles,
   AlertTriangle,
   Loader2,
   Check,

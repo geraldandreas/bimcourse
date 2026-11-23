@@ -1,6 +1,6 @@
 "use client";
 
-import { Quote, Star } from "lucide-react";
+import { Quote } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem, HoverCard } from "@/components/animations/MotionWrappers";
 import { DEFAULT_SITE_CONTENT, WebTestimonialItem } from "@/data/defaultSiteContent";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
@@ -62,14 +62,6 @@ export default function TestimonialsSection({
                   <div>
                     <div className="flex items-center justify-between mb-6">
                       <Quote className="w-8 h-8 text-amber-400/50 dark:text-amber-400/30" />
-                      <div className="flex items-center gap-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className="w-4 h-4 fill-amber-400 text-amber-400"
-                          />
-                        ))}
-                      </div>
                     </div>
 
                     <p className="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed italic mb-6">

@@ -137,56 +137,56 @@ export default function AdminDashboard() {
       )}
 
       {/* Top Banner */}
-      <div className="p-6 rounded-3xl bg-gradient-to-r from-blue-950/40 via-blue-900/20 to-black/40 border border-blue-500/20">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-[11px] font-mono font-bold mb-2 border border-blue-500/30">
+      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-blue-50 via-indigo-50/50 to-white dark:from-blue-950/40 dark:via-blue-900/20 dark:to-black/40 border border-blue-200 dark:border-blue-500/20 shadow-md">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 text-[11px] font-mono font-bold mb-2 border border-blue-200 dark:border-blue-500/30">
           <BookOpen className="w-3.5 h-3.5" />
-          <span>OPERATIONAL & CURRICULUM MANAGEMENT</span>
+          <span>OPERATIONAL &amp; CURRICULUM MANAGEMENT</span>
         </div>
-        <h1 className="text-2xl font-black text-white">Admin Operations Workspace</h1>
-        <p className="text-xs text-gray-400 mt-1">
+        <h1 className="text-2xl sm:text-3xl font-black text-gray-950 dark:text-white">Admin Operations Workspace</h1>
+        <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 max-w-xl">
           Persetujuan dan kurasi kelas BIM, monitoring pendaftaran siswa, serta rekonsiliasi transaksi.
         </p>
       </div>
 
       {/* Metrics */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
-          <div className="flex items-center justify-between text-gray-400 mb-2">
+        <div className="p-4 rounded-2xl bg-white dark:bg-white/[0.03] border border-gray-200 dark:border-white/10 shadow-sm">
+          <div className="flex items-center justify-between text-gray-500 dark:text-gray-400 mb-2">
             <span className="text-[11px] uppercase tracking-wider font-semibold">Total Kelas</span>
-            <BookOpen className="w-4 h-4 text-blue-400" />
+            <BookOpen className="w-4 h-4 text-blue-500 dark:text-blue-400" />
           </div>
-          <p className="text-2xl font-black text-white">{courses.length}</p>
-          <p className="text-[10px] text-emerald-400 mt-1">
+          <p className="text-2xl font-black text-gray-950 dark:text-white">{courses.length}</p>
+          <p className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-1">
             {courses.filter((c) => c.published).length} Live di Katalog
           </p>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
-          <div className="flex items-center justify-between text-gray-400 mb-2">
+        <div className="p-4 rounded-2xl bg-white dark:bg-white/[0.03] border border-gray-200 dark:border-white/10 shadow-sm">
+          <div className="flex items-center justify-between text-gray-500 dark:text-gray-400 mb-2">
             <span className="text-[11px] uppercase tracking-wider font-semibold">Menunggu Review</span>
-            <XCircle className="w-4 h-4 text-amber-400" />
+            <XCircle className="w-4 h-4 text-amber-500 dark:text-amber-400" />
           </div>
-          <p className="text-2xl font-black text-amber-400">
+          <p className="text-2xl font-black text-amber-600 dark:text-amber-400">
             {courses.filter((c) => !c.published).length}
           </p>
           <p className="text-[10px] text-gray-500 mt-1">Draft dari Pengajar</p>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
-          <div className="flex items-center justify-between text-gray-400 mb-2">
+        <div className="p-4 rounded-2xl bg-white dark:bg-white/[0.03] border border-gray-200 dark:border-white/10 shadow-sm">
+          <div className="flex items-center justify-between text-gray-500 dark:text-gray-400 mb-2">
             <span className="text-[11px] uppercase tracking-wider font-semibold">Pendaftaran Siswa</span>
-            <Users className="w-4 h-4 text-emerald-400" />
+            <Users className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
           </div>
-          <p className="text-2xl font-black text-white">{stats?.totalEnrollments || 0}</p>
+          <p className="text-2xl font-black text-gray-950 dark:text-white">{stats?.totalEnrollments || 0}</p>
           <p className="text-[10px] text-gray-500 mt-1">Siswa aktif kursus</p>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
-          <div className="flex items-center justify-between text-gray-400 mb-2">
+        <div className="p-4 rounded-2xl bg-white dark:bg-white/[0.03] border border-gray-200 dark:border-white/10 shadow-sm">
+          <div className="flex items-center justify-between text-gray-500 dark:text-gray-400 mb-2">
             <span className="text-[11px] uppercase tracking-wider font-semibold">Estimasi Revenue</span>
-            <DollarSign className="w-4 h-4 text-emerald-400" />
+            <DollarSign className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
           </div>
-          <p className="text-2xl font-black text-emerald-400">
+          <p className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
             {formatRupiah(stats?.estimatedRevenue || 0)}
           </p>
           <p className="text-[10px] text-gray-500 mt-1">Volume pendaftaran</p>
@@ -194,16 +194,16 @@ export default function AdminDashboard() {
       </div>
 
       {/* Courses Moderation Table */}
-      <div className="rounded-3xl bg-[#14171E] border border-white/10 p-6 shadow-xl space-y-6">
+      <div className="rounded-3xl bg-white dark:bg-[#14171E] border border-gray-200 dark:border-white/10 p-6 shadow-sm space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <span>Kurasi & Publikasi Kelas BIM</span>
-              <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-white/10 text-gray-300">
+            <h2 className="text-lg font-bold text-gray-950 dark:text-white flex items-center gap-2">
+              <span>Kurasi &amp; Publikasi Kelas BIM</span>
+              <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-transparent">
                 {filteredCourses.length} Kelas
               </span>
             </h2>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
               Setujui kelas dari instruktur untuk langsung tampil di halaman depan website.
             </p>
           </div>
@@ -214,7 +214,7 @@ export default function AdminDashboard() {
               placeholder="Cari judul kelas, instruktur..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="px-3.5 py-1.5 pl-9 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 w-64"
+              className="px-3.5 py-1.5 pl-9 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 w-64"
             />
             <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-2.5" />
           </div>
@@ -223,54 +223,54 @@ export default function AdminDashboard() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-white/10 text-gray-400 uppercase text-[10px] tracking-wider">
+              <tr className="border-b border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 bg-gray-50/80 dark:bg-transparent uppercase text-[10px] tracking-wider">
                 <th className="py-3 px-4">Kelas</th>
                 <th className="py-3 px-4">Instruktur</th>
-                <th className="py-3 px-4">Kategori & Level</th>
+                <th className="py-3 px-4">Kategori &amp; Level</th>
                 <th className="py-3 px-4">Biaya</th>
                 <th className="py-3 px-4">Siswa</th>
                 <th className="py-3 px-4">Status Kurasi</th>
                 <th className="py-3 px-4 text-right">Aksi Publikasi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-gray-100 dark:divide-white/5">
               {filteredCourses.map((c) => (
-                <tr key={c.id} className="hover:bg-white/[0.02] transition-colors">
+                <tr key={c.id} className="hover:bg-gray-50/80 dark:hover:bg-white/[0.02] transition-colors">
                   <td className="py-3.5 px-4 max-w-[280px]">
                     <div className="flex items-center gap-3">
                       <img
                         src={c.thumbnail}
                         alt={c.title}
-                        className="w-12 h-8 rounded-lg object-cover ring-1 ring-white/10 shrink-0"
+                        className="w-12 h-8 rounded-lg object-cover ring-1 ring-gray-200 dark:ring-white/10 shrink-0"
                       />
-                      <span className="font-bold text-white line-clamp-1">{c.title}</span>
+                      <span className="font-bold text-gray-950 dark:text-white line-clamp-1">{c.title}</span>
                     </div>
                   </td>
 
-                  <td className="py-3.5 px-4 text-gray-300">{c.instructor.name}</td>
+                  <td className="py-3.5 px-4 text-gray-700 dark:text-gray-300">{c.instructor.name}</td>
 
                   <td className="py-3.5 px-4">
-                    <span className="px-2 py-0.5 rounded-md bg-white/5 text-gray-300 font-mono text-[10px]">
+                    <span className="px-2 py-0.5 rounded-md bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300 font-mono text-[10px] border border-gray-200 dark:border-transparent">
                       {c.category} • {c.level}
                     </span>
                   </td>
 
-                  <td className="py-3.5 px-4 font-mono font-bold text-white">
+                  <td className="py-3.5 px-4 font-mono font-bold text-gray-950 dark:text-white">
                     {formatRupiah(c.price)}
                   </td>
 
-                  <td className="py-3.5 px-4 text-gray-400 font-mono">
+                  <td className="py-3.5 px-4 text-gray-500 font-mono">
                     {c._count.enrollments} Terdaftar
                   </td>
 
                   <td className="py-3.5 px-4">
                     {c.published ? (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold font-mono">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 text-[10px] font-bold font-mono">
                         <CheckCircle2 className="w-3 h-3" />
                         <span>LIVE (PUBLISHED)</span>
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 text-[10px] font-bold font-mono">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-400 border border-amber-500/30 text-[10px] font-bold font-mono">
                         <XCircle className="w-3 h-3" />
                         <span>MENUNGGU REVIEW</span>
                       </span>
@@ -280,9 +280,9 @@ export default function AdminDashboard() {
                   <td className="py-3.5 px-4 text-right">
                     <button
                       onClick={() => handleTogglePublish(c.id, c.published)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 ${
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer ${
                         c.published
-                          ? "bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30"
+                          ? "bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-500/30 dark:hover:bg-rose-500/30"
                           : "bg-emerald-600 text-white hover:bg-emerald-500"
                       }`}
                     >

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, ArrowRight, RotateCcw, CheckCircle, Tag } from "lucide-react";
+import { ArrowRight, RotateCcw, CheckCircle, Tag } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeIn } from "@/components/animations/MotionWrappers";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
@@ -134,8 +134,7 @@ export default function QuizRecommender({ content }: QuizRecommenderProps) {
             <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-amber-500/15 via-yellow-600/10 to-transparent rounded-full blur-[120px] pointer-events-none" />
 
             <div className="relative z-10 max-w-3xl mx-auto text-center mb-10">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/15 to-yellow-500/15 text-amber-300 text-xs font-semibold uppercase tracking-wider mb-4 border border-amber-400/35 shadow-xs">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <div className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/15 to-yellow-500/15 text-amber-300 text-xs font-semibold uppercase tracking-wider mb-4 border border-amber-400/35 shadow-xs">
                 {content?.badge || "AI Career Pathfinder"}
               </div>
               <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">

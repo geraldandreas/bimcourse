@@ -8,7 +8,6 @@ import {
   Video, 
   Award, 
   FolderGit2, 
-  Sparkles, 
   CheckCircle2, 
   ArrowRight, 
   MessageCircle, 
@@ -125,8 +124,7 @@ export default function CommunitySection({
         <FadeIn direction="up">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-6">
             <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/15 to-yellow-500/15 text-amber-700 dark:text-amber-300 border border-amber-400/35 text-xs font-bold uppercase tracking-wider mb-3 shadow-xs">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <div className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/15 to-yellow-500/15 text-amber-700 dark:text-amber-300 border border-amber-400/35 text-xs font-bold uppercase tracking-wider mb-3 shadow-xs">
                 {language === "en" ? t.community.badge : (content?.badge || "Ekosistem Belajar Kolaboratif")}
               </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-gray-950 dark:text-white leading-tight">

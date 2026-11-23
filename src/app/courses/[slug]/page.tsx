@@ -23,7 +23,6 @@ import {
   Award,
   Play,
   Layers,
-  Sparkles,
   HelpCircle,
   Laptop,
   Download,
@@ -623,7 +622,7 @@ export default function CourseDetailPage() {
                 {/* Key Learnings (Customizable from SuperAdmin) */}
                 <div className="p-6 sm:p-7 rounded-3xl bg-white dark:bg-[#161B22] border border-gray-200 dark:border-white/10 shadow-2xs space-y-4">
                   <h3 className="text-base font-bold text-gray-950 dark:text-white flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                     <span>Yang Akan Anda Pelajari &amp; Kuasai</span>
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs text-gray-700 dark:text-zinc-300">

@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Search, Star, Clock, BookOpen, ArrowUpRight, CheckCircle2, SlidersHorizontal, Sparkles } from "lucide-react";
+import { Search, Clock, BookOpen, ArrowUpRight, CheckCircle2, SlidersHorizontal } from "lucide-react";
 import { motion } from "framer-motion";
 import { FadeIn, StaggerContainer, StaggerItem, HoverCard } from "@/components/animations/MotionWrappers";
 import { COURSES, CATEGORIES, type Course } from "@/data/courses";
@@ -196,8 +196,7 @@ export default function CourseCatalog({ onEnrollSuccess, searchQueryProp = "", c
         <FadeIn direction="up">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/15 to-yellow-500/15 text-amber-700 dark:text-amber-300 border border-amber-400/35 text-xs font-bold uppercase tracking-wider mb-3 shadow-xs">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <div className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/15 to-yellow-500/15 text-amber-700 dark:text-amber-300 border border-amber-400/35 text-xs font-bold uppercase tracking-wider mb-3 shadow-xs">
                 {language === "en" ? t.courses.badge : (content?.badge || "Kurikulum Praktisi Terakreditasi")}
               </div>
               <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-950 dark:text-white">
@@ -348,7 +347,6 @@ export default function CourseCatalog({ onEnrollSuccess, searchQueryProp = "", c
                         {/* Rating & Metrics */}
                         <div className="flex items-center justify-between text-xs text-gray-500 dark:text-zinc-400 mb-2.5">
                           <div className="flex items-center gap-1 font-bold text-gray-900 dark:text-white">
-                            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                             <span>{course.rating}</span>
                             <span className="text-gray-400 dark:text-zinc-500 font-normal">({course.reviewsCount})</span>
                           </div>

@@ -12,7 +12,6 @@ import {
   MessageSquare,
   Award,
   ChevronRight,
-  Sparkles,
   Layers,
   Download,
 } from "lucide-react";
@@ -176,7 +175,7 @@ export default function PengajarDashboard() {
               : "text-gray-400 hover:text-white"
           }`}
         >
-          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+          <Layers className="w-3.5 h-3.5 text-amber-400" />
           <span>Tulis & Kelola Modul</span>
         </button>
       </div>
