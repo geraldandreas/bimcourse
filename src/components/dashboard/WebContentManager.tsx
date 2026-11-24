@@ -780,12 +780,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
             activeSubTab === "instructors"
               ? "bg-[#B27D56] text-white shadow-xs"
-              : "bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-white/5 dark:text-gray-400 dark:hover:text-white dark:hover:bg-white/10"
+              : "bg-white hover:bg-gray-50 text-gray-700 hover:text-gray-950 border border-gray-200 shadow-2xs dark:bg-white/5 dark:text-gray-400 dark:hover:text-white dark:border-transparent"
           }`}
         >
           <Award className="w-4 h-4" />
           <span>Tim Pengajar, CV &amp; Portofolio Proyek</span>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-black/20 text-amber-100">
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-black/20 text-white font-bold">
             {content.instructors.length}
           </span>
         </button>
@@ -795,12 +795,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
             activeSubTab === "visibility"
               ? "bg-purple-600 text-white shadow-xs"
-              : "bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-white/5 dark:text-gray-400 dark:hover:text-white dark:hover:bg-white/10"
+              : "bg-white hover:bg-gray-50 text-gray-700 hover:text-gray-950 border border-gray-200 shadow-2xs dark:bg-white/5 dark:text-gray-400 dark:hover:text-white dark:border-transparent"
           }`}
         >
           <Eye className="w-4 h-4" />
           <span>Visibilitas Section (Sembunyikan / Tampilkan)</span>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-black/20 text-purple-100">
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-black/20 text-white font-bold">
             {activeCount}/{totalCount} Aktif
           </span>
         </button>
@@ -810,12 +810,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
             activeSubTab === "sections"
               ? "bg-blue-600 text-white shadow-xs"
-              : "bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-white/5 dark:text-gray-400 dark:hover:text-white dark:hover:bg-white/10"
+              : "bg-white hover:bg-gray-50 text-gray-700 hover:text-gray-950 border border-gray-200 shadow-2xs dark:bg-white/5 dark:text-gray-400 dark:hover:text-white dark:border-transparent"
           }`}
         >
           <Edit3 className="w-4 h-4" />
           <span>Edit Teks Seluruh Section Web (CMS)</span>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-black/20 text-blue-100">
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-black/20 text-white font-bold">
             12 Section
           </span>
         </button>
@@ -894,7 +894,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-400 mb-1">
+                <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-300 mb-1">
                   Sub-Badge Teks
                 </label>
                 <input
@@ -909,12 +909,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       },
                     })
                   }
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-[#B27D56]"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-[#B27D56]"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-400 mb-1">
+                <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-300 mb-1">
                   Judul Utama Section
                 </label>
                 <input
@@ -929,7 +929,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       },
                     })
                   }
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-[#B27D56]"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-[#B27D56]"
                 />
               </div>
             </div>
@@ -942,7 +942,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                 <h4 className="text-sm font-bold text-gray-950 dark:text-white">
                   Daftar Profil Instruktur ({content.instructors.length} Terdaftar)
                 </h4>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">
                   Klik &ldquo;Edit Data &amp; Portofolio CV&rdquo; untuk mengubah isi CV, pendidikan, pengalaman, keahlian, atau proyek sayembara.
                 </p>
               </div>
@@ -1142,7 +1142,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         type="button"
                         onClick={() => toggleSection(sec.key)}
                         className={`w-14 h-7 rounded-full p-1 transition-colors duration-300 cursor-pointer flex items-center ${
-                          isEnabled ? "bg-emerald-600 justify-end" : "bg-gray-800 justify-start"
+                          isEnabled ? "bg-emerald-600 justify-end" : "bg-gray-300 dark:bg-gray-700 justify-start"
                         }`}
                       >
                         <span className="w-5 h-5 rounded-full bg-white shadow-md transform transition-transform" />
@@ -1185,7 +1185,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
       {activeSubTab === "sections" && (
         <div className="space-y-6">
           {/* Section Selection Banner & Quick Navigation */}
-          <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-50 via-white to-white dark:from-blue-900/20 dark:via-[#14171E] dark:to-[#14171E] border border-blue-200 dark:border-blue-500/30">
+          <div className="p-4 rounded-2xl bg-white dark:bg-[#14171E] border border-gray-200 dark:border-white/10 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
               <div>
                 <h3 className="text-sm font-bold text-gray-950 dark:text-white flex items-center gap-2">
@@ -1238,20 +1238,24 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     onClick={() => setSelectedSectionKey(item.key)}
                     className={`p-2.5 rounded-xl text-left border transition-all flex flex-col justify-between gap-2 cursor-pointer ${
                       isSelected
-                        ? "bg-blue-600/20 border-blue-400 text-white shadow-sm ring-1 ring-blue-400"
-                        : "bg-gray-50 hover:bg-gray-100 text-gray-700 border-gray-200 dark:bg-white/5 dark:hover:bg-white/10 dark:text-gray-300 dark:border-white/5"
+                        ? "bg-blue-600 text-white border-blue-600 shadow-md ring-2 ring-blue-500/30 dark:bg-blue-600/30 dark:border-blue-400 dark:text-white dark:ring-blue-400/50"
+                        : "bg-white hover:bg-gray-50 text-gray-800 border-gray-200/90 hover:border-gray-300 shadow-2xs dark:bg-white/5 dark:hover:bg-white/10 dark:text-gray-300 dark:border-white/5"
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <ItemIcon className={`w-4 h-4 ${isSelected ? "text-blue-400" : "text-gray-400"}`} />
+                      <ItemIcon className={`w-4 h-4 ${isSelected ? "text-white dark:text-blue-400" : "text-gray-500 dark:text-gray-400"}`} />
                       <span
                         className={`w-2 h-2 rounded-full ${
-                          isVisible ? "bg-emerald-400" : "bg-rose-500"
+                          isSelected
+                            ? "bg-white ring-1 ring-white/50"
+                            : isVisible
+                            ? "bg-emerald-500 dark:bg-emerald-400"
+                            : "bg-rose-500"
                         }`}
                         title={isVisible ? "Section Aktif" : "Section Tersembunyi"}
                       />
                     </div>
-                    <span className="text-xs font-bold truncate leading-tight">
+                    <span className={`text-xs font-bold truncate leading-tight ${isSelected ? "text-white" : "text-gray-900 dark:text-gray-200"}`}>
                       {item.label}
                     </span>
                   </button>
@@ -1265,25 +1269,25 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
             <div className="p-5 rounded-2xl bg-white dark:bg-[#14171E] border border-gray-200 dark:border-white/10 shadow-sm space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-200 dark:border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 flex items-center justify-center">
                     <Video className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-gray-950 dark:text-white">1. Hero Banner Utama (Cinematic Video)</h4>
-                    <p className="text-xs text-gray-400">Bagian paling atas yang pertama kali dilihat pengunjung web.</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Bagian paling atas yang pertama kali dilihat pengunjung web.</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                    content.sectionsVisibility.hero ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                    content.sectionsVisibility.hero ? "bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-transparent font-bold" : "bg-rose-50 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-transparent font-bold"
                   }`}>
                     {content.sectionsVisibility.hero ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
                   </span>
                   <button
                     type="button"
                     onClick={() => toggleSection("hero")}
-                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-gray-900 dark:text-white"
+                    className="px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-800 dark:bg-white/10 dark:hover:bg-white/15 dark:text-white border border-gray-200 dark:border-transparent transition-colors cursor-pointer"
                   >
                     {content.sectionsVisibility.hero ? "Sembunyikan" : "Tampilkan"}
                   </button>
@@ -1292,7 +1296,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Sub-Badge Hero (Teks Mengambang di Atas Judul)
                   </label>
                   <input
@@ -1304,12 +1308,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         hero: { ...content.hero, badge: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Judul Baris 1
                   </label>
                   <input
@@ -1321,12 +1325,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         hero: { ...content.hero, titleLine1: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400 font-bold"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400 font-bold"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Judul Baris 2
                   </label>
                   <input
@@ -1338,12 +1342,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         hero: { ...content.hero, titleLine2: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400 font-bold"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400 font-bold"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Paragraf Deskripsi Hero
                   </label>
                   <textarea
@@ -1355,12 +1359,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         hero: { ...content.hero, description: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400 leading-relaxed"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400 leading-relaxed"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Teks Tombol CTA Utama
                   </label>
                   <input
@@ -1372,12 +1376,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         hero: { ...content.hero, primaryCtaText: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Teks Tombol Video Showcase
                   </label>
                   <input
@@ -1389,12 +1393,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         hero: { ...content.hero, secondaryCtaText: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Skor Rating Ulasan (Social Proof)
                   </label>
                   <input
@@ -1406,12 +1410,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         hero: { ...content.hero, statsRating: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Jumlah Peserta / Alumni (Social Proof)
                   </label>
                   <input
@@ -1423,7 +1427,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         hero: { ...content.hero, statsStudents: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400"
                   />
                 </div>
               </div>
@@ -1435,25 +1439,25 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
             <div className="p-5 rounded-2xl bg-white dark:bg-[#14171E] border border-gray-200 dark:border-white/10 shadow-sm space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-200 dark:border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-400 flex items-center justify-center">
                     <Layers className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-gray-950 dark:text-white">2. Tiga Kartu Bento Pilar Keunggulan</h4>
-                    <p className="text-xs text-gray-400">Menampilkan 3 kartu utama: Kurikulum Praktik, Peta Jalan, dan Bimbingan Instruktur.</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Menampilkan 3 kartu utama: Kurikulum Praktik, Peta Jalan, dan Bimbingan Instruktur.</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                    content.sectionsVisibility.features ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                    content.sectionsVisibility.features ? "bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-transparent font-bold" : "bg-rose-50 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-transparent font-bold"
                   }`}>
                     {content.sectionsVisibility.features ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
                   </span>
                   <button
                     type="button"
                     onClick={() => toggleSection("features")}
-                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-gray-900 dark:text-white"
+                    className="px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-800 dark:bg-white/10 dark:hover:bg-white/15 dark:text-white border border-gray-200 dark:border-transparent transition-colors cursor-pointer"
                   >
                     {content.sectionsVisibility.features ? "Sembunyikan" : "Tampilkan"}
                   </button>
@@ -1461,7 +1465,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
               </div>
 
               {/* Kartu 1 */}
-              <div className="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-3">
+              <div className="p-4 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-3">
                 <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">
                   Kartu 1: Kurikulum &amp; Standar Industri
                 </span>
@@ -1477,7 +1481,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card1Badge: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                   <div>
@@ -1491,7 +1495,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card1Title: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-white font-bold"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-bold"
                     />
                   </div>
                   <div className="sm:col-span-2">
@@ -1505,7 +1509,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card1Desc: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                   <div>
@@ -1519,7 +1523,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card1Tag1: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                   <div>
@@ -1533,14 +1537,14 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card1Tag2: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Kartu 2 */}
-              <div className="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-3">
+              <div className="p-4 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-3">
                 <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">
                   Kartu 2: Peta Jalan Karier &amp; Stepper
                 </span>
@@ -1556,7 +1560,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card2Badge: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                   <div>
@@ -1570,7 +1574,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card2Title: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-white font-bold"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-bold"
                     />
                   </div>
                   <div className="sm:col-span-2">
@@ -1584,7 +1588,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card2Desc: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                   <div className="sm:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
@@ -1599,7 +1603,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                             features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card2Step1: e.target.value },
                           })
                         }
-                        className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                       />
                     </div>
                     <div>
@@ -1613,7 +1617,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                             features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card2Step2: e.target.value },
                           })
                         }
-                        className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                       />
                     </div>
                     <div>
@@ -1627,7 +1631,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                             features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card2Step3: e.target.value },
                           })
                         }
-                        className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                       />
                     </div>
                   </div>
@@ -1635,7 +1639,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
               </div>
 
               {/* Kartu 3 */}
-              <div className="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-3">
+              <div className="p-4 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-3">
                 <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">
                   Kartu 3: Terhubung Instruktur &amp; Praktisi
                 </span>
@@ -1651,7 +1655,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3Badge: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                   <div>
@@ -1665,7 +1669,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3Title: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-white font-bold"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-bold"
                     />
                   </div>
                   <div className="sm:col-span-2">
@@ -1679,7 +1683,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3Desc: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                   <div>
@@ -1693,7 +1697,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3ChatAuthor: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                   <div>
@@ -1707,7 +1711,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3ChatRole: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                   <div className="sm:col-span-2">
@@ -1721,7 +1725,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3ChatQuote: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                 </div>
@@ -1734,25 +1738,25 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
             <div className="p-5 rounded-2xl bg-white dark:bg-[#14171E] border border-gray-200 dark:border-white/10 shadow-sm space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-200 dark:border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-400 flex items-center justify-center">
                     <Layout className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-gray-950 dark:text-white">3. Katalog Kelas Spesialisasi BIM</h4>
-                    <p className="text-xs text-gray-400">Heading dan teks pengantar di atas daftar modul kursus.</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Heading dan teks pengantar di atas daftar modul kursus.</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                    content.sectionsVisibility.courses ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                    content.sectionsVisibility.courses ? "bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-transparent font-bold" : "bg-rose-50 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-transparent font-bold"
                   }`}>
                     {content.sectionsVisibility.courses ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
                   </span>
                   <button
                     type="button"
                     onClick={() => toggleSection("courses")}
-                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-gray-900 dark:text-white"
+                    className="px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-800 dark:bg-white/10 dark:hover:bg-white/15 dark:text-white border border-gray-200 dark:border-transparent transition-colors cursor-pointer"
                   >
                     {content.sectionsVisibility.courses ? "Sembunyikan" : "Tampilkan"}
                   </button>
@@ -1761,7 +1765,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Badge Katalog
                   </label>
                   <input
@@ -1773,12 +1777,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         courses: { ...(content.courses || DEFAULT_SITE_CONTENT.courses), badge: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Judul Utama Section
                   </label>
                   <input
@@ -1790,12 +1794,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         courses: { ...(content.courses || DEFAULT_SITE_CONTENT.courses), title: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-white font-bold"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-bold"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Placeholder Kotak Pencarian
                   </label>
                   <input
@@ -1807,12 +1811,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         courses: { ...(content.courses || DEFAULT_SITE_CONTENT.courses), searchPlaceholder: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Subtitle / Paragraf Pengantar
                   </label>
                   <textarea
@@ -1824,7 +1828,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         courses: { ...(content.courses || DEFAULT_SITE_CONTENT.courses), subtitle: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -1836,25 +1840,25 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
             <div className="p-5 rounded-2xl bg-white dark:bg-[#14171E] border border-gray-200 dark:border-white/10 shadow-sm space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-200 dark:border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 flex items-center justify-center">
                     <ArrowRight className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-gray-950 dark:text-white">4. Jalur Karier BIM (Learning Path)</h4>
-                    <p className="text-xs text-gray-400">Heading dan teks pengantar pada peta jalan karier bertahap.</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Heading dan teks pengantar pada peta jalan karier bertahap.</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                    content.sectionsVisibility.roadmaps ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                    content.sectionsVisibility.roadmaps ? "bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-transparent font-bold" : "bg-rose-50 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-transparent font-bold"
                   }`}>
                     {content.sectionsVisibility.roadmaps ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
                   </span>
                   <button
                     type="button"
                     onClick={() => toggleSection("roadmaps")}
-                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-gray-900 dark:text-white"
+                    className="px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-800 dark:bg-white/10 dark:hover:bg-white/15 dark:text-white border border-gray-200 dark:border-transparent transition-colors cursor-pointer"
                   >
                     {content.sectionsVisibility.roadmaps ? "Sembunyikan" : "Tampilkan"}
                   </button>
@@ -1863,7 +1867,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Badge Roadmap
                   </label>
                   <input
@@ -1875,12 +1879,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         roadmaps: { ...(content.roadmaps || DEFAULT_SITE_CONTENT.roadmaps), badge: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Judul Utama Roadmap
                   </label>
                   <input
@@ -1892,12 +1896,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         roadmaps: { ...(content.roadmaps || DEFAULT_SITE_CONTENT.roadmaps), title: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-white font-bold"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-bold"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Subtitle / Paragraf Pengantar
                   </label>
                   <textarea
@@ -1909,7 +1913,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         roadmaps: { ...(content.roadmaps || DEFAULT_SITE_CONTENT.roadmaps), subtitle: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -1926,20 +1930,20 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-gray-950 dark:text-white">5. Section Komunitas AEC &amp; 4 Pilar Mentoring</h4>
-                    <p className="text-xs text-gray-400">Mengatur teks pengantar ekosistem belajar dan 4 pilar mentoring.</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Mengatur teks pengantar ekosistem belajar dan 4 pilar mentoring.</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                    content.sectionsVisibility.community ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                    content.sectionsVisibility.community ? "bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-transparent font-bold" : "bg-rose-50 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-transparent font-bold"
                   }`}>
                     {content.sectionsVisibility.community ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
                   </span>
                   <button
                     type="button"
                     onClick={() => toggleSection("community")}
-                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-gray-900 dark:text-white"
+                    className="px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-800 dark:bg-white/10 dark:hover:bg-white/15 dark:text-white border border-gray-200 dark:border-transparent transition-colors cursor-pointer"
                   >
                     {content.sectionsVisibility.community ? "Sembunyikan" : "Tampilkan"}
                   </button>
@@ -1949,7 +1953,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
               {/* Header Komunitas */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Badge Komunitas</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Badge Komunitas</label>
                   <input
                     type="text"
                     value={content.community.badge}
@@ -1959,12 +1963,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         community: { ...content.community, badge: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Judul Utama Komunitas</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Judul Utama Komunitas</label>
                   <input
                     type="text"
                     value={content.community.title}
@@ -1974,12 +1978,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         community: { ...content.community, title: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-white font-bold"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-bold"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Subtitle Komunitas</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Subtitle Komunitas</label>
                   <textarea
                     rows={2}
                     value={content.community.subtitle}
@@ -1989,12 +1993,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         community: { ...content.community, subtitle: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Tag Member Aktif</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Tag Member Aktif</label>
                   <input
                     type="text"
                     value={content.community.activeMembersText}
@@ -2004,12 +2008,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         community: { ...content.community, activeMembersText: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Tag Mentor BUMN</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Tag Mentor BUMN</label>
                   <input
                     type="text"
                     value={content.community.mentorBadgeText}
@@ -2019,12 +2023,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         community: { ...content.community, mentorBadgeText: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Judul Kartu Diskusi</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Judul Kartu Diskusi</label>
                   <input
                     type="text"
                     value={content.community.cardHeading}
@@ -2034,12 +2038,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         community: { ...content.community, cardHeading: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Deskripsi Kartu Diskusi</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Deskripsi Kartu Diskusi</label>
                   <input
                     type="text"
                     value={content.community.cardDescription}
@@ -2049,7 +2053,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         community: { ...content.community, cardDescription: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -2062,7 +2066,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Pilar 1 */}
-                  <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-2">
+                  <div className="p-3.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-2">
                     <span className="text-[11px] font-bold text-gray-300">Pilar 1: Q&amp;A Kendala Modeling</span>
                     <input
                       type="text"
@@ -2074,7 +2078,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           community: { ...content.community, pillar1Badge: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                     <input
                       type="text"
@@ -2086,7 +2090,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           community: { ...content.community, pillar1Title: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-white font-semibold"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-semibold"
                     />
                     <textarea
                       rows={2}
@@ -2098,12 +2102,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           community: { ...content.community, pillar1Desc: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
 
                   {/* Pilar 2 */}
-                  <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-2">
+                  <div className="p-3.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-2">
                     <span className="text-[11px] font-bold text-gray-300">Pilar 2: Live Mentoring Rutin</span>
                     <input
                       type="text"
@@ -2115,7 +2119,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           community: { ...content.community, pillar2Badge: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                     <input
                       type="text"
@@ -2127,7 +2131,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           community: { ...content.community, pillar2Title: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-white font-semibold"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-semibold"
                     />
                     <textarea
                       rows={2}
@@ -2139,12 +2143,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           community: { ...content.community, pillar2Desc: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
 
                   {/* Pilar 3 */}
-                  <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-2">
+                  <div className="p-3.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-2">
                     <span className="text-[11px] font-bold text-gray-300">Pilar 3: Feedback 1-on-1 Mentor</span>
                     <input
                       type="text"
@@ -2156,7 +2160,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           community: { ...content.community, pillar3Badge: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                     <input
                       type="text"
@@ -2168,7 +2172,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           community: { ...content.community, pillar3Title: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-white font-semibold"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-semibold"
                     />
                     <textarea
                       rows={2}
@@ -2180,12 +2184,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           community: { ...content.community, pillar3Desc: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
 
                   {/* Pilar 4 */}
-                  <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-2">
+                  <div className="p-3.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-2">
                     <span className="text-[11px] font-bold text-gray-300">Pilar 4: Aset &amp; Info Loker</span>
                     <input
                       type="text"
@@ -2197,7 +2201,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           community: { ...content.community, pillar4Badge: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                     <input
                       type="text"
@@ -2209,7 +2213,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           community: { ...content.community, pillar4Title: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-white font-semibold"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-semibold"
                     />
                     <textarea
                       rows={2}
@@ -2221,7 +2225,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           community: { ...content.community, pillar4Desc: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                 </div>
@@ -2234,25 +2238,25 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
             <div className="p-5 rounded-2xl bg-white dark:bg-[#14171E] border border-gray-200 dark:border-white/10 shadow-sm space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-200 dark:border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-400 flex items-center justify-center">
                     <Award className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-gray-950 dark:text-white">6. Header Tim Pengajar &amp; Mentor di Beranda</h4>
-                    <p className="text-xs text-gray-400">Judul dan pengantar yang muncul tepat di atas deretan kartu pengajar.</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Judul dan pengantar yang muncul tepat di atas deretan kartu pengajar.</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                    content.sectionsVisibility.instructors ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                    content.sectionsVisibility.instructors ? "bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-transparent font-bold" : "bg-rose-50 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-transparent font-bold"
                   }`}>
                     {content.sectionsVisibility.instructors ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
                   </span>
                   <button
                     type="button"
                     onClick={() => toggleSection("instructors")}
-                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-gray-900 dark:text-white"
+                    className="px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-800 dark:bg-white/10 dark:hover:bg-white/15 dark:text-white border border-gray-200 dark:border-transparent transition-colors cursor-pointer"
                   >
                     {content.sectionsVisibility.instructors ? "Sembunyikan" : "Tampilkan"}
                   </button>
@@ -2261,7 +2265,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Badge Pengajar
                   </label>
                   <input
@@ -2273,12 +2277,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         community: { ...content.community, instructorsBadge: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Judul Section Pengajar
                   </label>
                   <input
@@ -2290,12 +2294,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         community: { ...content.community, instructorsTitle: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-white font-bold"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-bold"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Subtitle Pengajar
                   </label>
                   <textarea
@@ -2307,7 +2311,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         community: { ...content.community, instructorsSubtitle: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -2341,20 +2345,20 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-gray-950 dark:text-white">7. Kuis Rekomendasi Jalur BIM 30 Detik</h4>
-                    <p className="text-xs text-gray-400">Heading dan panduan langkah kuis rekomendasi interaktif.</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Heading dan panduan langkah kuis rekomendasi interaktif.</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                    content.sectionsVisibility.quiz ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                    content.sectionsVisibility.quiz ? "bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-transparent font-bold" : "bg-rose-50 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-transparent font-bold"
                   }`}>
                     {content.sectionsVisibility.quiz ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
                   </span>
                   <button
                     type="button"
                     onClick={() => toggleSection("quiz")}
-                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-gray-900 dark:text-white"
+                    className="px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-800 dark:bg-white/10 dark:hover:bg-white/15 dark:text-white border border-gray-200 dark:border-transparent transition-colors cursor-pointer"
                   >
                     {content.sectionsVisibility.quiz ? "Sembunyikan" : "Tampilkan"}
                   </button>
@@ -2363,7 +2367,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Badge Kuis</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Badge Kuis</label>
                   <input
                     type="text"
                     value={content.quiz?.badge || ""}
@@ -2373,12 +2377,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), badge: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Judul Utama Kuis</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Judul Utama Kuis</label>
                   <input
                     type="text"
                     value={content.quiz?.title || ""}
@@ -2388,12 +2392,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), title: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-white font-bold"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-bold"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Subtitle Kuis</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Subtitle Kuis</label>
                   <textarea
                     rows={2}
                     value={content.quiz?.subtitle || ""}
@@ -2403,12 +2407,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), subtitle: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Judul Langkah 1 (Latar Belakang)</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Judul Langkah 1 (Latar Belakang)</label>
                   <input
                     type="text"
                     value={content.quiz?.step1Heading || ""}
@@ -2418,12 +2422,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), step1Heading: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Judul Langkah 2 (Target Karier)</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Judul Langkah 2 (Target Karier)</label>
                   <input
                     type="text"
                     value={content.quiz?.step2Heading || ""}
@@ -2433,7 +2437,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), step2Heading: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -2445,25 +2449,25 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
             <div className="p-5 rounded-2xl bg-white dark:bg-[#14171E] border border-gray-200 dark:border-white/10 shadow-sm space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-200 dark:border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-400 flex items-center justify-center">
                     <MessageSquare className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-gray-950 dark:text-white">8. Cerita Alumni &amp; Testimoni Industri</h4>
-                    <p className="text-xs text-gray-400">Heading dan daftar ulasan alumni yang tampil di beranda.</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Heading dan daftar ulasan alumni yang tampil di beranda.</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                    content.sectionsVisibility.testimonials ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                    content.sectionsVisibility.testimonials ? "bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-transparent font-bold" : "bg-rose-50 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-transparent font-bold"
                   }`}>
                     {content.sectionsVisibility.testimonials ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
                   </span>
                   <button
                     type="button"
                     onClick={() => toggleSection("testimonials")}
-                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-gray-900 dark:text-white"
+                    className="px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-800 dark:bg-white/10 dark:hover:bg-white/15 dark:text-white border border-gray-200 dark:border-transparent transition-colors cursor-pointer"
                   >
                     {content.sectionsVisibility.testimonials ? "Sembunyikan" : "Tampilkan"}
                   </button>
@@ -2473,7 +2477,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
               {/* Headings */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Badge Testimoni</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Badge Testimoni</label>
                   <input
                     type="text"
                     value={content.testimonials.badge}
@@ -2483,12 +2487,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         testimonials: { ...content.testimonials, badge: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Judul Utama Testimoni</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Judul Utama Testimoni</label>
                   <input
                     type="text"
                     value={content.testimonials.title}
@@ -2498,12 +2502,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         testimonials: { ...content.testimonials, title: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-white font-bold"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-bold"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Subtitle Testimoni</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Subtitle Testimoni</label>
                   <textarea
                     rows={2}
                     value={content.testimonials.subtitle}
@@ -2513,7 +2517,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         testimonials: { ...content.testimonials, subtitle: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -2536,7 +2540,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
                 <div className="space-y-3">
                   {content.testimonials.items.map((testi, i) => (
-                    <div key={testi.id || i} className="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-3">
+                    <div key={testi.id || i} className="p-4 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-amber-400">Testimoni #{i + 1}</span>
                         <button
@@ -2553,7 +2557,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           value={testi.author}
                           onChange={(e) => handleUpdateTestimonial(i, "author", e.target.value)}
                           placeholder="Nama Alumni"
-                          className="px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-white font-semibold"
+                          className="px-2.5 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-semibold"
                         />
                         <input
                           type="text"
@@ -2564,14 +2568,14 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                             handleUpdateTestimonial(i, "company", parts[1] || "");
                           }}
                           placeholder="Role • Perusahaan"
-                          className="px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                          className="px-2.5 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                         />
                         <input
                           type="text"
                           value={testi.courseTaken}
                           onChange={(e) => handleUpdateTestimonial(i, "courseTaken", e.target.value)}
                           placeholder="Kelas Diikuti"
-                          className="px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                          className="px-2.5 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                         />
                       </div>
                       <textarea
@@ -2579,7 +2583,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         value={testi.quote}
                         onChange={(e) => handleUpdateTestimonial(i, "quote", e.target.value)}
                         placeholder="Kutipan ulasan alumni..."
-                        className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                       />
                     </div>
                   ))}
@@ -2593,25 +2597,25 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
             <div className="p-5 rounded-2xl bg-white dark:bg-[#14171E] border border-gray-200 dark:border-white/10 shadow-sm space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-200 dark:border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 flex items-center justify-center">
                     <Building className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-gray-950 dark:text-white">9. Pelatihan Perusahaan (Corporate Training)</h4>
-                    <p className="text-xs text-gray-400">Solusi B2B untuk korporasi, kontraktor BUMN, dan konsultasi tender.</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Solusi B2B untuk korporasi, kontraktor BUMN, dan konsultasi tender.</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                    content.sectionsVisibility.enterprise ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                    content.sectionsVisibility.enterprise ? "bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-transparent font-bold" : "bg-rose-50 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-transparent font-bold"
                   }`}>
                     {content.sectionsVisibility.enterprise ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
                   </span>
                   <button
                     type="button"
                     onClick={() => toggleSection("enterprise")}
-                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-gray-900 dark:text-white"
+                    className="px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-800 dark:bg-white/10 dark:hover:bg-white/15 dark:text-white border border-gray-200 dark:border-transparent transition-colors cursor-pointer"
                   >
                     {content.sectionsVisibility.enterprise ? "Sembunyikan" : "Tampilkan"}
                   </button>
@@ -2621,7 +2625,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
               {/* Headings */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Badge Enterprise</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Badge Enterprise</label>
                   <input
                     type="text"
                     value={content.enterprise?.badge || ""}
@@ -2631,12 +2635,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), badge: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Judul Utama</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Judul Utama</label>
                   <input
                     type="text"
                     value={content.enterprise?.title || ""}
@@ -2646,12 +2650,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), title: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-white font-bold"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-bold"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Subtitle / Pengantar</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Subtitle / Pengantar</label>
                   <textarea
                     rows={2}
                     value={content.enterprise?.subtitle || ""}
@@ -2661,7 +2665,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), subtitle: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -2673,7 +2677,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                 </h5>
 
                 <div className="space-y-3">
-                  <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-2">
+                  <div className="p-3.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-2">
                     <label className="block text-[11px] font-bold text-gray-300">Benefit 1</label>
                     <input
                       type="text"
@@ -2685,7 +2689,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), benefit1Title: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-white font-semibold"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-semibold"
                     />
                     <textarea
                       rows={2}
@@ -2697,11 +2701,11 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), benefit1Desc: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-2">
+                  <div className="p-3.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-2">
                     <label className="block text-[11px] font-bold text-gray-300">Benefit 2</label>
                     <input
                       type="text"
@@ -2713,7 +2717,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), benefit2Title: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-white font-semibold"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-semibold"
                     />
                     <textarea
                       rows={2}
@@ -2725,11 +2729,11 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), benefit2Desc: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-2">
+                  <div className="p-3.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-2">
                     <label className="block text-[11px] font-bold text-gray-300">Benefit 3</label>
                     <input
                       type="text"
@@ -2741,7 +2745,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), benefit3Title: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-white font-semibold"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-semibold"
                     />
                     <textarea
                       rows={2}
@@ -2753,7 +2757,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), benefit3Desc: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                 </div>
@@ -2776,7 +2780,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), formTitle: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                   <div>
@@ -2790,7 +2794,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), formSubtitle: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                   <div>
@@ -2804,7 +2808,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           enterprise: { ...(content.enterprise || DEFAULT_SITE_CONTENT.enterprise), formBtnText: e.target.value },
                         })
                       }
-                      className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                 </div>
@@ -2817,25 +2821,25 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
             <div className="p-5 rounded-2xl bg-white dark:bg-[#14171E] border border-gray-200 dark:border-white/10 shadow-sm space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-200 dark:border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-400 flex items-center justify-center">
                     <HelpCircle className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-gray-950 dark:text-white">10. Tanya Jawab Umum (FAQ)</h4>
-                    <p className="text-xs text-gray-400">Heading dan daftar pertanyaan yang sering diajukan calon peserta.</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Heading dan daftar pertanyaan yang sering diajukan calon peserta.</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                    content.sectionsVisibility.faq ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                    content.sectionsVisibility.faq ? "bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-transparent font-bold" : "bg-rose-50 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-transparent font-bold"
                   }`}>
                     {content.sectionsVisibility.faq ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
                   </span>
                   <button
                     type="button"
                     onClick={() => toggleSection("faq")}
-                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-gray-900 dark:text-white"
+                    className="px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-800 dark:bg-white/10 dark:hover:bg-white/15 dark:text-white border border-gray-200 dark:border-transparent transition-colors cursor-pointer"
                   >
                     {content.sectionsVisibility.faq ? "Sembunyikan" : "Tampilkan"}
                   </button>
@@ -2845,7 +2849,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
               {/* Headings */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Badge FAQ</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Badge FAQ</label>
                   <input
                     type="text"
                     value={content.faq.badge}
@@ -2855,12 +2859,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         faq: { ...content.faq, badge: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Judul Utama FAQ</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Judul Utama FAQ</label>
                   <input
                     type="text"
                     value={content.faq.title}
@@ -2870,12 +2874,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         faq: { ...content.faq, title: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-white font-bold"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-bold"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">Subtitle FAQ</label>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Subtitle FAQ</label>
                   <textarea
                     rows={2}
                     value={content.faq.subtitle}
@@ -2885,7 +2889,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         faq: { ...content.faq, subtitle: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -2908,7 +2912,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
                 <div className="space-y-3">
                   {content.faq.items.map((faqItem, i) => (
-                    <div key={faqItem.id || i} className="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-2">
+                    <div key={faqItem.id || i} className="p-4 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-purple-300">FAQ #{i + 1}</span>
                         <button
@@ -2924,14 +2928,14 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         value={faqItem.question}
                         onChange={(e) => handleUpdateFaq(i, "question", e.target.value)}
                         placeholder="Pertanyaan"
-                        className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-white font-semibold"
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-semibold"
                       />
                       <textarea
                         rows={2}
                         value={faqItem.answer}
                         onChange={(e) => handleUpdateFaq(i, "answer", e.target.value)}
                         placeholder="Jawaban"
-                        className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                       />
                     </div>
                   ))}
@@ -2945,25 +2949,25 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
             <div className="p-5 rounded-2xl bg-white dark:bg-[#14171E] border border-gray-200 dark:border-white/10 shadow-sm space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-200 dark:border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 flex items-center justify-center">
                     <ShieldCheck className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-gray-950 dark:text-white">11. Pre-Footer Banner CTA (Penutup)</h4>
-                    <p className="text-xs text-gray-400">Banner ajakan bergabung terakhir di atas footer dengan garansi kepuasan.</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Banner ajakan bergabung terakhir di atas footer dengan garansi kepuasan.</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                    content.sectionsVisibility.cta ? "bg-emerald-500/20 text-emerald-300" : "bg-rose-500/20 text-rose-300"
+                    content.sectionsVisibility.cta ? "bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-transparent font-bold" : "bg-rose-50 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-transparent font-bold"
                   }`}>
                     {content.sectionsVisibility.cta ? "SECTION AKTIF" : "SECTION TERSEMBUNYI"}
                   </span>
                   <button
                     type="button"
                     onClick={() => toggleSection("cta")}
-                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-gray-900 dark:text-white"
+                    className="px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-800 dark:bg-white/10 dark:hover:bg-white/15 dark:text-white border border-gray-200 dark:border-transparent transition-colors cursor-pointer"
                   >
                     {content.sectionsVisibility.cta ? "Sembunyikan" : "Tampilkan"}
                   </button>
@@ -2972,7 +2976,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Badge Garansi / Highlight
                   </label>
                   <input
@@ -2984,12 +2988,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         cta: { ...(content.cta || DEFAULT_SITE_CONTENT.cta), badge: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Judul Utama CTA
                   </label>
                   <input
@@ -3001,12 +3005,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         cta: { ...(content.cta || DEFAULT_SITE_CONTENT.cta), title: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-white font-bold"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-bold"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Paragraf Subtitle / Ajakan
                   </label>
                   <textarea
@@ -3018,12 +3022,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         cta: { ...(content.cta || DEFAULT_SITE_CONTENT.cta), subtitle: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Teks Tombol CTA Utama
                   </label>
                   <input
@@ -3035,12 +3039,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         cta: { ...(content.cta || DEFAULT_SITE_CONTENT.cta), primaryBtnText: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Teks Tombol CTA Sekunder
                   </label>
                   <input
@@ -3052,7 +3056,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         cta: { ...(content.cta || DEFAULT_SITE_CONTENT.cta), secondaryBtnText: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -3064,12 +3068,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
             <div className="p-5 rounded-2xl bg-white dark:bg-[#14171E] border border-gray-200 dark:border-white/10 shadow-sm space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-200 dark:border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-zinc-500/20 text-zinc-300 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-gray-100 text-gray-700 dark:bg-zinc-500/20 dark:text-zinc-300 flex items-center justify-center">
                     <MapPin className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-gray-950 dark:text-white">12. Footer &amp; Informasi Kontak Resmi</h4>
-                    <p className="text-xs text-gray-400">Tagline brand di footer, alamat kantor, email, dan WhatsApp advisor.</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Tagline brand di footer, alamat kantor, email, dan WhatsApp advisor.</p>
                   </div>
                 </div>
 
@@ -3080,7 +3084,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Tagline Brand di Footer
                   </label>
                   <textarea
@@ -3092,12 +3096,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), tagline: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Alamat Kantor / Studio
                   </label>
                   <input
@@ -3109,12 +3113,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), address: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Email Kontak / Dukungan
                   </label>
                   <input
@@ -3126,12 +3130,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), email: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">
                     Nomor WhatsApp / Phone Student Advisor
                   </label>
                   <input
@@ -3143,7 +3147,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), phone: e.target.value },
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -3297,7 +3301,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                         Nama Lengkap &amp; Gelar *
                       </label>
                       <input
@@ -3306,12 +3310,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         value={instructorForm.name}
                         onChange={(e) => setInstructorForm({ ...instructorForm, name: e.target.value })}
                         placeholder="Contoh: Eddy Tuasikal, S.Ars"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                         Slug URL Halaman CV
                       </label>
                       <input
@@ -3319,12 +3323,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         value={instructorForm.slug || ""}
                         onChange={(e) => setInstructorForm({ ...instructorForm, slug: e.target.value })}
                         placeholder="eddy-tuasikal"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                         Jabatan / Spesialisasi *
                       </label>
                       <input
@@ -3333,12 +3337,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         value={instructorForm.role}
                         onChange={(e) => setInstructorForm({ ...instructorForm, role: e.target.value })}
                         placeholder="BIM Modeller & Architectural Designer"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                         Lencana Pengalaman (Badge Hijau)
                       </label>
                       <input
@@ -3346,12 +3350,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         value={instructorForm.experience}
                         onChange={(e) => setInstructorForm({ ...instructorForm, experience: e.target.value })}
                         placeholder="3 Tahun di Proyek Nasional & BUMN"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
                       />
                     </div>
 
                     <div className="sm:col-span-2">
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                         Afiliasi / Spesialisasi Singkat
                       </label>
                       <input
@@ -3359,17 +3363,17 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         value={instructorForm.affiliation}
                         onChange={(e) => setInstructorForm({ ...instructorForm, affiliation: e.target.value })}
                         placeholder="Eks Tim BIM MRT & High-Rise Specialist"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
                       />
                     </div>
                   </div>
 
                   {/* Avatar Upload / URL */}
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                       Foto Profil Instruktur
                     </label>
-                    <div className="flex items-center gap-4 p-3 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10">
+                    <div className="flex items-center gap-4 p-3 rounded-2xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs">
                       <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-900 border border-white/15 shrink-0">
                         <img
                           src={instructorForm.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200"}
@@ -3403,7 +3407,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           value={instructorForm.avatar}
                           onChange={(e) => setInstructorForm({ ...instructorForm, avatar: e.target.value })}
                           placeholder="URL gambar (https://...) atau path unggahan"
-                          className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
+                          className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
                         />
                       </div>
                     </div>
@@ -3411,7 +3415,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
                   {/* Kutipan Komunitas */}
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                       Kutipan Bimbingan di Komunitas
                     </label>
                     <textarea
@@ -3419,13 +3423,13 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       value={instructorForm.communityRole}
                       onChange={(e) => setInstructorForm({ ...instructorForm, communityRole: e.target.value })}
                       placeholder='Contoh: "Memandu audit BEP, strategi koordinasi multidisiplin, dan review kesiapan tender BIM."'
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
                     />
                   </div>
 
                   {/* Tag Keahlian Cepat di Kartu Beranda */}
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                       Tag Singkat Kartu Beranda (Pisahkan dengan koma)
                     </label>
                     <input
@@ -3433,7 +3437,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       value={expertiseInput}
                       onChange={(e) => setExpertiseInput(e.target.value)}
                       placeholder="Contoh: Revit, AutoCAD, Navisworks, Enscape, SketchUp"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#B27D56]"
                     />
                   </div>
 
@@ -3458,7 +3462,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                         Email Resmi
                       </label>
                       <input
@@ -3466,12 +3470,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         value={instructorForm.email || ""}
                         onChange={(e) => setInstructorForm({ ...instructorForm, email: e.target.value })}
                         placeholder="eddy.tuasikal18@gmail.com"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                         Nomor Telepon / WhatsApp
                       </label>
                       <input
@@ -3479,12 +3483,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         value={instructorForm.phone || ""}
                         onChange={(e) => setInstructorForm({ ...instructorForm, phone: e.target.value })}
                         placeholder="+62 813 7070 4533"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                         Lokasi / Domisili
                       </label>
                       <input
@@ -3492,12 +3496,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         value={instructorForm.location || ""}
                         onChange={(e) => setInstructorForm({ ...instructorForm, location: e.target.value })}
                         placeholder="Gowa, Sulawesi Selatan"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                         LinkedIn URL
                       </label>
                       <input
@@ -3505,12 +3509,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         value={instructorForm.linkedin || ""}
                         onChange={(e) => setInstructorForm({ ...instructorForm, linkedin: e.target.value })}
                         placeholder="https://www.linkedin.com/in/eddy-tuasikal"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div className="sm:col-span-2">
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                         Tautan Google Drive Portofolio PDF
                       </label>
                       <input
@@ -3518,7 +3522,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         value={instructorForm.portfolioLink || ""}
                         onChange={(e) => setInstructorForm({ ...instructorForm, portfolioLink: e.target.value })}
                         placeholder="https://drive.google.com/file/d/.../view"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                       />
                     </div>
                   </div>
@@ -3544,7 +3548,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
                   <div className="space-y-4">
                     {instructorForm.education?.map((edu, edIdx) => (
-                      <div key={edIdx} className="p-4 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-3">
+                      <div key={edIdx} className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-3">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-amber-400">Pendidikan #{edIdx + 1}</span>
                           <button
@@ -3564,7 +3568,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                               value={edu.degree}
                               onChange={(e) => handleUpdateEducation(edIdx, "degree", e.target.value)}
                               placeholder="Bachelor of Architecture (S.Ars)"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
 
@@ -3575,7 +3579,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                               value={edu.institution}
                               onChange={(e) => handleUpdateEducation(edIdx, "institution", e.target.value)}
                               placeholder="Universitas Hasanuddin (Makassar, Indonesia)"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
 
@@ -3586,7 +3590,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                               value={edu.period}
                               onChange={(e) => handleUpdateEducation(edIdx, "period", e.target.value)}
                               placeholder="Agu 2021 - Mei 2026"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
 
@@ -3597,7 +3601,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                               value={edu.gpa || ""}
                               onChange={(e) => handleUpdateEducation(edIdx, "gpa", e.target.value)}
                               placeholder="3.79 / 4.00"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
 
@@ -3616,7 +3620,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                                 )
                               }
                               placeholder="Konsentrasi Studi Struktur & Konstruksi&#10;2nd Runner Up Untar ADW 2024"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
                         </div>
@@ -3645,7 +3649,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
                   <div className="space-y-4">
                     {instructorForm.workExperience?.map((exp, eIdx) => (
-                      <div key={eIdx} className="p-4 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-3">
+                      <div key={eIdx} className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-3">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-amber-400">Pengalaman #{eIdx + 1}</span>
                           <button
@@ -3665,7 +3669,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                               value={exp.role}
                               onChange={(e) => handleUpdateExperience(eIdx, "role", e.target.value)}
                               placeholder="BIM Estimator"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
 
@@ -3676,7 +3680,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                               value={exp.company}
                               onChange={(e) => handleUpdateExperience(eIdx, "company", e.target.value)}
                               placeholder="PT Midi Utama Indonesia Tbk"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
 
@@ -3687,7 +3691,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                               value={exp.period}
                               onChange={(e) => handleUpdateExperience(eIdx, "period", e.target.value)}
                               placeholder="Sep 2026 - Sekarang"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
 
@@ -3698,7 +3702,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                               value={exp.location || ""}
                               onChange={(e) => handleUpdateExperience(eIdx, "location", e.target.value)}
                               placeholder="Tangerang, Banten"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
 
@@ -3717,7 +3721,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                                 )
                               }
                               placeholder="Perhitungan volume material berbasis BIM&#10;Koordinasi gambar kerja DED"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
                         </div>
@@ -3747,7 +3751,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     </div>
 
                     {instructorForm.organizations?.map((org, oIdx) => (
-                      <div key={oIdx} className="p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-2">
+                      <div key={oIdx} className="p-3.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-gray-200">Organisasi #{oIdx + 1}</span>
                           <button
@@ -3764,21 +3768,21 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                             value={org.role}
                             onChange={(e) => handleUpdateOrganization(oIdx, "role", e.target.value)}
                             placeholder="Jabatan (contoh: Staff Minat Ilmiah)"
-                            className="px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            className="px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                           />
                           <input
                             type="text"
                             value={org.organization}
                             onChange={(e) => handleUpdateOrganization(oIdx, "organization", e.target.value)}
                             placeholder="Organisasi (contoh: HMA FT Unhas)"
-                            className="px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            className="px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                           />
                           <input
                             type="text"
                             value={org.period}
                             onChange={(e) => handleUpdateOrganization(oIdx, "period", e.target.value)}
                             placeholder="Periode (contoh: 2023 - 2024)"
-                            className="px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            className="px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                           />
                         </div>
                         <input
@@ -3786,7 +3790,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                           value={org.description || ""}
                           onChange={(e) => handleUpdateOrganization(oIdx, "description", e.target.value)}
                           placeholder="Deskripsi kegiatan atau tanggung jawab..."
-                          className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                          className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                         />
                       </div>
                     ))}
@@ -3809,7 +3813,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     </div>
 
                     {instructorForm.webinars?.map((web, wIdx) => (
-                      <div key={wIdx} className="p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-2">
+                      <div key={wIdx} className="p-3.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-gray-200">Webinar #{wIdx + 1}</span>
                           <button
@@ -3826,21 +3830,21 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                             value={web.year}
                             onChange={(e) => handleUpdateWebinar(wIdx, "year", e.target.value)}
                             placeholder="Tahun"
-                            className="px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            className="px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                           />
                           <input
                             type="text"
                             value={web.title}
                             onChange={(e) => handleUpdateWebinar(wIdx, "title", e.target.value)}
                             placeholder="Judul Acara / Tema Webinar"
-                            className="sm:col-span-2 px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            className="sm:col-span-2 px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                           />
                           <input
                             type="text"
                             value={web.organizer}
                             onChange={(e) => handleUpdateWebinar(wIdx, "organizer", e.target.value)}
                             placeholder="Penyelenggara"
-                            className="px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            className="px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                           />
                         </div>
                       </div>
@@ -3853,7 +3857,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
               {modalTab === "skills" && (
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                       Software BIM &amp; Desain (Pisahkan dengan koma)
                     </label>
                     <textarea
@@ -3861,12 +3865,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       value={softwareSkillsInput}
                       onChange={(e) => setSoftwareSkillsInput(e.target.value)}
                       placeholder="Autodesk Revit, AutoCAD, Navisworks, SketchUp, Chaos Enscape, D5 Render, Canva, Microsoft Office"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                       Keahlian Teknis Arsitektur (Pisahkan dengan koma)
                     </label>
                     <textarea
@@ -3874,12 +3878,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       value={technicalSkillsInput}
                       onChange={(e) => setTechnicalSkillsInput(e.target.value)}
                       placeholder="Architectural Design, BIM Modeling LOD 300 - 350, Interior Design, Tropical Sustainable Design, Daylight Simulation, BoQ / Cost Estimation, Working Drawing (DED)"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1">
                       Soft Skills &amp; Kolaborasi (Pisahkan dengan koma)
                     </label>
                     <textarea
@@ -3887,7 +3891,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       value={softSkillsInput}
                       onChange={(e) => setSoftSkillsInput(e.target.value)}
                       placeholder="Problem Solving, Adaptability, Analytical Thinking, Team Collaboration, Project Coordination, Effective Communication, Time Management"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
                 </div>
@@ -3912,7 +3916,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
                   <div className="space-y-4">
                     {instructorForm.projects?.map((proj, pIdx) => (
-                      <div key={proj.id || pIdx} className="p-4 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-3">
+                      <div key={proj.id || pIdx} className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-3">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-amber-400">Proyek #{pIdx + 1}</span>
                           <button
@@ -3932,7 +3936,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                               value={proj.title}
                               onChange={(e) => handleUpdateProject(pIdx, "title", e.target.value)}
                               placeholder="Aura Pavilion"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
 
@@ -3944,14 +3948,14 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                                 value={proj.year}
                                 onChange={(e) => handleUpdateProject(pIdx, "year", e.target.value)}
                                 placeholder="2024"
-                                className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                                className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                               />
                               <input
                                 type="text"
                                 value={proj.category}
                                 onChange={(e) => handleUpdateProject(pIdx, "category", e.target.value)}
                                 placeholder="Sayembara Paviliun"
-                                className="col-span-2 w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                                className="col-span-2 w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                               />
                             </div>
                           </div>
@@ -3963,7 +3967,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                               value={proj.location || ""}
                               onChange={(e) => handleUpdateProject(pIdx, "location", e.target.value)}
                               placeholder="Tebet Eco Park, Jakarta"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
 
@@ -3974,7 +3978,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                               value={proj.award || ""}
                               onChange={(e) => handleUpdateProject(pIdx, "award", e.target.value)}
                               placeholder="2nd Runner Up Untar 2024"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
 
@@ -3985,7 +3989,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                               value={proj.team || ""}
                               onChange={(e) => handleUpdateProject(pIdx, "team", e.target.value)}
                               placeholder="Nurjannah, Ghifari Aulia Ramadhani, Eddy Tuasikal"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
 
@@ -4002,7 +4006,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                                 )
                               }
                               placeholder="Autodesk Revit, SketchUp, Chaos Enscape"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
 
@@ -4013,7 +4017,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                               value={proj.image || ""}
                               onChange={(e) => handleUpdateProject(pIdx, "image", e.target.value)}
                               placeholder="/instructors/eddy/portfolio-page-3.png"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
 
@@ -4030,7 +4034,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                                 )
                               }
                               placeholder="/instructors/eddy/portfolio-page-3.png, /instructors/eddy/portfolio-page-4.png"
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
 
@@ -4040,7 +4044,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                               rows={2}
                               value={proj.description}
                               onChange={(e) => handleUpdateProject(pIdx, "description", e.target.value)}
-                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                              className="w-full px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                             />
                           </div>
                         </div>
@@ -4070,7 +4074,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     </div>
 
                     {instructorForm.achievements?.map((ach, aIdx) => (
-                      <div key={ach.id || aIdx} className="p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-2">
+                      <div key={ach.id || aIdx} className="p-3.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-gray-200">Penghargaan #{aIdx + 1}</span>
                           <button
@@ -4087,28 +4091,28 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                             value={ach.title}
                             onChange={(e) => handleUpdateAchievement(aIdx, "title", e.target.value)}
                             placeholder="Gelar Juara (contoh: 2nd Runner Up)"
-                            className="px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            className="px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                           />
                           <input
                             type="text"
                             value={ach.event}
                             onChange={(e) => handleUpdateAchievement(aIdx, "event", e.target.value)}
                             placeholder="Nama Sayembara"
-                            className="px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            className="px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                           />
                           <input
                             type="text"
                             value={ach.organizer}
                             onChange={(e) => handleUpdateAchievement(aIdx, "organizer", e.target.value)}
                             placeholder="Penyelenggara (contoh: UNTAR)"
-                            className="px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            className="px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                           />
                           <input
                             type="text"
                             value={ach.year}
                             onChange={(e) => handleUpdateAchievement(aIdx, "year", e.target.value)}
                             placeholder="Tahun (contoh: 2024)"
-                            className="px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            className="px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                           />
                         </div>
                       </div>
@@ -4132,7 +4136,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     </div>
 
                     {instructorForm.certificates?.map((cert, cIdx) => (
-                      <div key={cert.id || cIdx} className="p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 space-y-2">
+                      <div key={cert.id || cIdx} className="p-3.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-gray-200">Sertifikat #{cIdx + 1}</span>
                           <button
@@ -4149,28 +4153,28 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                             value={cert.title}
                             onChange={(e) => handleUpdateCertificate(cIdx, "title", e.target.value)}
                             placeholder="Judul Sertifikat"
-                            className="px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            className="px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                           />
                           <input
                             type="text"
                             value={cert.issuer}
                             onChange={(e) => handleUpdateCertificate(cIdx, "issuer", e.target.value)}
                             placeholder="Penerbit"
-                            className="px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            className="px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                           />
                           <input
                             type="text"
                             value={cert.year}
                             onChange={(e) => handleUpdateCertificate(cIdx, "year", e.target.value)}
                             placeholder="Tahun"
-                            className="px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            className="px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                           />
                           <input
                             type="text"
                             value={cert.image || ""}
                             onChange={(e) => handleUpdateCertificate(cIdx, "image", e.target.value)}
                             placeholder="Path gambar (/instructors/eddy/portfolio-page-16.png)"
-                            className="px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            className="px-3 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                           />
                         </div>
                       </div>
