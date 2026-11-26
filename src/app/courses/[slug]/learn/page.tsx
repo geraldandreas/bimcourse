@@ -31,6 +31,7 @@ import {
   Check,
   Bookmark,
   Share2,
+  Lock,
 } from "lucide-react";
 import { useTheme } from "@/lib/theme/ThemeContext";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
@@ -68,7 +69,8 @@ function CourseLearnContent() {
     setLanguage(language === "id" ? "en" : "id");
   };
 
-  const [modules, setModules] = useState<CurriculumModule[]>(BIM_MODULES);
+  const [modules, setModules] = useState<CurriculumModule[]>([]);
+  const [loadingCurriculum, setLoadingCurriculum] = useState(true);
   const [resources, setResources] = useState<CurriculumResource[]>([]);
   const [currentUser, setCurrentUser] = useState<{ name?: string; email?: string } | null>(null);
   const [courseData, setCourseData] = useState<{
@@ -78,11 +80,19 @@ function CourseLearnContent() {
     attachmentName?: string | null;
     attachmentDescription?: string | null;
   } | null>(null);
+  const [courseCert, setCourseCert] = useState<{
+    id: string;
+    certificateNo: string;
+    status: "REQUESTED" | "ISSUED";
+    issuedDate?: string;
+  } | null>(null);
+  const [requestingCert, setRequestingCert] = useState(false);
+  const [certMsg, setCertMsg] = useState<string | null>(null);
 
   // Fetch current user session for security watermarking
   useEffect(() => {
     let isMounted = true;
-    fetch("/api/auth/me")
+    fetch("/api/auth/me", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (isMounted && data?.user) {
@@ -98,7 +108,7 @@ function CourseLearnContent() {
   // Fetch course details (for master project dataset & description)
   useEffect(() => {
     let isMounted = true;
-    fetch(`/api/courses/${slug}`)
+    fetch(`/api/courses/${slug}`, { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (isMounted && data?.course) {
@@ -111,24 +121,47 @@ function CourseLearnContent() {
     };
   }, [slug]);
 
-  // Fetch dynamic curriculum & resources from API (if superadmin/pengajar customized it)
+  // Fetch student's certificate status for this course
   useEffect(() => {
     let isMounted = true;
-    fetch(`/api/curriculum/${slug}`)
-      .then((res) => (res.ok ? res.json() : { modules: BIM_MODULES, resources: [] }))
+    fetch(`/api/certificates?slug=${encodeURIComponent(slug)}`, { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (isMounted) {
-          if (Array.isArray(data.modules) && data.modules.length > 0) {
-            setModules(data.modules);
-          }
-          if (Array.isArray(data.resources)) {
-            setResources(data.resources);
-          } else {
-            setResources([]);
-          }
+        if (isMounted && Array.isArray(data?.certificates) && data.certificates.length > 0) {
+          setCourseCert(data.certificates[0]);
         }
       })
       .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, [slug]);
+
+  // Fetch dynamic curriculum & resources from API (no stale cache or dummy flash)
+  useEffect(() => {
+    let isMounted = true;
+    setLoadingCurriculum(true);
+    fetch(`/api/curriculum/${slug}`, { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!isMounted) return;
+        if (data && Array.isArray(data.modules)) {
+          setModules(data.modules);
+        } else {
+          setModules(BIM_MODULES);
+        }
+        if (data && Array.isArray(data.resources)) {
+          setResources(data.resources);
+        } else {
+          setResources([]);
+        }
+      })
+      .catch(() => {
+        if (isMounted) setModules(BIM_MODULES);
+      })
+      .finally(() => {
+        if (isMounted) setLoadingCurriculum(false);
+      });
     return () => {
       isMounted = false;
     };
@@ -143,12 +176,19 @@ function CourseLearnContent() {
         });
       });
     });
-    return list.length > 0 ? list : getAllLessons();
+    return list;
   }, [modules]);
 
   // Active lesson state (initialized from URL param or first lesson)
-  const initialLessonId = searchParams.get("lesson") || allLessons[0]?.id;
+  const initialLessonId = searchParams.get("lesson") || "";
   const [activeLessonId, setActiveLessonId] = useState<string>(initialLessonId);
+
+  useEffect(() => {
+    if (allLessons.length === 0) return;
+    if (!activeLessonId || !allLessons.some((l) => l.id === activeLessonId)) {
+      setActiveLessonId(allLessons[0].id);
+    }
+  }, [allLessons, activeLessonId]);
 
   // Mounted flag to avoid hydration mismatch
   const [hasMounted, setHasMounted] = useState(false);
@@ -180,6 +220,9 @@ function CourseLearnContent() {
   const [practiceCompleted, setPracticeCompleted] = useState<Record<string, boolean>>({});
   const [matchingCompleted, setMatchingCompleted] = useState<Record<string, boolean>>({});
   const [quizCompleted, setQuizCompleted] = useState<Record<string, boolean>>({});
+  const [quizStatusMap, setQuizStatusMap] = useState<
+    Record<string, "APPROVED" | "PENDING" | "REVISION">
+  >({});
 
   // Sidebar open/collapse state
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -236,6 +279,49 @@ function CourseLearnContent() {
     currentSectionIndex < allSections.length - 1
       ? allSections[currentSectionIndex + 1]
       : null;
+
+  const isQuizLessonApproved = (lesson: CurriculumLesson) => {
+    const status = quizStatusMap[lesson.id];
+    if (status === "APPROVED") return true;
+    if (status === "PENDING" || status === "REVISION") return false;
+    return Boolean(quizCompleted[lesson.id]) || completedLessons.includes(lesson.id);
+  };
+
+  const activeSectionBlockingQuiz = useMemo(() => {
+    if (!activeSection) return null;
+    return (
+      activeSection.lessons.find(
+        (l) => Boolean(l.quizIntro) && !isQuizLessonApproved(l)
+      ) || null
+    );
+  }, [activeSection, quizStatusMap, quizCompleted, completedLessons]);
+
+  const firstLockedSectionIdx = useMemo(() => {
+    return allSections.findIndex((sec) =>
+      sec.lessons.some((l) => Boolean(l.quizIntro) && !isQuizLessonApproved(l))
+    );
+  }, [allSections, quizStatusMap, quizCompleted, completedLessons]);
+
+  const getQuizLockReason = (quizLesson: CurriculumLesson | null) => {
+    if (!quizLesson) return null;
+    const status = quizStatusMap[quizLesson.id];
+    const kkm = quizLesson.quizIntro?.passRatePercent ?? 70;
+    const hasManual = quizLesson.quizIntro?.questions?.some(
+      (q) => q.type === "essay" || q.type === "file_upload"
+    );
+    if (status === "PENDING") {
+      return "Menunggu verifikasi SuperAdmin/Pengajar untuk kuis isian atau tugas sebelum dapat melanjutkan ke Sub-Bab berikutnya.";
+    }
+    if (status === "REVISION") {
+      return `Nilai kuis masih di bawah KKM (${kkm}%). Silakan revisi dan kerjakan ulang kuis untuk membuka Sub-Bab berikutnya.`;
+    }
+    if (hasManual) {
+      return "Kerjakan kuis & tunggu verifikasi SuperAdmin/Pengajar terlebih dahulu untuk membuka Sub-Bab berikutnya.";
+    }
+    return `Selesaikan kuis dengan nilai minimal KKM ${kkm}% untuk melanjutkan ke Sub-Bab berikutnya.`;
+  };
+
+  const activeQuizLockReason = getQuizLockReason(activeSectionBlockingQuiz);
 
   // Active lesson object
   const activeLesson = useMemo(() => {
@@ -409,7 +495,8 @@ function CourseLearnContent() {
   const completedCount = completedLessons.filter((id) =>
     allLessons.some((l) => l.id === id)
   ).length;
-  const progressPercent = Math.round((completedCount / totalLessonsCount) * 100);
+  const progressPercent =
+    totalLessonsCount > 0 ? Math.round((completedCount / totalLessonsCount) * 100) : 0;
 
   // Toggle module accordion
   const toggleModule = (modId: string) => {
@@ -453,6 +540,54 @@ function CourseLearnContent() {
       return { ...mod, sections: filteredSections };
     }).filter((mod) => mod.sections.length > 0);
   }, [searchQuery, modules]);
+
+  const finalModule = useMemo(() => {
+    return modules.find((m) => m.isFinalModule) || modules[modules.length - 1] || null;
+  }, [modules]);
+
+  const isInFinalSection = useMemo(() => {
+    if (!finalModule || !activeSection) return false;
+    const lastSecOfFinalMod = finalModule.sections?.[finalModule.sections.length - 1];
+    return activeSection.id === lastSecOfFinalMod?.id || !nextSection;
+  }, [finalModule, activeSection, nextSection]);
+
+  const canRequestCertificate =
+    isInFinalSection &&
+    firstLockedSectionIdx === -1 &&
+    !activeSectionBlockingQuiz &&
+    !loadingCurriculum;
+
+  const handleRequestCertificate = async () => {
+    setRequestingCert(true);
+    setCertMsg(null);
+    try {
+      const res = await fetch("/api/certificates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          courseId: courseData?.id,
+          courseSlug: slug,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Gagal mengajukan sertifikat.");
+      }
+      setCourseCert(data.certificate);
+      setCertMsg(
+        data.message ||
+          "Pengajuan sertifikat berhasil dikirim! Menunggu verifikasi dan penerbitan SuperAdmin."
+      );
+    } catch (err: any) {
+      setCertMsg(err?.message || "Gagal mengajukan sertifikat.");
+    } finally {
+      setRequestingCert(false);
+    }
+  };
+
+  if (loadingCurriculum) {
+    return <CourseLearnLoading />;
+  }
 
   const isCurrentCompleted = completedLessons.includes(activeLesson?.id);
 
@@ -734,21 +869,39 @@ function CourseLearnContent() {
                                 {section.lessons.map((lesson) => {
                                   const isActive = activeLessonId === lesson.id;
                                   const isDone = completedLessons.includes(lesson.id);
+                                  const secGlobalIdx = allSections.findIndex((s) => s.id === section.id);
+                                  const isLockedByQuiz =
+                                    firstLockedSectionIdx !== -1 &&
+                                    secGlobalIdx > firstLockedSectionIdx;
 
                                   return (
                                     <button
                                       key={lesson.id}
                                       type="button"
-                                      onClick={() => handleSelectLesson(lesson)}
-                                      className={`w-full text-left py-2 px-2.5 rounded-xl text-xs transition-all flex items-start gap-2.5 relative z-10 cursor-pointer ${
-                                        isActive
-                                          ? "bg-amber-500/10 dark:bg-amber-400/15 border border-amber-500/30 text-gray-950 dark:text-white font-bold shadow-2xs"
-                                          : "hover:bg-gray-100/70 dark:hover:bg-white/5 text-gray-700 dark:text-zinc-300 font-medium"
+                                      disabled={isLockedByQuiz}
+                                      onClick={() => {
+                                        if (!isLockedByQuiz) handleSelectLesson(lesson);
+                                      }}
+                                      title={
+                                        isLockedByQuiz
+                                          ? "Lulus atau tunggu verifikasi kuis pada Sub-Bab sebelumnya terlebih dahulu"
+                                          : lesson.title
+                                      }
+                                      className={`w-full text-left py-2 px-2.5 rounded-xl text-xs transition-all flex items-start gap-2.5 relative z-10 ${
+                                        isLockedByQuiz
+                                          ? "opacity-50 cursor-not-allowed text-gray-400 dark:text-zinc-500"
+                                          : isActive
+                                          ? "bg-amber-500/10 dark:bg-amber-400/15 border border-amber-500/30 text-gray-950 dark:text-white font-bold shadow-2xs cursor-pointer"
+                                          : "hover:bg-gray-100/70 dark:hover:bg-white/5 text-gray-700 dark:text-zinc-300 font-medium cursor-pointer"
                                       }`}
                                     >
                                       {/* Status Checkbox Icon */}
                                       <div className="mt-0.5 shrink-0 bg-white dark:bg-[#161B22] rounded-full">
-                                        {isDone ? (
+                                        {isLockedByQuiz ? (
+                                          <div className="w-4 h-4 rounded-full bg-gray-200 dark:bg-zinc-800 text-gray-500 dark:text-zinc-400 flex items-center justify-center">
+                                            <Lock className="w-2.5 h-2.5" />
+                                          </div>
+                                        ) : isDone ? (
                                           <div className="w-4 h-4 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-xs">
                                             <Check className="w-2.5 h-2.5 stroke-[3]" />
                                           </div>
@@ -1173,6 +1326,34 @@ function CourseLearnContent() {
                                 [lesson.id]: true,
                               }));
                             }}
+                            onStatusChange={(status) => {
+                              setQuizStatusMap((prev) => ({
+                                ...prev,
+                                [lesson.id]: status,
+                              }));
+                              if (status === "APPROVED") {
+                                setQuizCompleted((prev) => ({
+                                  ...prev,
+                                  [lesson.id]: true,
+                                }));
+                              } else {
+                                setQuizCompleted((prev) => ({
+                                  ...prev,
+                                  [lesson.id]: false,
+                                }));
+                                setCompletedLessons((prev) => {
+                                  if (!prev.includes(lesson.id)) return prev;
+                                  const updated = prev.filter((id) => id !== lesson.id);
+                                  try {
+                                    localStorage.setItem(
+                                      `bimcourse_completed_${slug}`,
+                                      JSON.stringify(updated)
+                                    );
+                                  } catch {}
+                                  return updated;
+                                });
+                              }
+                            }}
                           />
                         )}
 
@@ -1219,29 +1400,54 @@ function CourseLearnContent() {
 
             {/* END OF SUB-BAB: TRANSITION CARD */}
             {nextSection ? (
-              <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-amber-500/10 via-yellow-400/5 to-transparent border border-amber-500/30 text-center space-y-4 shadow-sm">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-bold text-xs border border-emerald-500/30">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                  <span>Sub-Bab {activeSection?.code} Selesai Dibaca</span>
+              activeSectionBlockingQuiz ? (
+                <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-amber-500/10 border border-amber-500/30 text-center space-y-4 shadow-sm">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold text-xs border border-amber-500/30">
+                    <Lock className="w-3.5 h-3.5" />
+                    <span>Sub-Bab {nextSection.code} Terkunci</span>
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-black text-gray-950 dark:text-white">
+                    Selesaikan Kuis untuk Membuka {nextSection.code} {nextSection.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-gray-700 dark:text-zinc-300 max-w-lg mx-auto leading-relaxed">
+                    {activeQuizLockReason}
+                  </p>
+                  <div>
+                    <button
+                      type="button"
+                      disabled
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gray-300 dark:bg-white/10 text-gray-500 dark:text-zinc-400 font-extrabold text-sm cursor-not-allowed opacity-80"
+                    >
+                      <Lock className="w-4 h-4" />
+                      <span>Buka Sub-Bab {nextSection.code}</span>
+                    </button>
+                  </div>
                 </div>
-                <h3 className="text-lg sm:text-xl font-black text-gray-950 dark:text-white">
-                  Lanjut ke Sub-Bab Berikutnya: {nextSection.code} {nextSection.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400 max-w-md mx-auto">
-                  Materi akan bersambung ke topik {nextSection.lessons[0]?.code} {nextSection.lessons[0]?.title}.
-                </p>
-                <div>
-                  <button
-                    type="button"
-                    onClick={() => handleSelectLesson(nextSection.lessons[0])}
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-sm transition-all shadow-md active:scale-95 cursor-pointer"
-                  >
-                    <span>Buka Sub-Bab {nextSection.code}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
+              ) : (
+                <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-amber-500/10 via-yellow-400/5 to-transparent border border-amber-500/30 text-center space-y-4 shadow-sm">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-bold text-xs border border-emerald-500/30">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                    <span>Sub-Bab {activeSection?.code} Selesai Dibaca</span>
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-black text-gray-950 dark:text-white">
+                    Lanjut ke Sub-Bab Berikutnya: {nextSection.code} {nextSection.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400 max-w-md mx-auto">
+                    Materi akan bersambung ke topik {nextSection.lessons[0]?.code} {nextSection.lessons[0]?.title}.
+                  </p>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => handleSelectLesson(nextSection.lessons[0])}
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-sm transition-all shadow-md active:scale-95 cursor-pointer"
+                    >
+                      <span>Buka Sub-Bab {nextSection.code}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ) : (
+              )
+            ) : isInFinalSection ? null : (
               <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-emerald-500/10 border border-emerald-500/30 text-center space-y-3">
                 <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto" />
                 <h3 className="text-lg font-black text-gray-950 dark:text-white">
@@ -1250,6 +1456,94 @@ function CourseLearnContent() {
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">
                   Semua modul dan aktivitas interaktif telah selesai dieksplorasi.
                 </p>
+              </div>
+            )}
+
+            {/* FINAL MODULE COMPLETION & CERTIFICATE REQUEST CARD */}
+            {isInFinalSection && (
+              <div className="mt-10 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-500/10 via-amber-500/5 to-transparent border-2 border-emerald-500/30 text-center space-y-4 shadow-sm">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
+                  <Award className="w-6 h-6" />
+                </div>
+
+                {courseCert?.status === "ISSUED" ? (
+                  <>
+                    <span className="inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-mono text-xs font-bold">
+                      SERTIFIKAT SUDAH DITERBITKAN • {courseCert.certificateNo}
+                    </span>
+                    <h3 className="text-lg sm:text-xl font-black text-gray-950 dark:text-white">
+                      Sertifikat Resmi Anda Siap Diunduh!
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400 max-w-lg mx-auto">
+                      SuperAdmin telah menerbitkan sertifikat kompetensi bertanda tangan CEO untuk kelas ini dan mengirimkannya ke akun serta email Anda.
+                    </p>
+                    <div className="pt-1">
+                      <Link
+                        href="/profile?tab=certificates"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95"
+                      >
+                        <Award className="w-4 h-4" />
+                        <span>Lihat &amp; Unduh Sertifikat</span>
+                      </Link>
+                    </div>
+                  </>
+                ) : courseCert?.status === "REQUESTED" ? (
+                  <>
+                    <span className="inline-block px-3 py-1 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 font-mono text-xs font-bold">
+                      MENUNGGU PROSES SUPERADMIN • {courseCert.certificateNo}
+                    </span>
+                    <h3 className="text-lg sm:text-xl font-black text-gray-950 dark:text-white">
+                      Pengajuan Sertifikat Anda Sedang Diproses
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400 max-w-lg mx-auto">
+                      Tim SuperAdmin sedang meninjau kelulusan modul akhir Anda dan akan men-generate serta mengirimkan sertifikat melalui web BIMCourse &amp; email terdaftar Anda.
+                    </p>
+                  </>
+                ) : !canRequestCertificate ? (
+                  <>
+                    <span className="inline-block px-3 py-1 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 font-mono text-xs font-bold">
+                      AKHIR MODUL KURSUS • SYARAT SERTIFIKAT
+                    </span>
+                    <h3 className="text-lg sm:text-xl font-black text-gray-950 dark:text-white">
+                      Lulus Kuis untuk Mengajukan Sertifikat
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400 max-w-lg mx-auto">
+                      {activeQuizLockReason ||
+                        "Pastikan seluruh kuis pilihan ganda memenuhi KKM dan kuis isian/tugas telah diverifikasi SuperAdmin/Pengajar terlebih dahulu."}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <span className="inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-mono text-xs font-bold">
+                      AKHIR MODUL SELESAI • SIAP PENGAJUAN
+                    </span>
+                    <h3 className="text-lg sm:text-xl font-black text-gray-950 dark:text-white">
+                      Selamat! Anda Telah Mencapai Akhir Modul Kursus
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400 max-w-lg mx-auto">
+                      Seluruh syarat modul telah terpenuhi. Ajukan penerbitan sertifikat kelulusan resmi bertanda tangan CEO BIMCourse ke SuperAdmin sekarang.
+                    </p>
+                    <div className="pt-1">
+                      <button
+                        type="button"
+                        disabled={requestingCert}
+                        onClick={handleRequestCertificate}
+                        className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-sm shadow-lg transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
+                      >
+                        <Award className="w-4 h-4" />
+                        <span>
+                          {requestingCert ? "Mengirim Pengajuan..." : "Ajukan Sertifikat Kelulusan"}
+                        </span>
+                      </button>
+                    </div>
+                  </>
+                )}
+
+                {certMsg && (
+                  <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-300 pt-1">
+                    {certMsg}
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -1290,15 +1584,33 @@ function CourseLearnContent() {
               {nextSection ? (
                 <button
                   type="button"
-                  onClick={() => handleSelectLesson(nextSection.lessons[0])}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-black hover:bg-zinc-800 text-white dark:bg-white dark:hover:bg-zinc-200 dark:text-black text-xs font-bold transition-all cursor-pointer shadow-sm"
+                  disabled={Boolean(activeSectionBlockingQuiz)}
+                  onClick={() => {
+                    if (!activeSectionBlockingQuiz) {
+                      handleSelectLesson(nextSection.lessons[0]);
+                    }
+                  }}
+                  title={activeQuizLockReason || undefined}
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm ${
+                    activeSectionBlockingQuiz
+                      ? "bg-gray-200 dark:bg-white/10 text-gray-500 dark:text-zinc-400 cursor-not-allowed opacity-75"
+                      : "bg-black hover:bg-zinc-800 text-white dark:bg-white dark:hover:bg-zinc-200 dark:text-black cursor-pointer"
+                  }`}
                 >
-                  <span className="sm:hidden">Lanjut Sub-Bab</span>
+                  <span className="sm:hidden">
+                    {activeSectionBlockingQuiz ? "Kuis Belum Lulus" : "Lanjut Sub-Bab"}
+                  </span>
                   <div className="text-right hidden sm:block">
-                    <div className="text-[10px] font-mono opacity-60">Sub-Bab Selanjutnya</div>
+                    <div className="text-[10px] font-mono opacity-60">
+                      {activeSectionBlockingQuiz ? "Terkunci (Kuis)" : "Sub-Bab Selanjutnya"}
+                    </div>
                     <div className="truncate max-w-[150px] font-medium">{nextSection.code} {nextSection.title}</div>
                   </div>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  {activeSectionBlockingQuiz ? (
+                    <Lock className="w-3.5 h-3.5" />
+                  ) : (
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  )}
                 </button>
               ) : (
                 <div />

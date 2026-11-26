@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Search,
   ShoppingBag,
@@ -15,19 +16,33 @@ import { useLanguage } from "@/lib/i18n/LanguageContext";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useCart } from "@/lib/cart/CartContext";
+import { DEFAULT_SITE_CONTENT, SiteContentConfig } from "@/data/defaultSiteContent";
+
+type NavSectionKey = "courses" | "roadmaps" | "community" | "quiz" | "enterprise" | "faq";
 
 interface NavbarProps {
   onSearchClick?: () => void;
   cartCount?: number;
   solidBg?: boolean;
+  sectionsVisibility?: SiteContentConfig["sectionsVisibility"];
 }
 
-export default function Navbar({ onSearchClick, cartCount = 0, solidBg = false }: NavbarProps) {
+export default function Navbar({
+  onSearchClick,
+  cartCount = 0,
+  solidBg = false,
+  sectionsVisibility: sectionsVisibilityProp,
+}: NavbarProps) {
+  const pathname = usePathname();
   const { cartCount: liveCartCount, setIsCartOpen } = useCart();
   const effectiveCartCount = cartCount || liveCartCount;
 
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState<NavSectionKey | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [fetchedVisibility, setFetchedVisibility] = useState<
+    SiteContentConfig["sectionsVisibility"] | null
+  >(null);
   const [user, setUser] = useState<{
     id?: string;
     name: string;
@@ -38,14 +53,42 @@ export default function Navbar({ onSearchClick, cartCount = 0, solidBg = false }
   const { t } = useLanguage();
 
   useEffect(() => {
+    const sectionIds: NavSectionKey[] = [
+      "courses",
+      "roadmaps",
+      "community",
+      "quiz",
+      "enterprise",
+      "faq",
+    ];
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
-  // Fetch logged in user
+      if (pathname !== "/") {
+        setActiveSection(null);
+        return;
+      }
+
+      const triggerY = window.innerHeight * 0.32;
+      let current: NavSectionKey | null = null;
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= triggerY && rect.bottom > 110) {
+          current = id;
+        }
+      }
+      setActiveSection(current);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [pathname]);
+
+  // Fetch logged in user & visibility config (if not passed from parent)
   useEffect(() => {
     fetch("/api/auth/me")
       .then((res) => (res.ok ? res.json() : null))
@@ -53,7 +96,23 @@ export default function Navbar({ onSearchClick, cartCount = 0, solidBg = false }
         if (data?.user) setUser(data.user);
       })
       .catch(() => {});
-  }, []);
+
+    if (!sectionsVisibilityProp) {
+      fetch("/api/site-content", { cache: "no-store" })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.content?.sectionsVisibility) {
+            setFetchedVisibility(data.content.sectionsVisibility);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [sectionsVisibilityProp]);
+
+  const vis =
+    sectionsVisibilityProp ||
+    fetchedVisibility ||
+    DEFAULT_SITE_CONTENT.sectionsVisibility;
 
   const isSolid = solidBg || scrolled;
 
@@ -107,43 +166,44 @@ export default function Navbar({ onSearchClick, cartCount = 0, solidBg = false }
               : "text-gray-300"
           }`}
         >
-          <Link
-            href="/#courses"
-            className="hover:text-black dark:hover:text-white transition-colors whitespace-nowrap"
-          >
-            {t.navbar.courses}
-          </Link>
-          <Link
-            href="/#roadmaps"
-            className="hover:text-black dark:hover:text-white transition-colors whitespace-nowrap"
-          >
-            {t.navbar.roadmaps}
-          </Link>
-          <Link
-            href="/#community"
-            className="hover:text-black dark:hover:text-white transition-colors whitespace-nowrap"
-          >
-            {t.navbar.community}
-          </Link>
-          <Link
-            href="/#quiz"
-            className="hover:text-black dark:hover:text-white transition-colors flex items-center gap-1.5 whitespace-nowrap"
-          >
-            <span>{t.navbar.quiz}</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-          </Link>
-          <Link
-            href="/#enterprise"
-            className="hover:text-black dark:hover:text-white transition-colors whitespace-nowrap"
-          >
-            {t.navbar.enterprise}
-          </Link>
-          <Link
-            href="/#faq"
-            className="hover:text-black dark:hover:text-white transition-colors whitespace-nowrap"
-          >
-            {t.navbar.faq}
-          </Link>
+          {(
+            [
+              { key: "courses" as const, href: "/#courses", label: t.navbar.courses, visible: vis.courses !== false },
+              { key: "roadmaps" as const, href: "/#roadmaps", label: t.navbar.roadmaps, visible: vis.roadmaps !== false },
+              { key: "community" as const, href: "/#community", label: t.navbar.community, visible: vis.community !== false },
+              { key: "quiz" as const, href: "/#quiz", label: t.navbar.quiz, visible: vis.quiz !== false, hasDot: true },
+              { key: "enterprise" as const, href: "/#enterprise", label: t.navbar.enterprise, visible: vis.enterprise !== false },
+              { key: "faq" as const, href: "/#faq", label: t.navbar.faq, visible: vis.faq !== false },
+            ]
+          )
+            .filter((item) => item.visible)
+            .map((item) => {
+              const isActive = activeSection === item.key;
+              return (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  onClick={() => setActiveSection(item.key)}
+                  className={`relative py-1 whitespace-nowrap transition-colors flex items-center gap-1.5 ${
+                    isActive
+                      ? "text-amber-600 dark:text-amber-400 font-bold"
+                      : "hover:text-black dark:hover:text-white"
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  {item.hasDot && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  )}
+                  <span
+                    className={`absolute -bottom-1 left-0 right-0 h-[2px] rounded-full transition-all duration-300 ${
+                      isActive
+                        ? "bg-amber-500 dark:bg-amber-400 opacity-100 scale-x-100"
+                        : "bg-amber-500/0 opacity-0 scale-x-0"
+                    }`}
+                  />
+                </Link>
+              );
+            })}
         </div>
 
         {/* Right Action Buttons */}
@@ -308,49 +368,41 @@ export default function Navbar({ onSearchClick, cartCount = 0, solidBg = false }
             <LanguageSwitcher isDarkBg={false} />
           </div>
 
-          <div className="flex flex-col space-y-3 text-base font-medium text-gray-800 dark:text-gray-200">
-            <a
-              href="#courses"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-black dark:hover:text-white transition-colors"
-            >
-              {t.navbar.courses}
-            </a>
-            <a
-              href="#roadmaps"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-black dark:hover:text-white transition-colors"
-            >
-              {t.navbar.roadmaps}
-            </a>
-            <a
-              href="#community"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-black dark:hover:text-white transition-colors"
-            >
-              {t.navbar.community}
-            </a>
-            <a
-              href="#quiz"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-black dark:hover:text-white transition-colors"
-            >
-              {t.navbar.quiz}
-            </a>
-            <a
-              href="#enterprise"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-black dark:hover:text-white transition-colors"
-            >
-              {t.navbar.enterprise}
-            </a>
-            <a
-              href="#faq"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-black dark:hover:text-white transition-colors"
-            >
-              {t.navbar.faq}
-            </a>
+          <div className="flex flex-col space-y-1.5 text-base font-medium text-gray-800 dark:text-gray-200">
+            {(
+              [
+                { key: "courses" as const, href: "/#courses", label: t.navbar.courses, visible: vis.courses !== false },
+                { key: "roadmaps" as const, href: "/#roadmaps", label: t.navbar.roadmaps, visible: vis.roadmaps !== false },
+                { key: "community" as const, href: "/#community", label: t.navbar.community, visible: vis.community !== false },
+                { key: "quiz" as const, href: "/#quiz", label: t.navbar.quiz, visible: vis.quiz !== false },
+                { key: "enterprise" as const, href: "/#enterprise", label: t.navbar.enterprise, visible: vis.enterprise !== false },
+                { key: "faq" as const, href: "/#faq", label: t.navbar.faq, visible: vis.faq !== false },
+              ]
+            )
+              .filter((item) => item.visible)
+              .map((item) => {
+                const isActive = activeSection === item.key;
+                return (
+                  <Link
+                    key={item.key}
+                    href={item.href}
+                    onClick={() => {
+                      setActiveSection(item.key);
+                      setMobileMenuOpen(false);
+                    }}
+                    className={`py-2 px-3 rounded-xl transition-colors flex items-center justify-between ${
+                      isActive
+                        ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold border-l-2 border-amber-500"
+                        : "hover:text-black dark:hover:text-white"
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    {isActive && (
+                      <span className="w-2 h-2 rounded-full bg-amber-500 dark:bg-amber-400" />
+                    )}
+                  </Link>
+                );
+              })}
           </div>
 
           <div className="pt-3 border-t border-white/10 flex flex-col gap-2.5">

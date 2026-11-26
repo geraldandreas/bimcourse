@@ -58,7 +58,7 @@ export default function InstructorCvPortfolioPage({ params }: PageProps) {
 
   useEffect(() => {
     // Fetch latest instructor content from API
-    fetch("/api/site-content")
+    fetch("/api/site-content", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         const instructors: WebInstructor[] = data?.content?.instructors || DEFAULT_SITE_CONTENT.instructors;
@@ -94,9 +94,33 @@ export default function InstructorCvPortfolioPage({ params }: PageProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#09090B] flex flex-col items-center justify-center text-white">
-        <div className="w-10 h-10 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mb-4" />
-        <p className="text-sm text-zinc-400 font-mono">Memuat Portofolio &amp; CV Instruktur...</p>
+      <div className="min-h-screen bg-[#09090B] text-white flex flex-col">
+        <Navbar cartCount={0} />
+        <main className="flex-1 max-w-6xl w-full mx-auto px-6 pt-28 pb-20 space-y-8 animate-pulse">
+          <div className="rounded-3xl bg-white/[0.03] border border-white/10 p-8 flex flex-col md:flex-row gap-8 items-center">
+            <div className="w-36 h-36 rounded-3xl bg-white/10 shrink-0" />
+            <div className="flex-1 space-y-4 w-full">
+              <div className="h-5 w-40 rounded-full bg-amber-500/20" />
+              <div className="h-9 w-72 max-w-full rounded-xl bg-white/10" />
+              <div className="h-4 w-56 rounded bg-white/5" />
+              <div className="flex gap-2 pt-2">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="h-6 w-20 rounded-full bg-white/10" />
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-44 rounded-3xl bg-white/[0.03] border border-white/10 p-6 space-y-3">
+                <div className="h-5 w-32 rounded bg-white/10" />
+                <div className="h-3.5 w-full rounded bg-white/5" />
+                <div className="h-3.5 w-4/5 rounded bg-white/5" />
+              </div>
+            ))}
+          </div>
+        </main>
+        <Footer />
       </div>
     );
   }

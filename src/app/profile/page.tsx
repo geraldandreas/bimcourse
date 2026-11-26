@@ -66,10 +66,20 @@ interface Certificate {
   category: string;
   studentName: string;
   instructorName: string;
+  ceoName?: string;
+  ceoTitle?: string;
   completedAt: string;
   grade: string;
   standards: string;
   verificationCode: string;
+}
+
+interface PendingCertificate {
+  id: string;
+  certificateNo: string;
+  courseId: string;
+  courseTitle: string;
+  createdAt: string;
 }
 
 interface SubmissionItem {
@@ -133,12 +143,19 @@ function ProfileContent() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [enrollments, setEnrollments] = useState<EnrolledCourse[]>([]);
   const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [pendingCertificates, setPendingCertificates] = useState<PendingCertificate[]>([]);
   const [submissions, setSubmissions] = useState<SubmissionItem[]>([]);
   const [transactions, setTransactions] = useState<TransactionItem[]>([]);
 
   // Active Tab
   const [activeTab, setActiveTab] = useState<"courses" | "certificates" | "assignments" | "edit" | "transactions">(
-    tabQuery === "edit" ? "edit" : tabQuery === "transactions" ? "transactions" : "courses"
+    tabQuery === "edit"
+      ? "edit"
+      : tabQuery === "transactions"
+      ? "transactions"
+      : tabQuery === "certificates"
+      ? "certificates"
+      : "courses"
   );
 
   // Selected Proof Image Lightbox Modal
@@ -204,6 +221,7 @@ function ProfileContent() {
         setEditOrg(cleanOrg);
         setEnrollments(data.enrollments || []);
         setCertificates(data.certificates || []);
+        setPendingCertificates(data.pendingCertificates || []);
         setSubmissions(data.submissions || []);
         setTransactions(data.transactions || []);
         if (data.enrollments?.length > 0 && !selectedCourseId) {
@@ -866,6 +884,29 @@ function ProfileContent() {
               </div>
             </div>
 
+            {pendingCertificates.length > 0 && (
+              <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-1.5">
+                <p className="text-xs font-bold text-amber-700 dark:text-amber-300 flex items-center gap-2">
+                  <Clock className="w-4 h-4 shrink-0" />
+                  <span>
+                    {language === "en"
+                      ? `${pendingCertificates.length} certificate request(s) awaiting SuperAdmin processing`
+                      : `${pendingCertificates.length} Pengajuan Sertifikat Sedang Diproses SuperAdmin`}
+                  </span>
+                </p>
+                <div className="flex flex-wrap gap-2 pl-6">
+                  {pendingCertificates.map((pc) => (
+                    <span
+                      key={pc.id}
+                      className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white dark:bg-black/30 text-amber-700 dark:text-amber-300 border border-amber-500/25"
+                    >
+                      {pc.courseTitle} • {pc.certificateNo}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {certificates.length === 0 ? (
               <div className="p-12 text-center rounded-3xl bg-zinc-50 dark:bg-[#12151B] border border-zinc-200 dark:border-white/10 space-y-4">
                 <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto text-amber-600 dark:text-amber-400 shadow-2xs">
@@ -1401,90 +1442,108 @@ function ProfileContent() {
             {/* Official Landscape Certificate Paper */}
             <div
               id="certificate-paper"
-              className="relative p-8 sm:p-12 rounded-3xl bg-gradient-to-b from-amber-50/20 via-white to-zinc-50 dark:from-[#1C1F26] dark:to-[#12141A] border-4 border-amber-600/30 dark:border-zinc-700 shadow-2xl text-center space-y-6 print:border-black print:text-black print:bg-white text-gray-900 dark:text-white"
+              className="relative p-8 sm:p-12 rounded-3xl bg-[#FFFDF8] border-4 border-amber-500/40 shadow-2xl text-center space-y-6 text-gray-900"
             >
               {/* Inner Decorative Border */}
-              <div className="absolute inset-3 border border-amber-500/20 dark:border-zinc-800 rounded-2xl pointer-events-none" />
+              <div className="absolute inset-3 border border-amber-500/20 rounded-2xl pointer-events-none" />
 
               {/* Certificate Header */}
               <div className="flex flex-col items-center justify-center space-y-2">
-                <div className="w-12 h-12 rounded-xl bg-black/5 dark:bg-white/10 flex items-center justify-center p-2 border border-black/10 dark:border-white/20 shadow-inner">
+                <div className="w-12 h-12 rounded-xl bg-black/5 flex items-center justify-center p-2 border border-black/10 shadow-inner">
                   <Image
                     src="/logo.png"
                     alt="BIMCourse Logo"
                     width={36}
                     height={36}
-                    className="object-contain dark:invert"
+                    className="object-contain"
                   />
                 </div>
-                <h2 className="text-xl sm:text-2xl font-black tracking-widest text-gray-950 dark:text-white uppercase font-mono">
+                <h2 className="text-xl sm:text-2xl font-black tracking-widest text-gray-950 uppercase font-mono">
                   BIMCOURSE ACADEMY
                 </h2>
-                <span className="text-[10px] tracking-widest text-gray-500 dark:text-gray-400 uppercase font-mono">
+                <span className="text-[10px] tracking-widest text-gray-500 uppercase font-mono">
                   Center for Building Information Modeling &amp; Architectural Engineering Excellence
                 </span>
               </div>
 
               {/* Certificate Main Title */}
               <div className="py-2">
-                <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-mono tracking-wider block uppercase">
+                <span className="text-xs sm:text-sm text-gray-500 font-mono tracking-wider block uppercase">
                   {language === "en" ? "OFFICIAL COMPETENCY CERTIFICATE" : "SERTIFIKAT KOMPETENSI RESMI"}
                 </span>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 italic">
+                <p className="text-xs text-gray-500 mt-1 italic">
                   {language === "en" ? "Proudly presented to:" : "Diberikan dengan bangga kepada:"}
                 </p>
-                <h1 className="text-2xl sm:text-4xl font-black text-gray-950 dark:text-white mt-2 tracking-tight uppercase border-b-2 border-black/30 dark:border-white/40 inline-block px-8 pb-2">
+                <h1 className="text-2xl sm:text-4xl font-black text-gray-950 mt-2 tracking-tight uppercase border-b-2 border-zinc-300 inline-block px-8 pb-2">
                   {selectedCert.studentName}
                 </h1>
               </div>
 
               {/* Certificate Description */}
               <div className="max-w-xl mx-auto space-y-2">
-                <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
                   {language === "en"
                     ? "Has successfully completed the industry-standard curriculum and passed the capstone modeling evaluation in the specialization program:"
-                    : "Telah berhasil menyelesaikan kurikulum berstandar industri dan lulus evaluasi proyek pemodelan capstone pada program spesialisasi:"}
+                    : "Telah berhasil menyelesaikan kurikulum berstandar industri dan lulus evaluasi proyek pemodelan akhir pada program spesialisasi:"}
                 </p>
-                <h4 className="text-base sm:text-lg font-bold text-gray-950 dark:text-white">
+                <h4 className="text-base sm:text-lg font-bold text-amber-700">
                   {selectedCert.courseTitle}
                 </h4>
-                <p className="text-[11px] font-mono text-gray-500 dark:text-gray-400">
+                <p className="text-[11px] font-mono text-gray-500">
                   {selectedCert.standards}
+                </p>
+                <p className="text-[11px] font-mono text-gray-600 pt-1">
+                  {language === "en" ? "Grade" : "Predikat"}: <strong>{selectedCert.grade}</strong> •{" "}
+                  {language === "en" ? "Issued" : "Diterbitkan"}:{" "}
+                  <strong>
+                    {new Intl.DateTimeFormat(language === "en" ? "en-US" : "id-ID", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    }).format(new Date(selectedCert.completedAt))}
+                  </strong>
                 </p>
               </div>
 
               {/* Signatures & Seal Section */}
-              <div className="pt-8 grid grid-cols-1 sm:grid-cols-3 gap-6 items-end border-t border-zinc-200 dark:border-white/10 text-xs">
+              <div className="pt-8 grid grid-cols-1 sm:grid-cols-3 gap-6 items-end border-t border-zinc-200 text-xs">
                 {/* Left: Lead Instructor */}
                 <div className="space-y-1">
-                  <div className="font-serif italic text-base text-gray-800 dark:text-gray-300 border-b border-gray-300 dark:border-gray-600 pb-1 mx-auto max-w-[160px]">
+                  <div className="font-serif italic text-base text-gray-800 border-b border-gray-300 pb-1 mx-auto max-w-[170px]">
                     {selectedCert.instructorName}
                   </div>
-                  <span className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-mono block">
+                  <span className="text-[10px] text-gray-500 uppercase font-mono block">
                     {language === "en" ? "Professional BIM Instructor" : "Instruktur BIM Profesional"}
                   </span>
                 </div>
 
                 {/* Center: Official Golden Seal */}
                 <div className="flex flex-col items-center justify-center">
-                  <div className="w-16 h-16 rounded-full border-2 border-dashed border-amber-500/60 dark:border-white/60 flex items-center justify-center p-1 bg-amber-50/50 dark:bg-white/10 shadow-inner">
-                    <div className="w-13 h-13 rounded-full bg-amber-400 text-black dark:bg-white dark:text-black flex flex-col items-center justify-center text-[8px] font-bold tracking-tighter shadow-xs">
+                  <div className="w-16 h-16 rounded-full border-2 border-dashed border-amber-500/60 flex items-center justify-center p-1 bg-amber-50 shadow-inner">
+                    <div className="w-13 h-13 rounded-full bg-amber-400 text-black flex flex-col items-center justify-center text-[8px] font-bold tracking-tighter shadow-xs">
                       <span>OFFICIAL</span>
                       <span>VERIFIED</span>
                     </div>
                   </div>
-                  <span className="text-[9px] font-mono text-gray-700 dark:text-white mt-1">
+                  <span className="text-[9px] font-mono text-gray-700 font-bold mt-1">
                     ID: {selectedCert.id}
                   </span>
                 </div>
 
-                {/* Right: Academic Director */}
+                {/* Right: CEO Signature */}
                 <div className="space-y-1">
-                  <div className="font-serif italic text-base text-gray-800 dark:text-gray-300 border-b border-gray-300 dark:border-gray-600 pb-1 mx-auto max-w-[160px]">
-                    Dr. Ir. Hendra Gunawan, M.T.
+                  <div className="flex flex-col items-center justify-end border-b border-gray-300 pb-1 mx-auto max-w-[190px]">
+                    <img
+                      src="/ceo-signature.png"
+                      alt={`Tanda Tangan ${selectedCert.ceoName || "CEO"}`}
+                      className="h-14 w-auto object-contain mix-blend-multiply"
+                    />
+                    <span className="font-bold text-xs text-gray-900 mt-0.5">
+                      {selectedCert.ceoName || "Eddy Tuasikal, S.Ars"}
+                    </span>
                   </div>
-                  <span className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-mono block">
-                    Head of Academic Board
+                  <span className="text-[10px] text-gray-500 uppercase font-mono block">
+                    {selectedCert.ceoTitle || "Chief Executive Officer, BIMCourse Academy"}
                   </span>
                 </div>
               </div>

@@ -38,11 +38,17 @@ import {
   AlertCircle,
   AlertTriangle,
   XCircle,
+  Mail,
+  BookOpenCheck,
+
 } from "lucide-react";
 import WebContentManager from "@/components/dashboard/WebContentManager";
 import CurriculumEditor from "@/components/dashboard/CurriculumEditor";
 import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
+import NewsletterLeadsManager from "@/components/dashboard/NewsletterLeadsManager";
 import { QuizSubmissionReviewSheet, parseQuizNotes } from "@/components/dashboard/QuizSubmissionReviewSheet";
+import QuizReviewPanel from "@/components/dashboard/QuizReviewPanel";
+import CertificateManagerPanel from "@/components/dashboard/CertificateManagerPanel";
 import { CurriculumResource } from "@/data/bimDocCurriculum";
 
 interface TransactionItem {
@@ -211,7 +217,7 @@ export interface SuperAdminSubmissionItem {
 }
 
 export default function SuperAdminDashboard() {
-  const [activeTab, setActiveTab] = useState<"courses" | "curriculum" | "users" | "content" | "payments" | "submissions">("courses");
+  const [activeTab, setActiveTab] = useState<"courses" | "curriculum" | "users" | "content" | "payments" | "submissions" | "quiz-review" | "certificates" | "newsletter">("courses");
   const [stats, setStats] = useState<any>(null);
   const [courses, setCourses] = useState<CourseItem[]>([]);
   const [users, setUsers] = useState<UserItem[]>([]);
@@ -1067,6 +1073,50 @@ export default function SuperAdminDashboard() {
             <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-rose-500 rounded-full" />
           )}
         </button>
+
+        {/* Quiz Review Tab */}
+        <button
+          onClick={() => setActiveTab("quiz-review")}
+          className={`pb-3 text-xs sm:text-sm font-bold transition-all relative cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+            activeTab === "quiz-review" ? "text-gray-950 dark:text-white" : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+          }`}
+        >
+          <BookOpenCheck className="w-4 h-4 text-amber-500" />
+          <span>Review Kuis Siswa</span>
+          {activeTab === "quiz-review" && (
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-amber-500 rounded-full" />
+          )}
+        </button>
+
+        {/* Certificates Tab */}
+        <button
+          onClick={() => setActiveTab("certificates")}
+          className={`pb-3 text-xs sm:text-sm font-bold transition-all relative cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+            activeTab === "certificates" ? "text-gray-950 dark:text-white" : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+          }`}
+        >
+          <Award className="w-4 h-4 text-emerald-500" />
+          <span>Sertifikat</span>
+          {activeTab === "certificates" && (
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500 rounded-full" />
+          )}
+        </button>
+
+        <button
+          onClick={() => setActiveTab("newsletter")}
+          className={`pb-3 text-xs sm:text-sm font-bold transition-all relative cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+            activeTab === "newsletter" ? "text-gray-950 dark:text-white" : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+          }`}
+        >
+          <Mail className="w-4 h-4 text-amber-500" />
+          <span>Buletin &amp; Leads</span>
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 font-bold border border-amber-500/30">
+            Digest
+          </span>
+          {activeTab === "newsletter" && (
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-amber-500 rounded-full" />
+          )}
+        </button>
       </div>
 
       {/* TAB 1: COURSES MANAGEMENT */}
@@ -1489,7 +1539,7 @@ export default function SuperAdminDashboard() {
                   </span>
                 </h2>
                 <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
-                  Verifikasi bukti transfer (QRIS / Bank Transfer) mahasiswa untuk mengaktifkan akses kurikulum &amp; modul kelas secara instan.
+                  Verifikasi bukti transfer bank mahasiswa untuk mengaktifkan akses kurikulum &amp; modul kelas secara instan.
                 </p>
               </div>
 
@@ -1927,6 +1977,26 @@ export default function SuperAdminDashboard() {
               </div>
             )}
           </div>
+        </div>
+      )}
+    {/* TAB: REVIEW KUIS SISWA */}
+      {activeTab === "quiz-review" && (
+        <div className="animate-in fade-in duration-300">
+          <QuizReviewPanel />
+        </div>
+      )}
+
+      {/* TAB: SERTIFIKAT KELULUSAN */}
+      {activeTab === "certificates" && (
+        <div className="animate-in fade-in duration-300">
+          <CertificateManagerPanel />
+        </div>
+      )}
+      
+      {/* TAB 7: BULETIN & KONSULTASI LEADS */}
+      {activeTab === "newsletter" && (
+        <div className="animate-in fade-in duration-300">
+          <NewsletterLeadsManager />
         </div>
       )}
 

@@ -25,17 +25,45 @@ export default function Home() {
   const [cartCount, setCartCount] = useState(0);
   const [heroVideoOpen, setHeroVideoOpen] = useState(false);
   const [siteContent, setSiteContent] = useState<SiteContentConfig>(DEFAULT_SITE_CONTENT);
+  const [contentLoaded, setContentLoaded] = useState(false);
 
   useEffect(() => {
-    fetch("/api/site-content")
+    fetch("/api/site-content", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data?.content) {
           setSiteContent(data.content);
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setContentLoaded(true));
   }, []);
+
+  if (!contentLoaded) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-[#09090B] transition-colors">
+        <div className="h-20 border-b border-black/10 dark:border-white/10 px-6 lg:px-8 flex items-center justify-between max-w-7xl mx-auto animate-pulse">
+          <div className="h-9 w-36 rounded-xl bg-zinc-200 dark:bg-white/10" />
+          <div className="hidden md:flex items-center gap-6">
+            <div className="h-4 w-24 rounded bg-zinc-200 dark:bg-white/10" />
+            <div className="h-4 w-20 rounded bg-zinc-200 dark:bg-white/10" />
+            <div className="h-4 w-20 rounded bg-zinc-200 dark:bg-white/10" />
+            <div className="h-4 w-24 rounded bg-zinc-200 dark:bg-white/10" />
+          </div>
+          <div className="h-9 w-32 rounded-full bg-zinc-200 dark:bg-white/10" />
+        </div>
+        <div className="max-w-5xl mx-auto px-6 py-28 text-center space-y-6 animate-pulse">
+          <div className="h-7 w-72 rounded-full bg-zinc-200 dark:bg-white/10 mx-auto" />
+          <div className="h-16 sm:h-24 w-3/4 rounded-3xl bg-zinc-200 dark:bg-white/10 mx-auto" />
+          <div className="h-5 w-2/3 rounded-xl bg-zinc-100 dark:bg-white/5 mx-auto" />
+          <div className="flex justify-center gap-4 pt-4">
+            <div className="h-12 w-48 rounded-full bg-amber-400/20" />
+            <div className="h-12 w-48 rounded-full bg-zinc-200 dark:bg-white/10" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleEnrollSuccess = (_course: Course) => {
     setCartCount((prev) => prev + 1);
@@ -57,12 +85,19 @@ export default function Home() {
       </div>
 
       {/* Navigation */}
-      <Navbar onSearchClick={scrollToCourses} cartCount={cartCount} />
+      <Navbar
+        onSearchClick={scrollToCourses}
+        cartCount={cartCount}
+        sectionsVisibility={siteContent.sectionsVisibility}
+      />
 
       {/* Hero Section with Cinematic Video Background (Hazael Cut) */}
       {siteContent.sectionsVisibility.hero !== false && (
         <section className="relative min-h-screen flex flex-col justify-center items-center text-center overflow-hidden bg-black text-white px-6 lg:px-8 pt-24 pb-16">
-          <HeroVideoBackground />
+          <HeroVideoBackground
+            videoUrl={siteContent.hero.videoUrl}
+            posterImageUrl={siteContent.hero.posterImageUrl}
+          />
 
           <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center">
             {/* Sub-badge */}
@@ -162,7 +197,10 @@ export default function Home() {
                 {/* Dedicated Framed Visual Area (Separated from text - No Overlap) */}
                 <div className="mt-8 rounded-2xl overflow-hidden border border-white/10 bg-[#1A1D24] relative h-48 flex flex-col justify-between p-4 shadow-inner">
                   <img
-                    src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=600&auto=format&fit=crop"
+                    src={
+                      siteContent.features?.card1ImageUrl ||
+                      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=600&auto=format&fit=crop"
+                    }
                     alt="Engineering Software & 3D BIM Modeling"
                     className="absolute inset-0 w-full h-full object-cover opacity-35 group-hover:scale-105 transition-transform duration-700"
                   />
@@ -179,13 +217,23 @@ export default function Home() {
 
                   <div className="relative z-10">
                     <p className="text-[11px] font-semibold text-gray-300 mb-2">
-                      {language === "en" ? "Industry Software Stack:" : "Stack Software Industri:"}
+                      {language === "en"
+                        ? "Industry Software Stack:"
+                        : siteContent.features?.card1SoftwareTitle || "Stack Software Industri:"}
                     </p>
                     <div className="flex flex-wrap gap-1.5">
-                      <span className="px-2 py-0.5 rounded bg-white/15 backdrop-blur-xs text-white text-[10px] font-bold border border-white/10">Revit</span>
-                      <span className="px-2 py-0.5 rounded bg-white/15 backdrop-blur-xs text-white text-[10px] font-bold border border-white/10">Navisworks</span>
-                      <span className="px-2 py-0.5 rounded bg-white/15 backdrop-blur-xs text-white text-[10px] font-bold border border-white/10">Tekla</span>
-                      <span className="px-2 py-0.5 rounded bg-white/15 backdrop-blur-xs text-white text-[10px] font-bold border border-white/10">Dynamo</span>
+                      {(siteContent.features?.card1SoftwareTags &&
+                      siteContent.features.card1SoftwareTags.length > 0
+                        ? siteContent.features.card1SoftwareTags
+                        : ["Revit", "Navisworks", "Tekla", "Dynamo"]
+                      ).map((tag, idx) => (
+                        <span
+                          key={`${tag}-${idx}`}
+                          className="px-2 py-0.5 rounded bg-white/15 backdrop-blur-xs text-white text-[10px] font-bold border border-white/10"
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -224,10 +272,14 @@ export default function Home() {
                 <div className="mt-8 rounded-2xl overflow-hidden border border-black/10 dark:border-white/10 bg-white/90 dark:bg-zinc-950/80 p-4 relative h-48 flex flex-col justify-between shadow-xs">
                   <div className="flex items-center justify-between border-b border-black/5 dark:border-white/10 pb-2.5">
                     <span className="text-[11px] font-bold text-gray-900 dark:text-zinc-100">
-                      {language === "en" ? "Competency Level & Progression" : "Level Kompetensi & Progresi"}
+                      {language === "en"
+                        ? "Competency Level & Progression"
+                        : siteContent.features?.card2BoxTitle || "Level Kompetensi & Progresi"}
                     </span>
                     <span className="text-[10px] font-semibold text-zinc-900 dark:text-zinc-200 bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-full border border-zinc-300 dark:border-zinc-700">
-                      {language === "en" ? "100% Guided" : "Terarah 100%"}
+                      {language === "en"
+                        ? "100% Guided"
+                        : siteContent.features?.card2BoxBadge || "Terarah 100%"}
                     </span>
                   </div>
 
@@ -298,27 +350,40 @@ export default function Home() {
                     <div className="flex items-center gap-2">
                       <div className="flex -space-x-1.5">
                         <img
-                          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=80&auto=format&fit=crop"
-                          alt="Instruktur Hendra"
+                          src={
+                            siteContent.features?.card3Avatar1 ||
+                            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=80&auto=format&fit=crop"
+                          }
+                          alt="Instruktur 1"
                           className="w-5 h-5 rounded-full object-cover ring-1 ring-black"
                         />
                         <img
-                          src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=80&auto=format&fit=crop"
-                          alt="Instruktur Budi"
+                          src={
+                            siteContent.features?.card3Avatar2 ||
+                            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=80&auto=format&fit=crop"
+                          }
+                          alt="Instruktur 2"
                           className="w-5 h-5 rounded-full object-cover ring-1 ring-black"
                         />
                         <img
-                          src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=80&auto=format&fit=crop"
-                          alt="Instruktur Dewi"
+                          src={
+                            siteContent.features?.card3Avatar3 ||
+                            "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=80&auto=format&fit=crop"
+                          }
+                          alt="Instruktur 3"
                           className="w-5 h-5 rounded-full object-cover ring-1 ring-black"
                         />
                       </div>
                       <span className="text-[10px] text-gray-300 font-medium">
-                        {language === "en" ? "Instructors On Standby" : "Instruktur Standby"}
+                        {language === "en"
+                          ? "Instructors On Standby"
+                          : siteContent.features?.card3StatusTitle || "Instruktur Standby"}
                       </span>
                     </div>
                     <span className="text-[10px] font-bold text-amber-300 bg-amber-400/15 px-2 py-0.5 rounded-full border border-amber-400/30">
-                      {language === "en" ? "Active Every Day" : "Aktif Setiap Hari"}
+                      {language === "en"
+                        ? "Active Every Day"
+                        : siteContent.features?.card3StatusBadge || "Aktif Setiap Hari"}
                     </span>
                   </div>
 
@@ -336,7 +401,11 @@ export default function Home() {
 
                   {/* Bottom Tags */}
                   <div className="flex items-center justify-between text-[10px] text-gray-400 pt-1">
-                    <span>{t.features.membersTag}</span>
+                    <span>
+                      {language === "en"
+                        ? t.features.membersTag
+                        : siteContent.features?.card3MembersTag || t.features.membersTag}
+                    </span>
                     <span className="text-amber-400 group-hover:text-amber-300 font-bold flex items-center gap-1 transition-colors">
                       {siteContent.features?.card3LinkText || t.features.card3Link} <ArrowRight className="w-3 h-3" />
                     </span>
@@ -435,7 +504,10 @@ export default function Home() {
       )}
 
       {/* Footer */}
-      <Footer content={siteContent.footer} />
+      <Footer
+        content={siteContent.footer}
+        sectionsVisibility={siteContent.sectionsVisibility}
+      />
 
       {/* Hero Video Preview Modal */}
       {heroVideoOpen && (
@@ -457,13 +529,21 @@ export default function Home() {
               </button>
             </div>
             <div className="aspect-video bg-gray-950 rounded-2xl overflow-hidden border border-white/10 relative flex items-center justify-center">
-              <video
-                src="/hero-bg.mp4"
-                controls
-                autoPlay
-                playsInline
-                className="w-full h-full object-contain"
-              />
+              {/\.(png|jpe?g|webp|gif|avif)(\?.*)?$/i.test(siteContent.hero.videoUrl || "/hero-bg.mp4") ? (
+                <img
+                  src={siteContent.hero.videoUrl || ""}
+                  alt="BIMCourse Showcase"
+                  className="w-full h-full object-contain"
+                />
+              ) : (
+                <video
+                  src={siteContent.hero.videoUrl || "/hero-bg.mp4"}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="w-full h-full object-contain"
+                />
+              )}
             </div>
           </div>
         </div>

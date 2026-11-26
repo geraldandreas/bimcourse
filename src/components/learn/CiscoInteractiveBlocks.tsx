@@ -553,6 +553,7 @@ export interface QuizIntroProps {
   courseId?: string;
   onStart?: () => void;
   onComplete?: () => void;
+  onStatusChange?: (status: "APPROVED" | "PENDING" | "REVISION") => void;
 }
 
 export function CiscoQuizIntro({
@@ -565,6 +566,7 @@ export function CiscoQuizIntro({
   courseId = "revit-basic",
   onStart,
   onComplete,
+  onStatusChange,
 }: QuizIntroProps) {
   const [isStarted, setIsStarted] = useState(false);
   const [currentQIdx, setCurrentQIdx] = useState(0);
@@ -609,6 +611,14 @@ export function CiscoQuizIntro({
             );
             if (found && isMounted) {
               setExistingSubmission(found);
+              const normalizedStatus = (found.status || "PENDING") as
+                | "APPROVED"
+                | "PENDING"
+                | "REVISION";
+              onStatusChange?.(normalizedStatus);
+              if (normalizedStatus === "APPROVED") {
+                onComplete?.();
+              }
             }
           }
         }
@@ -794,7 +804,10 @@ export function CiscoQuizIntro({
         correctMC: correctCount,
       });
 
-      onComplete?.();
+      onStatusChange?.(finalStatus);
+      if (finalStatus === "APPROVED") {
+        onComplete?.();
+      }
     } catch (err: any) {
       alert(err.message || "Terjadi kesalahan saat mengumpulkan kuis.");
     } finally {

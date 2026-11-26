@@ -185,7 +185,7 @@ export async function POST(req: NextRequest) {
         userId: session.userId,
         courseId: course.id,
         amount: Number(amount) || course.price || 0,
-        paymentMethod: paymentMethod || "QRIS",
+        paymentMethod: paymentMethod || "BANK_TRANSFER",
         proofUrl,
         senderName: senderName || session.name,
         notes: notes || null,

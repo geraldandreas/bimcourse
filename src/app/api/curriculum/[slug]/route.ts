@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { getSession, isAuthorized } from "@/lib/auth";
 import { BIM_MODULES, BIM_RESOURCES, CurriculumModule, CurriculumResource } from "@/data/bimDocCurriculum";
 
+export const dynamic = "force-dynamic";
+
 // GET: Load curriculum and resources for course slug
 export async function GET(
   req: NextRequest,

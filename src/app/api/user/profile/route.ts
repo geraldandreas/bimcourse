@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession, createSessionToken, setSessionCookie, UserRole } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const session = await getSession();
@@ -76,27 +78,44 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
     });
 
-    // Generate certificates for completed courses (progress >= 100 or status === "COMPLETED")
-    const certificates = enrollments
-      .filter((e) => e.progress >= 100 || e.status === "COMPLETED")
-      .map((e) => {
-        const hashSeed = (e.id + user.id).replace(/[^a-zA-Z0-9]/g, "").slice(-6).toUpperCase();
-        const year = new Date(e.updatedAt || e.enrolledAt).getFullYear();
-        return {
-          id: `BC-${year}-${hashSeed || "884920"}`,
-          enrollmentId: e.id,
-          courseId: e.course.id,
-          courseTitle: e.course.title,
-          courseSlug: e.course.slug,
-          category: e.course.category,
-          studentName: user.name,
-          instructorName: e.course.instructor?.name || "Tim Akademik BIMCourse AEC",
-          completedAt: e.updatedAt || e.enrolledAt,
-          grade: "A (Distinction • 96/100)",
-          standards: "SKKNI BIM Level 6 • Mandat PUPR • ISO 19650",
-          verificationCode: `VERIFY-BIM-${hashSeed}`,
-        };
-      });
+    // Fetch real DB Certificates (ISSUED shown as active certificates, REQUESTED shown as pending)
+    const dbCertificates = await prisma.certificate.findMany({
+      where: { userId: user.id },
+      include: {
+        course: { select: { id: true, title: true, slug: true, category: true } },
+      },
+      orderBy: { issuedDate: "desc" },
+    });
+
+    const certificates = dbCertificates
+      .filter((c) => c.status === "ISSUED")
+      .map((c) => ({
+        id: c.certificateNo || c.id,
+        dbId: c.id,
+        enrollmentId: c.id,
+        courseId: c.courseId,
+        courseTitle: c.courseTitle,
+        courseSlug: c.course?.slug || "",
+        category: c.course?.category || "BIM Course",
+        studentName: c.studentName,
+        instructorName: c.instructorName,
+        ceoName: c.ceoName,
+        ceoTitle: c.ceoTitle,
+        completedAt: c.issuedDate,
+        grade: c.grade,
+        standards: c.standards,
+        verificationCode: c.certificateNo,
+      }));
+
+    const pendingCertificates = dbCertificates
+      .filter((c) => c.status === "REQUESTED")
+      .map((c) => ({
+        id: c.id,
+        certificateNo: c.certificateNo,
+        courseId: c.courseId,
+        courseTitle: c.courseTitle,
+        createdAt: c.createdAt,
+      }));
 
     return NextResponse.json({
       success: true,
@@ -104,6 +123,7 @@ export async function GET() {
       enrollments,
       submissions,
       certificates,
+      pendingCertificates,
       transactions,
     });
   } catch (error: any) {

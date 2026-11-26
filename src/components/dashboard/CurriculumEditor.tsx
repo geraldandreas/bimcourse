@@ -130,7 +130,7 @@ export default function CurriculumEditor({
 
   // Fetch available courses
   useEffect(() => {
-    fetch("/api/courses")
+    fetch("/api/courses", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : { courses: [] }))
       .then((data) => {
         if (Array.isArray(data.courses) && data.courses.length > 0) {
@@ -153,22 +153,24 @@ export default function CurriculumEditor({
   useEffect(() => {
     if (!selectedSlug) return;
     setLoading(true);
-    fetch(`/api/curriculum/${selectedSlug}`)
-      .then((res) => (res.ok ? res.json() : { modules: BIM_MODULES, resources: BIM_RESOURCES }))
+    fetch(`/api/curriculum/${selectedSlug}`, { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : { modules: BIM_MODULES, resources: [] }))
       .then((data) => {
-        if (Array.isArray(data.modules) && data.modules.length > 0) {
+        if (Array.isArray(data.modules)) {
           setModules(data.modules);
           setActiveModId(data.modules[0]?.id || "mod-1");
           setActiveSecId(data.modules[0]?.sections?.[0]?.id || "sec-1-0");
           setActiveLessonId(data.modules[0]?.sections?.[0]?.lessons?.[0]?.id || "les-1-0-1");
         }
-        if (Array.isArray(data.resources) && data.resources.length > 0) {
+        if (Array.isArray(data.resources)) {
           setResources(data.resources);
+        } else {
+          setResources([]);
         }
       })
       .catch(() => {
         setModules(BIM_MODULES);
-        setResources(BIM_RESOURCES);
+        setResources([]);
       })
       .finally(() => setLoading(false));
   }, [selectedSlug]);
@@ -1058,6 +1060,11 @@ export default function CurriculumEditor({
                       <span className="text-xs font-extrabold text-gray-950 dark:text-white truncate">
                         {mod.title}
                       </span>
+                      {mod.isFinalModule && (
+                        <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 shrink-0">
+                          AKHIR
+                        </span>
+                      )}
                     </button>
 
                     <div className="flex items-center gap-1 shrink-0">
@@ -1387,6 +1394,43 @@ export default function CurriculumEditor({
                   placeholder="Jelaskan ringkasan kompetensi yang akan dicapai siswa pada modul ini..."
                   className="w-full p-2.5 rounded-xl bg-gray-50 dark:bg-[#0D1117] border border-black/10 dark:border-white/10 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-400"
                 />
+              </div>
+
+              {/* Akhir Modul / Syarat Pengajuan Sertifikat Toggle */}
+              <div className="p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-2">
+                    <Award className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <span className="text-xs font-extrabold text-gray-950 dark:text-white">
+                      Jadikan Akhir Modul Kursus (Syarat Pengajuan Sertifikat)
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-gray-600 dark:text-zinc-300">
+                    Saat siswa menuntaskan sub-bab terakhir di modul ini &amp; lulus semua kuis, tombol &ldquo;Ajukan Sertifikat&rdquo; ke SuperAdmin akan otomatis muncul.
+                  </p>
+                </div>
+                <label className="inline-flex items-center gap-2.5 cursor-pointer shrink-0 select-none px-3 py-2 rounded-xl bg-white dark:bg-[#161B22] border border-emerald-500/30 shadow-2xs">
+                  <input
+                    type="checkbox"
+                    checked={Boolean(currentModule.isFinalModule)}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      setModules((prev) =>
+                        prev.map((m) =>
+                          m.id === currentModule.id
+                            ? { ...m, isFinalModule: checked }
+                            : checked
+                            ? { ...m, isFinalModule: false }
+                            : m
+                        )
+                      );
+                    }}
+                    className="w-4 h-4 accent-emerald-600 rounded cursor-pointer"
+                  />
+                  <span className="text-xs font-bold text-gray-900 dark:text-white">
+                    {currentModule.isFinalModule ? "Modul Terakhir Aktif" : "Tandai Akhir Modul"}
+                  </span>
+                </label>
               </div>
 
               {/* Sub-Bab / Sections Management */}

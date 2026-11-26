@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { getSession, isAuthorized } from "@/lib/auth";
 import { DEFAULT_SITE_CONTENT, SiteContentConfig } from "@/data/defaultSiteContent";
 
+export const dynamic = "force-dynamic";
+
 const SITE_SETTING_KEY = "homepage_content";
 
 export async function GET() {
@@ -34,6 +36,9 @@ export async function GET() {
         features: {
           ...DEFAULT_SITE_CONTENT.features,
           ...(parsed.features || {}),
+          card1SoftwareTags: Array.isArray(parsed.features?.card1SoftwareTags)
+            ? parsed.features.card1SoftwareTags
+            : DEFAULT_SITE_CONTENT.features.card1SoftwareTags,
         },
         courses: {
           ...DEFAULT_SITE_CONTENT.courses,
@@ -42,52 +47,62 @@ export async function GET() {
         roadmaps: {
           ...DEFAULT_SITE_CONTENT.roadmaps,
           ...(parsed.roadmaps || {}),
+          tracks: Array.isArray(parsed.roadmaps?.tracks)
+            ? parsed.roadmaps.tracks
+            : DEFAULT_SITE_CONTENT.roadmaps.tracks,
         },
         community: {
           ...DEFAULT_SITE_CONTENT.community,
           ...(parsed.community || {}),
         },
-        instructors:
-          Array.isArray(parsed.instructors) && parsed.instructors.length > 0
-            ? parsed.instructors.map((pi: any) => {
-                const def = DEFAULT_SITE_CONTENT.instructors.find(
-                  (di) => di.id === pi.id || (pi.slug && di.slug === pi.slug)
-                );
-                if (!def) return pi;
-                return {
-                  ...def,
-                  ...pi,
-                  slug: pi.slug || def.slug,
-                  email: pi.email || def.email,
-                  phone: pi.phone || def.phone,
-                  location: pi.location || def.location,
-                  linkedin: pi.linkedin || def.linkedin,
-                  portfolioLink: pi.portfolioLink || def.portfolioLink,
-                  bio: pi.bio || def.bio,
-                  projects: pi.projects && pi.projects.length > 0 ? pi.projects : def.projects,
-                  education: pi.education && pi.education.length > 0 ? pi.education : def.education,
-                  workExperience: pi.workExperience && pi.workExperience.length > 0 ? pi.workExperience : def.workExperience,
-                  certificates: pi.certificates && pi.certificates.length > 0 ? pi.certificates : def.certificates,
-                  achievements: pi.achievements && pi.achievements.length > 0 ? pi.achievements : def.achievements,
-                  organizations: pi.organizations && pi.organizations.length > 0 ? pi.organizations : def.organizations,
-                  webinars: pi.webinars && pi.webinars.length > 0 ? pi.webinars : def.webinars,
-                  softwareSkills: pi.softwareSkills && pi.softwareSkills.length > 0 ? pi.softwareSkills : def.softwareSkills,
-                  technicalSkills: pi.technicalSkills && pi.technicalSkills.length > 0 ? pi.technicalSkills : def.technicalSkills,
-                  softSkills: pi.softSkills && pi.softSkills.length > 0 ? pi.softSkills : def.softSkills,
-                };
-              })
-            : DEFAULT_SITE_CONTENT.instructors,
+        instructors: Array.isArray(parsed.instructors)
+          ? parsed.instructors.map((pi: any) => {
+              const def = DEFAULT_SITE_CONTENT.instructors.find(
+                (di) => di.id === pi.id || (pi.slug && di.slug === pi.slug)
+              );
+              if (!def) return pi;
+              return {
+                ...def,
+                ...pi,
+                slug: pi.slug !== undefined ? pi.slug : def.slug,
+                email: pi.email !== undefined ? pi.email : def.email,
+                phone: pi.phone !== undefined ? pi.phone : def.phone,
+                location: pi.location !== undefined ? pi.location : def.location,
+                linkedin: pi.linkedin !== undefined ? pi.linkedin : def.linkedin,
+                portfolioLink: pi.portfolioLink !== undefined ? pi.portfolioLink : def.portfolioLink,
+                bio: pi.bio !== undefined ? pi.bio : def.bio,
+                projects: Array.isArray(pi.projects) ? pi.projects : def.projects,
+                education: Array.isArray(pi.education) ? pi.education : def.education,
+                workExperience: Array.isArray(pi.workExperience) ? pi.workExperience : def.workExperience,
+                certificates: Array.isArray(pi.certificates) ? pi.certificates : def.certificates,
+                achievements: Array.isArray(pi.achievements) ? pi.achievements : def.achievements,
+                organizations: Array.isArray(pi.organizations) ? pi.organizations : def.organizations,
+                webinars: Array.isArray(pi.webinars) ? pi.webinars : def.webinars,
+                softwareSkills: Array.isArray(pi.softwareSkills) ? pi.softwareSkills : def.softwareSkills,
+                technicalSkills: Array.isArray(pi.technicalSkills) ? pi.technicalSkills : def.technicalSkills,
+                softSkills: Array.isArray(pi.softSkills) ? pi.softSkills : def.softSkills,
+              };
+            })
+          : DEFAULT_SITE_CONTENT.instructors,
         quiz: {
           ...DEFAULT_SITE_CONTENT.quiz,
           ...(parsed.quiz || {}),
+          backgrounds: Array.isArray(parsed.quiz?.backgrounds)
+            ? parsed.quiz.backgrounds
+            : DEFAULT_SITE_CONTENT.quiz.backgrounds,
+          goals: Array.isArray(parsed.quiz?.goals)
+            ? parsed.quiz.goals
+            : DEFAULT_SITE_CONTENT.quiz.goals,
+          recommendations: Array.isArray(parsed.quiz?.recommendations)
+            ? parsed.quiz.recommendations
+            : DEFAULT_SITE_CONTENT.quiz.recommendations,
         },
         testimonials: {
           ...DEFAULT_SITE_CONTENT.testimonials,
           ...(parsed.testimonials || {}),
-          items:
-            Array.isArray(parsed.testimonials?.items) && parsed.testimonials.items.length > 0
-              ? parsed.testimonials.items
-              : DEFAULT_SITE_CONTENT.testimonials.items,
+          items: Array.isArray(parsed.testimonials?.items)
+            ? parsed.testimonials.items
+            : DEFAULT_SITE_CONTENT.testimonials.items,
         },
         enterprise: {
           ...DEFAULT_SITE_CONTENT.enterprise,
@@ -96,10 +111,9 @@ export async function GET() {
         faq: {
           ...DEFAULT_SITE_CONTENT.faq,
           ...(parsed.faq || {}),
-          items:
-            Array.isArray(parsed.faq?.items) && parsed.faq.items.length > 0
-              ? parsed.faq.items
-              : DEFAULT_SITE_CONTENT.faq.items,
+          items: Array.isArray(parsed.faq?.items)
+            ? parsed.faq.items
+            : DEFAULT_SITE_CONTENT.faq.items,
         },
         cta: {
           ...DEFAULT_SITE_CONTENT.cta,
@@ -108,6 +122,19 @@ export async function GET() {
         footer: {
           ...DEFAULT_SITE_CONTENT.footer,
           ...(parsed.footer || {}),
+          popularCourses: Array.isArray(parsed.footer?.popularCourses)
+            ? parsed.footer.popularCourses
+            : DEFAULT_SITE_CONTENT.footer.popularCourses,
+          quickLinks: Array.isArray(parsed.footer?.quickLinks)
+            ? parsed.footer.quickLinks
+            : DEFAULT_SITE_CONTENT.footer.quickLinks,
+        },
+        payment: {
+          ...DEFAULT_SITE_CONTENT.payment,
+          ...(parsed.payment || {}),
+          bankAccounts: Array.isArray(parsed.payment?.bankAccounts)
+            ? parsed.payment.bankAccounts
+            : DEFAULT_SITE_CONTENT.payment?.bankAccounts || [],
         },
       };
 

@@ -18,12 +18,12 @@ export default function TestimonialsSection({
   content = DEFAULT_SITE_CONTENT.testimonials,
 }: TestimonialsSectionProps) {
   const { language, t } = useLanguage();
-  const items = content?.items && content.items.length > 0
+  const items = Array.isArray(content?.items)
     ? content.items
     : DEFAULT_SITE_CONTENT.testimonials.items;
 
   return (
-    <section className="relative z-10 w-full bg-white dark:bg-[#09090B] border-b border-black/10 dark:border-white/10 py-24 scroll-mt-12 transition-colors duration-300">
+    <section id="testimonials" className="relative z-10 w-full bg-white dark:bg-[#09090B] border-b border-black/10 dark:border-white/10 py-24 scroll-mt-12 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Section Indicator Divider */}
         <div className="flex items-center gap-3 mb-10 pb-4 border-b border-black/10 dark:border-white/10">

@@ -9,8 +9,12 @@ export default function ConfirmPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#0F1115] flex items-center justify-center text-white">
-          <Loader2 className="w-8 h-8 text-white animate-spin" />
+        <div className="min-h-screen bg-[#0F1115] flex items-center justify-center p-6">
+          <div className="max-w-md w-full bg-[#14171d] border border-white/10 rounded-3xl p-8 text-center space-y-4 animate-pulse">
+            <div className="w-14 h-14 rounded-2xl bg-white/10 mx-auto" />
+            <div className="h-6 w-48 rounded-lg bg-white/10 mx-auto" />
+            <div className="h-3.5 w-64 rounded bg-white/5 mx-auto" />
+          </div>
         </div>
       }
     >
@@ -135,8 +139,9 @@ function ConfirmContent() {
     <div className="min-h-screen bg-[#0F1115] text-white flex items-center justify-center p-6">
       <div className="max-w-md w-full bg-[#14171d] border border-white/10 rounded-3xl p-8 text-center space-y-4 shadow-2xl">
         {status === "loading" && (
-          <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 text-white flex items-center justify-center mx-auto">
-            <Loader2 className="w-7 h-7 animate-spin" />
+          <div className="space-y-3 animate-pulse">
+            <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 mx-auto" />
+            <div className="h-2 w-32 rounded-full bg-amber-400/30 mx-auto" />
           </div>
         )}
 

@@ -30,7 +30,8 @@ const normalizeCategory = (cat: string) => {
 
 export default function CourseCatalog({ onEnrollSuccess, searchQueryProp = "", content }: CourseCatalogProps) {
   const { language, t } = useLanguage();
-  const [coursesList, setCoursesList] = useState<Course[]>(COURSES);
+  const [coursesList, setCoursesList] = useState<Course[]>([]);
+  const [loadingCourses, setLoadingCourses] = useState<boolean>(true);
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [activeLevel, setActiveLevel] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>(searchQueryProp);
@@ -39,9 +40,10 @@ export default function CourseCatalog({ onEnrollSuccess, searchQueryProp = "", c
   const [enrolledToast, setEnrolledToast] = useState<string | null>(null);
   const [targetCardSlug, setTargetCardSlug] = useState<string | null>(null);
 
-  // Fetch live courses from SQLite database
+  // Fetch live courses from database
   useEffect(() => {
-    fetch("/api/courses?published=true")
+    setLoadingCourses(true);
+    fetch("/api/courses?published=true", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data.courses && Array.isArray(data.courses) && data.courses.length > 0) {
@@ -92,7 +94,8 @@ export default function CourseCatalog({ onEnrollSuccess, searchQueryProp = "", c
           setCoursesList([]);
         }
       })
-      .catch((err) => console.error("Error loading live courses:", err));
+      .catch((err) => console.error("Error loading live courses:", err))
+      .finally(() => setLoadingCourses(false));
   }, []);
 
   // Check URL hash/query for targeted course (e.g. from superadmin preview)
@@ -273,7 +276,33 @@ export default function CourseCatalog({ onEnrollSuccess, searchQueryProp = "", c
         </div>
 
         {/* Course Grid */}
-        {filteredCourses.length === 0 ? (
+        {loadingCourses ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Array.from({ length: 3 }).map((_, idx) => (
+              <div
+                key={idx}
+                className="bg-white dark:bg-zinc-900/90 rounded-3xl border border-zinc-200 dark:border-white/10 overflow-hidden animate-pulse"
+              >
+                <div className="aspect-16/10 bg-gray-200 dark:bg-white/10" />
+                <div className="p-6 space-y-4">
+                  <div className="flex justify-between">
+                    <div className="h-4 w-16 rounded bg-gray-200 dark:bg-white/10" />
+                    <div className="h-4 w-24 rounded bg-gray-200 dark:bg-white/10" />
+                  </div>
+                  <div className="h-6 w-3/4 rounded-lg bg-gray-200 dark:bg-white/10" />
+                  <div className="space-y-2">
+                    <div className="h-3.5 w-full rounded bg-gray-200/80 dark:bg-white/5" />
+                    <div className="h-3.5 w-5/6 rounded bg-gray-200/80 dark:bg-white/5" />
+                  </div>
+                  <div className="pt-4 border-t border-black/5 dark:border-white/10 flex justify-between items-center">
+                    <div className="h-5 w-24 rounded bg-gray-200 dark:bg-white/10" />
+                    <div className="h-9 w-28 rounded-full bg-amber-500/20" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : filteredCourses.length === 0 ? (
           <div className="text-center py-16 bg-white/50 dark:bg-zinc-900/50 rounded-3xl border border-dashed border-gray-300 dark:border-zinc-700">
             <p className="text-lg font-bold text-gray-900 dark:text-white mb-1">Tidak ada kelas yang cocok</p>
             <p className="text-sm text-gray-500 dark:text-zinc-400 mb-4">

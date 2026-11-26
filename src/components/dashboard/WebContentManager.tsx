@@ -38,7 +38,9 @@ import {
   MapPin,
   FileCheck2,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  RefreshCw,
+  Link2
 } from "lucide-react";
 import {
   DEFAULT_SITE_CONTENT,
@@ -105,7 +107,39 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
   const [technicalSkillsInput, setTechnicalSkillsInput] = useState("");
   const [softSkillsInput, setSoftSkillsInput] = useState("");
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [uploadingMediaKey, setUploadingMediaKey] = useState<string | null>(null);
+  const [syncingFooterCourses, setSyncingFooterCourses] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleSyncFooterCourses = async () => {
+    try {
+      setSyncingFooterCourses(true);
+      const res = await fetch("/api/courses");
+      const data = await res.json();
+      const liveCourses = (data.courses || []).filter((c: any) => c.published !== false);
+      if (liveCourses.length === 0) {
+        onShowToast("Belum ada kursus aktif di katalog.");
+        return;
+      }
+      const mapped = liveCourses.slice(0, 6).map((c: any) => ({
+        label: c.title,
+        href: `/courses/${c.slug}`,
+      }));
+      mapped.push({ label: "Semua Katalog Kelas", href: "/#courses" });
+      setContent((prev) => ({
+        ...prev,
+        footer: {
+          ...(prev.footer || DEFAULT_SITE_CONTENT.footer),
+          popularCourses: mapped,
+        },
+      }));
+      onShowToast(`Berhasil menyinkronkan ${liveCourses.length} kursus aktif ke Kelas Populer! Klik Simpan untuk mempublikasikan.`);
+    } catch {
+      onShowToast("Gagal mengambil daftar kursus aktif.");
+    } finally {
+      setSyncingFooterCourses(false);
+    }
+  };
 
   // Fetch current site content from API
   const fetchContent = async () => {
@@ -351,6 +385,31 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
       alert(err.message || "Gagal mengunggah file.");
     } finally {
       setUploadingAvatar(false);
+    }
+  };
+
+  // Generic media upload helper for all CMS sections (images, avatars, video backgrounds)
+  const handleCmsMediaUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    mediaKey: string,
+    onUrl: (url: string) => void
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setUploadingMediaKey(mediaKey);
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Gagal mengunggah media.");
+      onUrl(data.url);
+      onShowToast("Media berhasil diunggah! Klik Simpan & Publikasikan untuk menerapkan ke web.");
+    } catch (err: any) {
+      alert(err.message || "Gagal mengunggah file media.");
+    } finally {
+      setUploadingMediaKey(null);
+      e.target.value = "";
     }
   };
 
@@ -640,9 +699,29 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
   if (loading) {
     return (
-      <div className="py-20 flex flex-col items-center justify-center text-center">
-        <div className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mb-3" />
-        <p className="text-xs text-gray-400 font-mono">Memuat Pengaturan Konten Web...</p>
+      <div className="space-y-6 py-4 animate-pulse">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-200 dark:border-white/10">
+          <div className="space-y-2">
+            <div className="h-6 w-64 rounded-lg bg-gray-200 dark:bg-white/10" />
+            <div className="h-3.5 w-96 max-w-full rounded bg-gray-200/80 dark:bg-white/5" />
+          </div>
+          <div className="h-10 w-44 rounded-xl bg-amber-500/20" />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-3 space-y-2">
+            {Array.from({ length: 8 }).map((_, idx) => (
+              <div key={idx} className="h-10 rounded-xl bg-gray-200/80 dark:bg-white/5" />
+            ))}
+          </div>
+          <div className="lg:col-span-9 p-6 rounded-2xl border border-gray-200 dark:border-white/10 space-y-4">
+            <div className="h-6 w-56 rounded-lg bg-gray-200 dark:bg-white/10" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {Array.from({ length: 6 }).map((_, idx) => (
+                <div key={idx} className="h-12 rounded-xl bg-gray-200/70 dark:bg-white/5" />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -1222,7 +1301,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                 { key: "enterprise", label: "Pelatihan Perusahaan", icon: Building },
                 { key: "faq", label: "Tanya Jawab (FAQ)", icon: HelpCircle },
                 { key: "cta", label: "Pre-Footer Banner", icon: ShieldCheck },
-                { key: "footer", label: "Footer & Kontak", icon: MapPin },
+                { key: "footer", label: "Footer, Kontak & Rekening", icon: MapPin },
               ].map((item) => {
                 const ItemIcon = item.icon;
                 const isSelected = selectedSectionKey === item.key;
@@ -1430,6 +1509,51 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-amber-400"
                   />
                 </div>
+
+                {/* Video / Gambar Background Hero */}
+                <div className="md:col-span-2 p-4 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/10 space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <span className="text-xs font-bold text-gray-900 dark:text-amber-300 block">
+                        Media Background Hero (Video MP4 atau Gambar Banner)
+                      </span>
+                      <span className="text-[11px] text-gray-600 dark:text-gray-400">
+                        Mendukung file video `.mp4` maupun gambar `.jpg/.png/.webp` untuk latar belakang Hero &amp; Showcase.
+                      </span>
+                    </div>
+                    <label className="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-500/20 dark:hover:bg-amber-500/30 dark:text-amber-300 dark:border-amber-500/30 text-[11px] font-bold flex items-center gap-1.5 cursor-pointer shrink-0">
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>
+                        {uploadingMediaKey === "hero_video" ? "Mengunggah..." : "Unggah Video / Gambar"}
+                      </span>
+                      <input
+                        type="file"
+                        accept="video/mp4,video/webm,image/png,image/jpeg,image/webp"
+                        className="hidden"
+                        onChange={(e) =>
+                          handleCmsMediaUpload(e, "hero_video", (url) =>
+                            setContent((prev) => ({
+                              ...prev,
+                              hero: { ...prev.hero, videoUrl: url },
+                            }))
+                          )
+                        }
+                      />
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    value={content.hero.videoUrl ?? "/hero-bg.mp4"}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        hero: { ...content.hero, videoUrl: e.target.value },
+                      })
+                    }
+                    placeholder="/hero-bg.mp4 atau URL gambar/video..."
+                    className="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs font-mono text-gray-900 dark:text-white"
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -1527,7 +1651,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-gray-400 mb-1">Label Tag 2 (LOD)</label>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Label Tag 2 (LOD)</label>
                     <input
                       type="text"
                       value={content.features?.card1Tag2 || ""}
@@ -1540,17 +1664,92 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Judul Stack Software</label>
+                    <input
+                      type="text"
+                      value={content.features?.card1SoftwareTitle ?? "Stack Software Industri:"}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card1SoftwareTitle: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Daftar Tag Software (pisahkan koma)</label>
+                    <input
+                      type="text"
+                      value={(content.features?.card1SoftwareTags || ["Revit", "Navisworks", "Tekla", "Dynamo"]).join(", ")}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: {
+                            ...(content.features || DEFAULT_SITE_CONTENT.features),
+                            card1SoftwareTags: e.target.value.split(",").map((s) => s.trim()).filter(Boolean),
+                          },
+                        })
+                      }
+                      placeholder="Revit, Navisworks, Tekla, Dynamo"
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div className="sm:col-span-2 p-3 rounded-xl bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[11px] font-bold text-gray-800 dark:text-gray-200">
+                        Gambar Background Kartu 1
+                      </span>
+                      <label className="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:border-amber-500/30 text-[11px] font-bold flex items-center gap-1 cursor-pointer">
+                        <Upload className="w-3 h-3" />
+                        <span>{uploadingMediaKey === "feat_card1" ? "Mengunggah..." : "Unggah Gambar"}</span>
+                        <input
+                          type="file"
+                          accept="image/png,image/jpeg,image/webp"
+                          className="hidden"
+                          onChange={(e) =>
+                            handleCmsMediaUpload(e, "feat_card1", (url) =>
+                              setContent((prev) => ({
+                                ...prev,
+                                features: { ...(prev.features || DEFAULT_SITE_CONTENT.features), card1ImageUrl: url },
+                              }))
+                            )
+                          }
+                        />
+                      </label>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={content.features?.card1ImageUrl || DEFAULT_SITE_CONTENT.features.card1ImageUrl}
+                        alt="Preview Kartu 1"
+                        className="w-16 h-11 rounded-lg object-cover border border-gray-200 dark:border-white/10 shrink-0"
+                      />
+                      <input
+                        type="text"
+                        value={content.features?.card1ImageUrl || ""}
+                        onChange={(e) =>
+                          setContent({
+                            ...content,
+                            features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card1ImageUrl: e.target.value },
+                          })
+                        }
+                        placeholder="URL gambar latar belakang kartu 1..."
+                        className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs font-mono text-gray-800 dark:text-white"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
 
               {/* Kartu 2 */}
               <div className="p-4 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-3">
-                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">
+                <span className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider block">
                   Kartu 2: Peta Jalan Karier &amp; Stepper
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] text-gray-400 mb-1">Badge Kartu 2</label>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Badge Kartu 2</label>
                     <input
                       type="text"
                       value={content.features?.card2Badge || ""}
@@ -1564,7 +1763,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-gray-400 mb-1">Judul Kartu 2</label>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Judul Kartu 2</label>
                     <input
                       type="text"
                       value={content.features?.card2Title || ""}
@@ -1578,7 +1777,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="block text-[11px] text-gray-400 mb-1">Deskripsi Kartu 2</label>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Deskripsi Kartu 2</label>
                     <textarea
                       rows={2}
                       value={content.features?.card2Desc || ""}
@@ -1591,9 +1790,37 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                     />
                   </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Judul Header Box Stepper</label>
+                    <input
+                      type="text"
+                      value={content.features?.card2BoxTitle ?? "Level Kompetensi & Progresi"}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card2BoxTitle: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Badge Header Box Stepper</label>
+                    <input
+                      type="text"
+                      value={content.features?.card2BoxBadge ?? "Terarah 100%"}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card2BoxBadge: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
+                    />
+                  </div>
                   <div className="sm:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
                     <div>
-                      <label className="block text-[10px] text-gray-400 mb-1">Step 1</label>
+                      <label className="block text-[10px] font-bold text-gray-600 dark:text-gray-400 mb-1">Step 1</label>
                       <input
                         type="text"
                         value={content.features?.card2Step1 || ""}
@@ -1607,7 +1834,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] text-gray-400 mb-1">Step 2</label>
+                      <label className="block text-[10px] font-bold text-gray-600 dark:text-gray-400 mb-1">Step 2</label>
                       <input
                         type="text"
                         value={content.features?.card2Step2 || ""}
@@ -1621,7 +1848,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] text-gray-400 mb-1">Step 3</label>
+                      <label className="block text-[10px] font-bold text-gray-600 dark:text-gray-400 mb-1">Step 3</label>
                       <input
                         type="text"
                         value={content.features?.card2Step3 || ""}
@@ -1640,12 +1867,12 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
               {/* Kartu 3 */}
               <div className="p-4 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs space-y-3">
-                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">
+                <span className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider block">
                   Kartu 3: Terhubung Instruktur &amp; Praktisi
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] text-gray-400 mb-1">Badge Kartu 3</label>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Badge Kartu 3</label>
                     <input
                       type="text"
                       value={content.features?.card3Badge || ""}
@@ -1659,7 +1886,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-gray-400 mb-1">Judul Kartu 3</label>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Judul Kartu 3</label>
                     <input
                       type="text"
                       value={content.features?.card3Title || ""}
@@ -1673,7 +1900,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="block text-[11px] text-gray-400 mb-1">Deskripsi Kartu 3</label>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Deskripsi Kartu 3</label>
                     <textarea
                       rows={2}
                       value={content.features?.card3Desc || ""}
@@ -1687,7 +1914,80 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-gray-400 mb-1">Nama Pengirim Pesan Chat</label>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Teks Status Atas (Standby)</label>
+                    <input
+                      type="text"
+                      value={content.features?.card3StatusTitle ?? "Instruktur Standby"}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3StatusTitle: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Badge Status Atas</label>
+                    <input
+                      type="text"
+                      value={content.features?.card3StatusBadge ?? "Aktif Setiap Hari"}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3StatusBadge: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
+                    />
+                  </div>
+
+                  {/* 3 Avatar Mini Kartu 3 */}
+                  <div className="sm:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-2 p-3 rounded-xl bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10">
+                    {(["card3Avatar1", "card3Avatar2", "card3Avatar3"] as const).map((avatarField, aIdx) => {
+                      const avatarVal = (content.features as any)?.[avatarField] || (DEFAULT_SITE_CONTENT.features as any)[avatarField];
+                      return (
+                        <div key={avatarField} className="space-y-1.5">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300">Avatar #{aIdx + 1}</span>
+                            <label className="text-[10px] font-bold text-amber-700 dark:text-amber-300 underline cursor-pointer">
+                              {uploadingMediaKey === avatarField ? "Mengunggah..." : "Unggah"}
+                              <input
+                                type="file"
+                                accept="image/png,image/jpeg,image/webp"
+                                className="hidden"
+                                onChange={(e) =>
+                                  handleCmsMediaUpload(e, avatarField, (url) =>
+                                    setContent((prev) => ({
+                                      ...prev,
+                                      features: { ...(prev.features || DEFAULT_SITE_CONTENT.features), [avatarField]: url },
+                                    }))
+                                  )
+                                }
+                              />
+                            </label>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <img src={avatarVal} alt={`Avatar ${aIdx + 1}`} className="w-7 h-7 rounded-full object-cover border border-gray-300 shrink-0" />
+                            <input
+                              type="text"
+                              value={avatarVal || ""}
+                              onChange={(e) =>
+                                setContent({
+                                  ...content,
+                                  features: { ...(content.features || DEFAULT_SITE_CONTENT.features), [avatarField]: e.target.value },
+                                })
+                              }
+                              className="w-full px-2 py-1 rounded bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 text-[10px] font-mono text-gray-800 dark:text-white"
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Nama Pengirim Pesan Chat</label>
                     <input
                       type="text"
                       value={content.features?.card3ChatAuthor || ""}
@@ -1701,7 +2001,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-gray-400 mb-1">Jabatan / Role Pengirim Chat</label>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Jabatan / Role Pengirim Chat</label>
                     <input
                       type="text"
                       value={content.features?.card3ChatRole || ""}
@@ -1715,7 +2015,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="block text-[11px] text-gray-400 mb-1">Isi Kutipan Pesan Chat Mentoring</label>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Isi Kutipan Pesan Chat Mentoring</label>
                     <input
                       type="text"
                       value={content.features?.card3ChatQuote || ""}
@@ -1723,6 +2023,34 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         setContent({
                           ...content,
                           features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3ChatQuote: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Teks Member Bawah</label>
+                    <input
+                      type="text"
+                      value={content.features?.card3MembersTag ?? "18.500+ Member AEC"}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3MembersTag: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Teks Tautan Bawah</label>
+                    <input
+                      type="text"
+                      value={content.features?.card3LinkText || ""}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          features: { ...(content.features || DEFAULT_SITE_CONTENT.features), card3LinkText: e.target.value },
                         })
                       }
                       className="w-full px-3 py-2 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
@@ -1916,6 +2244,284 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Label Kotak Gaji</label>
+                  <input
+                    type="text"
+                    value={content.roadmaps?.salaryLabel ?? "Estimasi Standar Gaji Industri"}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        roadmaps: { ...(content.roadmaps || DEFAULT_SITE_CONTENT.roadmaps), salaryLabel: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Catatan Sumber Gaji</label>
+                  <input
+                    type="text"
+                    value={content.roadmaps?.salarySourceNote ?? "Berdasarkan survei BUMN & Konsultan AEC 2026"}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        roadmaps: { ...(content.roadmaps || DEFAULT_SITE_CONTENT.roadmaps), salarySourceNote: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Catatan Bawah CTA Roadmap</label>
+                  <input
+                    type="text"
+                    value={content.roadmaps?.ctaNote ?? "Termasuk bimbingan portfolio review 1-on-1 bersama instruktur berlisensi & simulasi tes teknis kerja."}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        roadmaps: { ...(content.roadmaps || DEFAULT_SITE_CONTENT.roadmaps), ctaNote: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Awalan Teks Tombol Paket</label>
+                  <input
+                    type="text"
+                    value={content.roadmaps?.ctaBtnPrefix ?? "Ambil Paket"}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        roadmaps: { ...(content.roadmaps || DEFAULT_SITE_CONTENT.roadmaps), ctaBtnPrefix: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-bold"
+                  />
+                </div>
+              </div>
+
+              {/* Daftar Jalur Karier Spesifik (Tracks) */}
+              <div className="pt-4 border-t border-gray-200 dark:border-white/10 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <h5 className="text-xs font-extrabold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+                      Daftar Jalur Karier Spesifik ({(content.roadmaps?.tracks || DEFAULT_SITE_CONTENT.roadmaps.tracks || []).length} Jalur)
+                    </h5>
+                    <p className="text-[11px] text-gray-600 dark:text-gray-400">
+                      Edit tab jalur karier, estimasi gaji, durasi, target posisi, dan tahapan capstone di setiap jalur.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const curr = content.roadmaps?.tracks || DEFAULT_SITE_CONTENT.roadmaps.tracks || [];
+                      setContent({
+                        ...content,
+                        roadmaps: {
+                          ...(content.roadmaps || DEFAULT_SITE_CONTENT.roadmaps),
+                          tracks: [
+                            ...curr,
+                            {
+                              id: `track-${Date.now()}`,
+                              title: "Jalur Karier Baru",
+                              subtitle: "Untuk Engineer & Praktisi BIM",
+                              duration: "6 Minggu",
+                              targetRole: "BIM Specialist",
+                              salaryRange: "Rp 10.000.000 - Rp 18.000.000 / bln",
+                              steps: [
+                                {
+                                  phase: "Tahap 1",
+                                  title: "Fondasi & Standar Kerja",
+                                  description: "Memahami alur kerja BIM dan pembuatan model terstruktur.",
+                                  deliverable: "Model Proyek Dasar",
+                                },
+                              ],
+                            },
+                          ],
+                        },
+                      });
+                    }}
+                    className="px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/30 text-[11px] font-bold flex items-center gap-1 cursor-pointer shrink-0"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Tambah Jalur Karier</span>
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {(content.roadmaps?.tracks || DEFAULT_SITE_CONTENT.roadmaps.tracks || []).map((track, tIdx) => {
+                    const updateTrack = (patch: Partial<typeof track>) => {
+                      const list = [...(content.roadmaps?.tracks || DEFAULT_SITE_CONTENT.roadmaps.tracks || [])];
+                      list[tIdx] = { ...list[tIdx], ...patch };
+                      setContent({
+                        ...content,
+                        roadmaps: { ...(content.roadmaps || DEFAULT_SITE_CONTENT.roadmaps), tracks: list },
+                      });
+                    };
+
+                    return (
+                      <div key={track.id || tIdx} className="p-4 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/10 space-y-3">
+                        <div className="flex items-center justify-between border-b border-gray-200 dark:border-white/10 pb-2">
+                          <span className="text-xs font-extrabold text-gray-950 dark:text-amber-300">
+                            Jalur #{tIdx + 1}: {track.title}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const list = [...(content.roadmaps?.tracks || DEFAULT_SITE_CONTENT.roadmaps.tracks || [])];
+                              list.splice(tIdx, 1);
+                              setContent({
+                                ...content,
+                                roadmaps: { ...(content.roadmaps || DEFAULT_SITE_CONTENT.roadmaps), tracks: list },
+                              });
+                            }}
+                            className="p-1 rounded text-rose-600 hover:bg-rose-50 dark:text-rose-400 cursor-pointer"
+                            title="Hapus Jalur"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                          <div>
+                            <label className="block text-[10px] font-bold text-gray-600 dark:text-gray-400 mb-1">Judul Tab Jalur</label>
+                            <input
+                              type="text"
+                              value={track.title}
+                              onChange={(e) => updateTrack({ title: e.target.value })}
+                              className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs font-bold text-gray-900 dark:text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold text-gray-600 dark:text-gray-400 mb-1">Subjudul / Target Peserta</label>
+                            <input
+                              type="text"
+                              value={track.subtitle}
+                              onChange={(e) => updateTrack({ subtitle: e.target.value })}
+                              className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold text-gray-600 dark:text-gray-400 mb-1">Durasi Belajar</label>
+                            <input
+                              type="text"
+                              value={track.duration}
+                              onChange={(e) => updateTrack({ duration: e.target.value })}
+                              className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold text-gray-600 dark:text-gray-400 mb-1">Target Posisi Karier</label>
+                            <input
+                              type="text"
+                              value={track.targetRole}
+                              onChange={(e) => updateTrack({ targetRole: e.target.value })}
+                              className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                            />
+                          </div>
+                          <div className="sm:col-span-2">
+                            <label className="block text-[10px] font-bold text-gray-600 dark:text-gray-400 mb-1">Estimasi Rentang Gaji</label>
+                            <input
+                              type="text"
+                              value={track.salaryRange}
+                              onChange={(e) => updateTrack({ salaryRange: e.target.value })}
+                              className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs font-bold text-emerald-700 dark:text-emerald-300"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Phases / Steps inside this Track */}
+                        <div className="space-y-2 pt-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[11px] font-bold text-gray-700 dark:text-gray-300">
+                              Tahapan Belajar ({track.steps?.length || 0} Tahap):
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                updateTrack({
+                                  steps: [
+                                    ...(track.steps || []),
+                                    {
+                                      phase: `Tahap ${(track.steps?.length || 0) + 1}`,
+                                      title: "Judul Tahap Baru",
+                                      description: "Deskripsi materi tahap ini.",
+                                      deliverable: "Deliverable Capstone",
+                                    },
+                                  ],
+                                })
+                              }
+                              className="text-[11px] font-bold text-amber-700 dark:text-amber-300 hover:underline flex items-center gap-1 cursor-pointer"
+                            >
+                              <Plus className="w-3 h-3" />
+                              <span>Tambah Tahap</span>
+                            </button>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+                            {(track.steps || []).map((st, sIdx) => {
+                              const updateStep = (patch: Partial<typeof st>) => {
+                                const stepsCopy = [...(track.steps || [])];
+                                stepsCopy[sIdx] = { ...stepsCopy[sIdx], ...patch };
+                                updateTrack({ steps: stepsCopy });
+                              };
+                              return (
+                                <div key={sIdx} className="p-2.5 rounded-xl bg-white dark:bg-black/30 border border-gray-200 dark:border-white/10 space-y-1.5">
+                                  <div className="flex items-center justify-between gap-1">
+                                    <input
+                                      type="text"
+                                      value={st.phase}
+                                      onChange={(e) => updateStep({ phase: e.target.value })}
+                                      className="w-24 px-2 py-1 rounded bg-amber-50 dark:bg-amber-500/20 border border-amber-200 dark:border-amber-500/30 text-[10px] font-black text-amber-900 dark:text-amber-300"
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const stepsCopy = [...(track.steps || [])];
+                                        stepsCopy.splice(sIdx, 1);
+                                        updateTrack({ steps: stepsCopy });
+                                      }}
+                                      className="text-rose-500 p-0.5 cursor-pointer"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                  <input
+                                    type="text"
+                                    value={st.title}
+                                    onChange={(e) => updateStep({ title: e.target.value })}
+                                    placeholder="Judul Tahap"
+                                    className="w-full px-2 py-1 rounded bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs font-bold text-gray-900 dark:text-white"
+                                  />
+                                  <textarea
+                                    rows={2}
+                                    value={st.description}
+                                    onChange={(e) => updateStep({ description: e.target.value })}
+                                    placeholder="Deskripsi..."
+                                    className="w-full px-2 py-1 rounded bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-[11px] text-gray-700 dark:text-gray-300"
+                                  />
+                                  <input
+                                    type="text"
+                                    value={st.deliverable}
+                                    onChange={(e) => updateStep({ deliverable: e.target.value })}
+                                    placeholder="Bukti Portofolio Capstone"
+                                    className="w-full px-2 py-1 rounded bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300"
+                                  />
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           )}
@@ -2054,6 +2660,258 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                       })
                     }
                     className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              {/* Kartu Simulasi Live Mentoring & Q&A Chat */}
+              <div className="p-4 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/10 space-y-4">
+                <span className="text-xs font-extrabold text-amber-700 dark:text-amber-400 uppercase tracking-wider block">
+                  Live Mentoring &amp; Simulasi Forum Q&amp;A
+                </span>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Badge Atas Live</label>
+                    <input
+                      type="text"
+                      value={content.community.liveBadge ?? "Live Sesi Mentoring Setiap Minggu"}
+                      onChange={(e) => setContent({ ...content, community: { ...content.community, liveBadge: e.target.value } })}
+                      className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Teks Tombol Gabung</label>
+                    <input
+                      type="text"
+                      value={content.community.joinBtnText ?? "Pilih Modul & Bergabung"}
+                      onChange={(e) => setContent({ ...content, community: { ...content.community, joinBtnText: e.target.value } })}
+                      className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs font-bold text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">Teks Info Akses Instan</label>
+                    <input
+                      type="text"
+                      value={content.community.instantAccessText ?? "Akses langsung diberikan otomatis setelah registrasi kelas."}
+                      onChange={(e) => setContent({ ...content, community: { ...content.community, instantAccessText: e.target.value } })}
+                      className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <input
+                    type="text"
+                    value={content.community.bullet1 ?? ""}
+                    onChange={(e) => setContent({ ...content, community: { ...content.community, bullet1: e.target.value } })}
+                    placeholder="Poin Checklist 1"
+                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                  />
+                  <input
+                    type="text"
+                    value={content.community.bullet2 ?? ""}
+                    onChange={(e) => setContent({ ...content, community: { ...content.community, bullet2: e.target.value } })}
+                    placeholder="Poin Checklist 2"
+                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                  />
+                  <input
+                    type="text"
+                    value={content.community.bullet3 ?? ""}
+                    onChange={(e) => setContent({ ...content, community: { ...content.community, bullet3: e.target.value } })}
+                    placeholder="Poin Checklist 3"
+                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                {/* Chat Header & Participants */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-gray-200 dark:border-white/10">
+                  <input
+                    type="text"
+                    value={content.community.chatChannel ?? "#qna-revit-dan-koordinasi"}
+                    onChange={(e) => setContent({ ...content, community: { ...content.community, chatChannel: e.target.value } })}
+                    placeholder="Nama Channel Chat"
+                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs font-mono font-bold text-gray-900 dark:text-white"
+                  />
+                  <input
+                    type="text"
+                    value={content.community.chatSubtitle ?? "Komunitas BIMCourse • Didampingi Instruktur Aktif"}
+                    onChange={(e) => setContent({ ...content, community: { ...content.community, chatSubtitle: e.target.value } })}
+                    placeholder="Subjudul Channel"
+                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                  />
+                  <input
+                    type="text"
+                    value={content.community.chatOnlineText ?? "1.240 Online"}
+                    onChange={(e) => setContent({ ...content, community: { ...content.community, chatOnlineText: e.target.value } })}
+                    placeholder="Jumlah Online"
+                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs font-mono text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                {/* Student Message Editor */}
+                <div className="p-3 rounded-xl bg-white dark:bg-black/30 border border-gray-200 dark:border-white/10 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-gray-800 dark:text-gray-200">Pertanyaan Siswa di Simulasi Chat</span>
+                    <label className="text-[11px] font-bold text-amber-700 dark:text-amber-300 underline cursor-pointer">
+                      {uploadingMediaKey === "comm_student" ? "Mengunggah..." : "Unggah Foto Siswa"}
+                      <input
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp"
+                        className="hidden"
+                        onChange={(e) =>
+                          handleCmsMediaUpload(e, "comm_student", (url) =>
+                            setContent((prev) => ({
+                              ...prev,
+                              community: { ...prev.community, studentAvatar: url },
+                            }))
+                          )
+                        }
+                      />
+                    </label>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={content.community.studentAvatar || DEFAULT_SITE_CONTENT.community.studentAvatar}
+                        alt="Student"
+                        className="w-7 h-7 rounded-full object-cover border border-gray-300 shrink-0"
+                      />
+                      <input
+                        type="text"
+                        value={content.community.studentAvatar ?? ""}
+                        onChange={(e) => setContent({ ...content, community: { ...content.community, studentAvatar: e.target.value } })}
+                        placeholder="URL Avatar Siswa"
+                        className="w-full px-2 py-1 rounded bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-[10px] font-mono text-gray-800 dark:text-white"
+                      />
+                    </div>
+                    <input
+                      type="text"
+                      value={content.community.studentName ?? "Fikri Ramadhan"}
+                      onChange={(e) => setContent({ ...content, community: { ...content.community, studentName: e.target.value } })}
+                      placeholder="Nama Siswa"
+                      className="px-2.5 py-1 rounded bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs font-bold text-gray-900 dark:text-white"
+                    />
+                    <input
+                      type="text"
+                      value={content.community.studentBadge ?? "Siswa BIMCourse"}
+                      onChange={(e) => setContent({ ...content, community: { ...content.community, studentBadge: e.target.value } })}
+                      placeholder="Label Siswa"
+                      className="px-2.5 py-1 rounded bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    />
+                    <input
+                      type="text"
+                      value={content.community.studentTime ?? "10:42 WIB"}
+                      onChange={(e) => setContent({ ...content, community: { ...content.community, studentTime: e.target.value } })}
+                      placeholder="Waktu"
+                      className="px-2.5 py-1 rounded bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs font-mono text-gray-700 dark:text-gray-300"
+                    />
+                  </div>
+                  <textarea
+                    rows={2}
+                    value={content.community.studentQuestion ?? ""}
+                    onChange={(e) => setContent({ ...content, community: { ...content.community, studentQuestion: e.target.value } })}
+                    placeholder="Isi pertanyaan siswa..."
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                {/* Mentor Reply Editor */}
+                <div className="p-3 rounded-xl bg-white dark:bg-black/30 border border-gray-200 dark:border-white/10 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-gray-800 dark:text-gray-200">Balasan Instruktur &amp; Lampiran File</span>
+                    <label className="text-[11px] font-bold text-amber-700 dark:text-amber-300 underline cursor-pointer">
+                      {uploadingMediaKey === "comm_mentor" ? "Mengunggah..." : "Unggah Foto Mentor"}
+                      <input
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp"
+                        className="hidden"
+                        onChange={(e) =>
+                          handleCmsMediaUpload(e, "comm_mentor", (url) =>
+                            setContent((prev) => ({
+                              ...prev,
+                              community: { ...prev.community, mentorAvatar: url },
+                            }))
+                          )
+                        }
+                      />
+                    </label>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={content.community.mentorAvatar || DEFAULT_SITE_CONTENT.community.mentorAvatar}
+                        alt="Mentor"
+                        className="w-7 h-7 rounded-full object-cover border border-gray-300 shrink-0"
+                      />
+                      <input
+                        type="text"
+                        value={content.community.mentorAvatar ?? ""}
+                        onChange={(e) => setContent({ ...content, community: { ...content.community, mentorAvatar: e.target.value } })}
+                        placeholder="URL Avatar Mentor"
+                        className="w-full px-2 py-1 rounded bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-[10px] font-mono text-gray-800 dark:text-white"
+                      />
+                    </div>
+                    <input
+                      type="text"
+                      value={content.community.mentorName ?? "Ir. Hendra Wijaya, S.T."}
+                      onChange={(e) => setContent({ ...content, community: { ...content.community, mentorName: e.target.value } })}
+                      placeholder="Nama Mentor"
+                      className="px-2.5 py-1 rounded bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs font-bold text-gray-900 dark:text-white"
+                    />
+                    <input
+                      type="text"
+                      value={content.community.mentorBadgeLabel ?? "INSTRUKTUR UTAMA"}
+                      onChange={(e) => setContent({ ...content, community: { ...content.community, mentorBadgeLabel: e.target.value } })}
+                      placeholder="Badge Mentor"
+                      className="px-2.5 py-1 rounded bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                    />
+                    <input
+                      type="text"
+                      value={content.community.mentorTime ?? "10:48 WIB"}
+                      onChange={(e) => setContent({ ...content, community: { ...content.community, mentorTime: e.target.value } })}
+                      placeholder="Waktu"
+                      className="px-2.5 py-1 rounded bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs font-mono text-gray-700 dark:text-gray-300"
+                    />
+                  </div>
+                  <textarea
+                    rows={2}
+                    value={content.community.mentorReply ?? ""}
+                    onChange={(e) => setContent({ ...content, community: { ...content.community, mentorReply: e.target.value } })}
+                    placeholder="Isi jawaban instruktur..."
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                  />
+                  <input
+                    type="text"
+                    value={content.community.mentorAttachment ?? ""}
+                    onChange={(e) => setContent({ ...content, community: { ...content.community, mentorAttachment: e.target.value } })}
+                    placeholder="Nama File Lampiran (misal: Detail_Clearance.rvt (2.4 MB))"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs font-mono text-gray-800 dark:text-white"
+                  />
+                </div>
+
+                {/* Live Sharing Bottom Banner */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-gray-200 dark:border-white/10">
+                  <input
+                    type="text"
+                    value={content.community.liveBannerTitle ?? ""}
+                    onChange={(e) => setContent({ ...content, community: { ...content.community, liveBannerTitle: e.target.value } })}
+                    placeholder="Judul Live Sharing"
+                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs font-bold text-gray-900 dark:text-white"
+                  />
+                  <input
+                    type="text"
+                    value={content.community.liveBannerSchedule ?? ""}
+                    onChange={(e) => setContent({ ...content, community: { ...content.community, liveBannerSchedule: e.target.value } })}
+                    placeholder="Jadwal & Pemateri"
+                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                  />
+                  <input
+                    type="text"
+                    value={content.community.liveBannerBadge ?? "Khusus Member"}
+                    onChange={(e) => setContent({ ...content, community: { ...content.community, liveBannerBadge: e.target.value } })}
+                    placeholder="Badge Kanan Banner"
+                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs font-bold text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -2440,6 +3298,162 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                     className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-[11px] font-bold text-gray-800 dark:text-gray-200 mb-1">Teks Tombol Submit Kuis</label>
+                  <input
+                    type="text"
+                    value={content.quiz?.submitBtnText ?? "Lihat Rekomendasi Kelas Saya"}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), submitBtnText: e.target.value },
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white font-bold"
+                  />
+                </div>
+              </div>
+
+              {/* Pilihan Latar Belakang */}
+              <div className="pt-4 border-t border-gray-200 dark:border-white/10 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+                    Opsi Latar Belakang ({(content.quiz?.backgrounds || DEFAULT_SITE_CONTENT.quiz.backgrounds || []).length})
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const curr = content.quiz?.backgrounds || DEFAULT_SITE_CONTENT.quiz.backgrounds || [];
+                      setContent({
+                        ...content,
+                        quiz: {
+                          ...(content.quiz || DEFAULT_SITE_CONTENT.quiz),
+                          backgrounds: [...curr, { id: `bg_${Date.now()}`, label: "Profesi Baru", icon: "👷" }],
+                        },
+                      });
+                    }}
+                    className="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:border-amber-500/30 text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                  >
+                    <Plus className="w-3 h-3" />
+                    <span>Tambah Profesi</span>
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {(content.quiz?.backgrounds || DEFAULT_SITE_CONTENT.quiz.backgrounds || []).map((bg, idx) => (
+                    <div key={bg.id || idx} className="flex items-center gap-2 p-2 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10">
+                      <input
+                        type="text"
+                        value={bg.icon}
+                        onChange={(e) => {
+                          const list = [...(content.quiz?.backgrounds || DEFAULT_SITE_CONTENT.quiz.backgrounds || [])];
+                          list[idx] = { ...list[idx], icon: e.target.value };
+                          setContent({ ...content, quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), backgrounds: list } });
+                        }}
+                        className="w-10 text-center px-1 py-1 rounded-lg bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 text-sm"
+                      />
+                      <input
+                        type="text"
+                        value={bg.label}
+                        onChange={(e) => {
+                          const list = [...(content.quiz?.backgrounds || DEFAULT_SITE_CONTENT.quiz.backgrounds || [])];
+                          list[idx] = { ...list[idx], label: e.target.value };
+                          setContent({ ...content, quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), backgrounds: list } });
+                        }}
+                        className="flex-1 px-2.5 py-1 rounded-lg bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs font-semibold text-gray-900 dark:text-white"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const list = [...(content.quiz?.backgrounds || DEFAULT_SITE_CONTENT.quiz.backgrounds || [])];
+                          list.splice(idx, 1);
+                          setContent({ ...content, quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), backgrounds: list } });
+                        }}
+                        className="p-1 text-rose-500 hover:bg-rose-50 rounded cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Target Prioritas */}
+              <div className="pt-4 border-t border-gray-200 dark:border-white/10 space-y-2.5">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-amber-700 dark:text-amber-400 block">
+                  Opsi Target Prioritas &amp; Hasil Rekomendasi
+                </span>
+                <div className="space-y-2">
+                  {(content.quiz?.goals || DEFAULT_SITE_CONTENT.quiz.goals || []).map((g, idx) => (
+                    <div key={g.id || idx} className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10">
+                      <input
+                        type="text"
+                        value={g.label}
+                        onChange={(e) => {
+                          const list = [...(content.quiz?.goals || DEFAULT_SITE_CONTENT.quiz.goals || [])];
+                          list[idx] = { ...list[idx], label: e.target.value };
+                          setContent({ ...content, quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), goals: list } });
+                        }}
+                        placeholder="Judul Target"
+                        className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs font-bold text-gray-900 dark:text-white"
+                      />
+                      <input
+                        type="text"
+                        value={g.desc}
+                        onChange={(e) => {
+                          const list = [...(content.quiz?.goals || DEFAULT_SITE_CONTENT.quiz.goals || [])];
+                          list[idx] = { ...list[idx], desc: e.target.value };
+                          setContent({ ...content, quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), goals: list } });
+                        }}
+                        placeholder="Deskripsi Target"
+                        className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-700 dark:text-gray-300"
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <div className="space-y-2 pt-2">
+                  <span className="text-[11px] font-bold text-gray-700 dark:text-gray-300 block">Kartu Rekomendasi Kelas:</span>
+                  {(content.quiz?.recommendations || DEFAULT_SITE_CONTENT.quiz.recommendations || []).map((rec, idx) => (
+                    <div key={rec.id || idx} className="p-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 space-y-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <input
+                          type="text"
+                          value={rec.title}
+                          onChange={(e) => {
+                            const list = [...(content.quiz?.recommendations || DEFAULT_SITE_CONTENT.quiz.recommendations || [])];
+                            list[idx] = { ...list[idx], title: e.target.value };
+                            setContent({ ...content, quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), recommendations: list } });
+                          }}
+                          placeholder="Judul Rekomendasi"
+                          className="sm:col-span-2 px-2.5 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs font-bold text-gray-900 dark:text-white"
+                        />
+                        <input
+                          type="text"
+                          value={rec.match}
+                          onChange={(e) => {
+                            const list = [...(content.quiz?.recommendations || DEFAULT_SITE_CONTENT.quiz.recommendations || [])];
+                            list[idx] = { ...list[idx], match: e.target.value };
+                            setContent({ ...content, quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), recommendations: list } });
+                          }}
+                          placeholder="Kecocokan (misal: 98% Sangat Cocok)"
+                          className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs font-semibold text-emerald-700 dark:text-emerald-300"
+                        />
+                      </div>
+                      <input
+                        type="text"
+                        value={rec.reason}
+                        onChange={(e) => {
+                          const list = [...(content.quiz?.recommendations || DEFAULT_SITE_CONTENT.quiz.recommendations || [])];
+                          list[idx] = { ...list[idx], reason: e.target.value };
+                          setContent({ ...content, quiz: { ...(content.quiz || DEFAULT_SITE_CONTENT.quiz), recommendations: list } });
+                        }}
+                        placeholder="Alasan rekomendasi..."
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-700 dark:text-gray-300"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -2585,6 +3599,34 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         placeholder="Kutipan ulasan alumni..."
                         className="w-full px-2.5 py-1.5 rounded-lg bg-gray-50/70 dark:bg-black/40 border border-gray-200 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                       />
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 p-2.5 rounded-lg bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10">
+                        <img
+                          src={testi.avatar}
+                          alt={testi.author}
+                          className="w-9 h-9 rounded-full object-cover border border-gray-300 dark:border-white/20 shrink-0"
+                        />
+                        <input
+                          type="text"
+                          value={testi.avatar}
+                          onChange={(e) => handleUpdateTestimonial(i, "avatar", e.target.value)}
+                          placeholder="URL Foto Avatar Alumni..."
+                          className="flex-1 px-2.5 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs font-mono text-gray-800 dark:text-white"
+                        />
+                        <label className="px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:border-amber-500/30 text-[11px] font-bold flex items-center gap-1 cursor-pointer shrink-0">
+                          <Upload className="w-3 h-3" />
+                          <span>{uploadingMediaKey === `testi_${i}` ? "Mengunggah..." : "Unggah Foto"}</span>
+                          <input
+                            type="file"
+                            accept="image/png,image/jpeg,image/webp"
+                            className="hidden"
+                            onChange={(e) =>
+                              handleCmsMediaUpload(e, `testi_${i}`, (url) =>
+                                handleUpdateTestimonial(i, "avatar", url)
+                              )
+                            }
+                          />
+                        </label>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -3065,7 +4107,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
 
           {/* SECTION 12: FOOTER */}
           {selectedSectionKey === "footer" && (
-            <div className="p-5 rounded-2xl bg-white dark:bg-[#14171E] border border-gray-200 dark:border-white/10 shadow-sm space-y-4">
+            <div className="p-5 rounded-2xl bg-white dark:bg-[#14171E] border border-gray-200 dark:border-white/10 shadow-sm space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-200 dark:border-white/10">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-lg bg-gray-100 text-gray-700 dark:bg-zinc-500/20 dark:text-zinc-300 flex items-center justify-center">
@@ -3073,11 +4115,11 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-gray-950 dark:text-white">12. Footer &amp; Informasi Kontak Resmi</h4>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Tagline brand di footer, alamat kantor, email, dan WhatsApp advisor.</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Tagline brand, alamat, email, WhatsApp advisor, serta daftar tautan Kelas Populer &amp; Tautan Cepat.</p>
                   </div>
                 </div>
 
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/30">
                   SELALU DITAMPILKAN
                 </span>
               </div>
@@ -3130,6 +4172,7 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), email: e.target.value },
                       })
                     }
+                    placeholder="bim.courseacad@gmail.com"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
                 </div>
@@ -3147,8 +4190,434 @@ export default function WebContentManager({ onShowToast }: WebContentManagerProp
                         footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), phone: e.target.value },
                       })
                     }
+                    placeholder="+62 815 2417 3386 (WhatsApp Student Advisor)"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs text-gray-900 dark:text-white"
                   />
+                </div>
+              </div>
+
+              {/* Footer Column 2: Kelas Populer */}
+              <div className="pt-4 border-t border-gray-200 dark:border-white/10 space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <h5 className="text-xs font-extrabold uppercase tracking-wider text-gray-900 dark:text-amber-300 flex items-center gap-1.5">
+                      <Link2 className="w-3.5 h-3.5 text-amber-500" />
+                      <span>Kolom 2: Kelas Populer</span>
+                    </h5>
+                    <p className="text-[11px] text-gray-600 dark:text-gray-400">
+                      Daftar tautan kelas di footer. Bisa disinkronkan langsung dari modul aktif atau diedit manual.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleSyncFooterCourses}
+                      disabled={syncingFooterCourses}
+                      className="px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 dark:bg-blue-500/15 dark:hover:bg-blue-500/25 dark:text-blue-300 dark:border-blue-500/30 text-[11px] font-bold flex items-center gap-1.5 cursor-pointer disabled:opacity-50 transition-colors"
+                    >
+                      <RefreshCw className={`w-3 h-3 ${syncingFooterCourses ? "animate-spin" : ""}`} />
+                      <span>{syncingFooterCourses ? "Menyinkronkan..." : "Ambil dari Kursus Aktif"}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const current = content.footer?.popularCourses || DEFAULT_SITE_CONTENT.footer.popularCourses || [];
+                        setContent({
+                          ...content,
+                          footer: {
+                            ...(content.footer || DEFAULT_SITE_CONTENT.footer),
+                            popularCourses: [...current, { label: "Kelas Baru", href: "/#courses" }],
+                          },
+                        });
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-500/15 dark:hover:bg-amber-500/25 dark:text-amber-300 dark:border-amber-500/30 text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                    >
+                      <Plus className="w-3 h-3" />
+                      <span>Tambah Kelas</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">
+                    Judul Kolom Kelas Populer
+                  </label>
+                  <input
+                    type="text"
+                    value={content.footer?.popularCoursesTitle ?? "Kelas Populer"}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        footer: {
+                          ...(content.footer || DEFAULT_SITE_CONTENT.footer),
+                          popularCoursesTitle: e.target.value,
+                        },
+                      })
+                    }
+                    className="w-full sm:w-1/2 px-3 py-2 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs font-bold text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  {(content.footer?.popularCourses || DEFAULT_SITE_CONTENT.footer.popularCourses || []).map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="grid grid-cols-1 sm:grid-cols-12 gap-2 items-center p-2.5 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/10"
+                    >
+                      <div className="sm:col-span-5">
+                        <input
+                          type="text"
+                          placeholder="Nama Tampilan Kelas (misal: Revit Basic)"
+                          value={item.label}
+                          onChange={(e) => {
+                            const list = [...(content.footer?.popularCourses || DEFAULT_SITE_CONTENT.footer.popularCourses || [])];
+                            list[idx] = { ...list[idx], label: e.target.value };
+                            setContent({
+                              ...content,
+                              footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), popularCourses: list },
+                            });
+                          }}
+                          className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 border border-gray-300 dark:border-white/10 text-xs font-semibold text-gray-900 dark:text-white"
+                        />
+                      </div>
+                      <div className="sm:col-span-6">
+                        <input
+                          type="text"
+                          placeholder="URL / Path (misal: /courses/revit-basic atau /#courses)"
+                          value={item.href}
+                          onChange={(e) => {
+                            const list = [...(content.footer?.popularCourses || DEFAULT_SITE_CONTENT.footer.popularCourses || [])];
+                            list[idx] = { ...list[idx], href: e.target.value };
+                            setContent({
+                              ...content,
+                              footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), popularCourses: list },
+                            });
+                          }}
+                          className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 border border-gray-300 dark:border-white/10 text-xs font-mono text-gray-700 dark:text-gray-300"
+                        />
+                      </div>
+                      <div className="sm:col-span-1 flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const list = [...(content.footer?.popularCourses || DEFAULT_SITE_CONTENT.footer.popularCourses || [])];
+                            list.splice(idx, 1);
+                            setContent({
+                              ...content,
+                              footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), popularCourses: list },
+                            });
+                          }}
+                          title="Hapus Tautan"
+                          className="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40 cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Footer Column 3: Tautan Cepat */}
+              <div className="pt-4 border-t border-gray-200 dark:border-white/10 space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <h5 className="text-xs font-extrabold uppercase tracking-wider text-gray-900 dark:text-amber-300 flex items-center gap-1.5">
+                      <Link2 className="w-3.5 h-3.5 text-emerald-500" />
+                      <span>Kolom 3: Tautan Cepat</span>
+                    </h5>
+                    <p className="text-[11px] text-gray-600 dark:text-gray-400">
+                      Tautan navigasi cepat ke bagian halaman atau URL lain di website.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setContent({
+                          ...content,
+                          footer: {
+                            ...(content.footer || DEFAULT_SITE_CONTENT.footer),
+                            quickLinks: DEFAULT_SITE_CONTENT.footer.quickLinks,
+                          },
+                        });
+                        onShowToast("Tautan Cepat di-reset sesuai section asli website!");
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-300 dark:bg-white/10 dark:hover:bg-white/15 dark:text-gray-200 dark:border-white/10 text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                    >
+                      <RotateCcw className="w-3 h-3" />
+                      <span>Reset Section Asli</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const current = content.footer?.quickLinks || DEFAULT_SITE_CONTENT.footer.quickLinks || [];
+                        setContent({
+                          ...content,
+                          footer: {
+                            ...(content.footer || DEFAULT_SITE_CONTENT.footer),
+                            quickLinks: [...current, { label: "Tautan Baru", href: "/#courses" }],
+                          },
+                        });
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/15 dark:hover:bg-emerald-500/25 dark:text-emerald-300 dark:border-emerald-500/30 text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                    >
+                      <Plus className="w-3 h-3" />
+                      <span>Tambah Tautan</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1">
+                    Judul Kolom Tautan Cepat
+                  </label>
+                  <input
+                    type="text"
+                    value={content.footer?.quickLinksTitle ?? "Tautan Cepat"}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        footer: {
+                          ...(content.footer || DEFAULT_SITE_CONTENT.footer),
+                          quickLinksTitle: e.target.value,
+                        },
+                      })
+                    }
+                    className="w-full sm:w-1/2 px-3 py-2 rounded-xl bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 shadow-2xs text-xs font-bold text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  {(content.footer?.quickLinks || DEFAULT_SITE_CONTENT.footer.quickLinks || []).map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="grid grid-cols-1 sm:grid-cols-12 gap-2 items-center p-2.5 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/10"
+                    >
+                      <div className="sm:col-span-5">
+                        <input
+                          type="text"
+                          placeholder="Label Tautan (misal: Roadmap Karier BIM)"
+                          value={item.label}
+                          onChange={(e) => {
+                            const list = [...(content.footer?.quickLinks || DEFAULT_SITE_CONTENT.footer.quickLinks || [])];
+                            list[idx] = { ...list[idx], label: e.target.value };
+                            setContent({
+                              ...content,
+                              footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), quickLinks: list },
+                            });
+                          }}
+                          className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 border border-gray-300 dark:border-white/10 text-xs font-semibold text-gray-900 dark:text-white"
+                        />
+                      </div>
+                      <div className="sm:col-span-6">
+                        <input
+                          type="text"
+                          placeholder="URL / Anchor (misal: /#roadmaps)"
+                          value={item.href}
+                          onChange={(e) => {
+                            const list = [...(content.footer?.quickLinks || DEFAULT_SITE_CONTENT.footer.quickLinks || [])];
+                            list[idx] = { ...list[idx], href: e.target.value };
+                            setContent({
+                              ...content,
+                              footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), quickLinks: list },
+                            });
+                          }}
+                          className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 border border-gray-300 dark:border-white/10 text-xs font-mono text-gray-700 dark:text-gray-300"
+                        />
+                      </div>
+                      <div className="sm:col-span-1 flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const list = [...(content.footer?.quickLinks || DEFAULT_SITE_CONTENT.footer.quickLinks || [])];
+                            list.splice(idx, 1);
+                            setContent({
+                              ...content,
+                              footer: { ...(content.footer || DEFAULT_SITE_CONTENT.footer), quickLinks: list },
+                            });
+                          }}
+                          title="Hapus Tautan"
+                          className="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40 cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Payment Bank Accounts Editor */}
+              <div className="pt-4 border-t border-gray-200 dark:border-white/10 space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <h5 className="text-xs font-bold text-gray-900 dark:text-white">Rekening Pembayaran (Transfer Bank)</h5>
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                      Daftar rekening tujuan pembayaran kelas di modal Checkout siswa.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const current =
+                        content.payment?.bankAccounts || DEFAULT_SITE_CONTENT.payment?.bankAccounts || [];
+                      setContent({
+                        ...content,
+                        payment: {
+                          ...(content.payment || DEFAULT_SITE_CONTENT.payment),
+                          bankAccounts: [
+                            ...current,
+                            {
+                              id: `bank-${Date.now()}`,
+                              bankName: "Nama Bank",
+                              accountNumber: "",
+                              accountHolder: "Eddy Tuasikal",
+                            },
+                          ],
+                        },
+                      });
+                    }}
+                    className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Plus className="w-3 h-3" />
+                    <span>Tambah Rekening</span>
+                  </button>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-600 dark:text-gray-400 mb-1">
+                    Instruksi Transfer di Modal Checkout
+                  </label>
+                  <input
+                    type="text"
+                    value={
+                      content.payment?.instructionNote ??
+                      DEFAULT_SITE_CONTENT.payment?.instructionNote ??
+                      ""
+                    }
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        payment: {
+                          ...(content.payment || DEFAULT_SITE_CONTENT.payment || { bankAccounts: [] }),
+                          instructionNote: e.target.value,
+                        },
+                      })
+                    }
+                    className="w-full px-3.5 py-2 rounded-xl bg-gray-50 dark:bg-black/40 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                <div className="space-y-2.5">
+                  {(
+                    content.payment?.bankAccounts ||
+                    DEFAULT_SITE_CONTENT.payment?.bankAccounts ||
+                    []
+                  ).map((bank, idx) => (
+                    <div
+                      key={bank.id || idx}
+                      className="p-3 rounded-xl bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-center"
+                    >
+                      <div className="sm:col-span-3">
+                        <input
+                          type="text"
+                          placeholder="Nama Bank (mis. SeaBank)"
+                          value={bank.bankName}
+                          onChange={(e) => {
+                            const list = [
+                              ...(content.payment?.bankAccounts ||
+                                DEFAULT_SITE_CONTENT.payment?.bankAccounts ||
+                                []),
+                            ];
+                            list[idx] = { ...list[idx], bankName: e.target.value };
+                            setContent({
+                              ...content,
+                              payment: {
+                                ...(content.payment || DEFAULT_SITE_CONTENT.payment),
+                                bankAccounts: list,
+                              },
+                            });
+                          }}
+                          className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 border border-gray-300 dark:border-white/10 text-xs font-bold text-gray-900 dark:text-white"
+                        />
+                      </div>
+                      <div className="sm:col-span-4">
+                        <input
+                          type="text"
+                          placeholder="Nomor Rekening"
+                          value={bank.accountNumber}
+                          onChange={(e) => {
+                            const list = [
+                              ...(content.payment?.bankAccounts ||
+                                DEFAULT_SITE_CONTENT.payment?.bankAccounts ||
+                                []),
+                            ];
+                            list[idx] = { ...list[idx], accountNumber: e.target.value };
+                            setContent({
+                              ...content,
+                              payment: {
+                                ...(content.payment || DEFAULT_SITE_CONTENT.payment),
+                                bankAccounts: list,
+                              },
+                            });
+                          }}
+                          className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 border border-gray-300 dark:border-white/10 text-xs font-mono text-gray-900 dark:text-white"
+                        />
+                      </div>
+                      <div className="sm:col-span-4">
+                        <input
+                          type="text"
+                          placeholder="Atas Nama"
+                          value={bank.accountHolder}
+                          onChange={(e) => {
+                            const list = [
+                              ...(content.payment?.bankAccounts ||
+                                DEFAULT_SITE_CONTENT.payment?.bankAccounts ||
+                                []),
+                            ];
+                            list[idx] = { ...list[idx], accountHolder: e.target.value };
+                            setContent({
+                              ...content,
+                              payment: {
+                                ...(content.payment || DEFAULT_SITE_CONTENT.payment),
+                                bankAccounts: list,
+                              },
+                            });
+                          }}
+                          className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 border border-gray-300 dark:border-white/10 text-xs text-gray-900 dark:text-white"
+                        />
+                      </div>
+                      <div className="sm:col-span-1 flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const list = [
+                              ...(content.payment?.bankAccounts ||
+                                DEFAULT_SITE_CONTENT.payment?.bankAccounts ||
+                                []),
+                            ];
+                            list.splice(idx, 1);
+                            setContent({
+                              ...content,
+                              payment: {
+                                ...(content.payment || DEFAULT_SITE_CONTENT.payment),
+                                bankAccounts: list,
+                              },
+                            });
+                          }}
+                          title="Hapus Rekening"
+                          className="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40 cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

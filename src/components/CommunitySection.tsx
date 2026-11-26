@@ -195,7 +195,7 @@ export default function CommunitySection({
               <div className="lg:col-span-5 space-y-6">
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 text-xs font-semibold text-zinc-200 border border-white/15 backdrop-blur-md">
                   <CalendarCheck className="w-4 h-4 text-white" />
-                  {t.community.liveBadge}
+                  {language === "en" ? t.community.liveBadge : (content?.liveBadge || t.community.liveBadge)}
                 </div>
 
                 <h3 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-snug">
@@ -210,15 +210,15 @@ export default function CommunitySection({
                 <div className="space-y-3 pt-2">
                   <div className="flex items-center gap-3 text-xs text-gray-200">
                     <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
-                    <span>{t.community.bullet1}</span>
+                    <span>{language === "en" ? t.community.bullet1 : (content?.bullet1 || t.community.bullet1)}</span>
                   </div>
                   <div className="flex items-center gap-3 text-xs text-gray-200">
                     <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
-                    <span>{t.community.bullet2}</span>
+                    <span>{language === "en" ? t.community.bullet2 : (content?.bullet2 || t.community.bullet2)}</span>
                   </div>
                   <div className="flex items-center gap-3 text-xs text-gray-200">
                     <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
-                    <span>{t.community.bullet3}</span>
+                    <span>{language === "en" ? t.community.bullet3 : (content?.bullet3 || t.community.bullet3)}</span>
                   </div>
                 </div>
 
@@ -230,11 +230,11 @@ export default function CommunitySection({
                     onClick={scrollToCourses}
                     className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-300 hover:to-yellow-400 text-black font-extrabold text-xs shadow-[0_4px_20px_rgba(245,180,50,0.35)] transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
-                    {t.community.joinBtn}
+                    {language === "en" ? t.community.joinBtn : (content?.joinBtnText || t.community.joinBtn)}
                     <ArrowRight className="w-4 h-4" />
                   </motion.a>
                   <span className="text-xs text-gray-400 font-medium text-center sm:text-left">
-                    {t.community.instantAccess}
+                    {language === "en" ? t.community.instantAccess : (content?.instantAccessText || t.community.instantAccess)}
                   </span>
                 </div>
               </div>
@@ -250,13 +250,19 @@ export default function CommunitySection({
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-bold text-white">#qna-revit-dan-koordinasi</span>
+                          <span className="text-sm font-bold text-white">
+                            {content?.chatChannel || "#qna-revit-dan-koordinasi"}
+                          </span>
                           <span className="px-2 py-0.5 rounded bg-white/20 text-white text-[10px] font-bold">LIVE</span>
                         </div>
-                        <span className="text-[11px] text-gray-400">Komunitas BIMCourse • Didampingi Instruktur Aktif</span>
+                        <span className="text-[11px] text-gray-400">
+                          {content?.chatSubtitle || "Komunitas BIMCourse • Didampingi Instruktur Aktif"}
+                        </span>
                       </div>
                     </div>
-                    <span className="text-[11px] text-gray-400 font-mono">1.240 Online</span>
+                    <span className="text-[11px] text-gray-400 font-mono">
+                      {content?.chatOnlineText || "1.240 Online"}
+                    </span>
                   </div>
 
                   {/* Simulated Chat Feed */}
@@ -264,20 +270,30 @@ export default function CommunitySection({
                     {/* Student Message */}
                     <div className="flex items-start gap-3 bg-white/[0.03] p-3.5 rounded-2xl border border-white/5">
                       <img
-                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=120&auto=format&fit=crop"
-                        alt="Student"
+                        src={
+                          content?.studentAvatar ||
+                          "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=120&auto=format&fit=crop"
+                        }
+                        alt={content?.studentName || "Student"}
                         className="w-8 h-8 rounded-full object-cover ring-2 ring-white/10 shrink-0"
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold text-gray-200">Fikri Ramadhan</span>
-                            <span className="text-[10px] text-gray-400 bg-white/10 px-1.5 py-0.5 rounded">Siswa BIMCourse</span>
+                            <span className="text-xs font-bold text-gray-200">
+                              {content?.studentName || "Fikri Ramadhan"}
+                            </span>
+                            <span className="text-[10px] text-gray-400 bg-white/10 px-1.5 py-0.5 rounded">
+                              {content?.studentBadge || "Siswa BIMCourse"}
+                            </span>
                           </div>
-                          <span className="text-[10px] text-gray-500">10:42 WIB</span>
+                          <span className="text-[10px] text-gray-500">
+                            {content?.studentTime || "10:42 WIB"}
+                          </span>
                         </div>
                         <p className="text-xs text-gray-300 mt-1 leading-relaxed">
-                          Izin bertanya Pak Hendra & Pak Budi, pas saya running Clash Detection di Navisworks untuk proyek RS 5 Lantai, pipa sprinkler banyak yang clash keras dengan balok induk struktur di koridor. Baiknya di-reroute atau minta web opening ke tim struktur?
+                          {content?.studentQuestion ||
+                            "Izin bertanya Pak Hendra & Pak Budi, pas saya running Clash Detection di Navisworks untuk proyek RS 5 Lantai, pipa sprinkler banyak yang clash keras dengan balok induk struktur di koridor. Baiknya di-reroute atau minta web opening ke tim struktur?"}
                         </p>
                       </div>
                     </div>
@@ -285,27 +301,39 @@ export default function CommunitySection({
                     {/* Instructor Reply */}
                     <div className="flex items-start gap-3 bg-white/10 p-4 rounded-2xl border border-white/15">
                       <img
-                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=120&auto=format&fit=crop"
-                        alt="Instructor Hendra"
+                        src={
+                          content?.mentorAvatar ||
+                          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=120&auto=format&fit=crop"
+                        }
+                        alt={content?.mentorName || "Instructor"}
                         className="w-9 h-9 rounded-full object-cover ring-2 ring-white shrink-0"
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold text-white">Ir. Hendra Wijaya, S.T.</span>
+                            <span className="text-xs font-bold text-white">
+                              {content?.mentorName || "Ir. Hendra Wijaya, S.T."}
+                            </span>
                             <span className="text-[10px] text-black bg-gradient-to-r from-amber-400 to-yellow-500 px-2 py-0.5 rounded-full font-bold shadow-xs">
-                              INSTRUKTUR UTAMA
+                              {content?.mentorBadgeLabel || "INSTRUKTUR UTAMA"}
                             </span>
                           </div>
-                          <span className="text-[10px] text-gray-400">10:48 WIB</span>
+                          <span className="text-[10px] text-gray-400">
+                            {content?.mentorTime || "10:48 WIB"}
+                          </span>
                         </div>
                         <p className="text-xs text-gray-200 mt-1.5 leading-relaxed">
-                          Halo Mas Fikri! Pertanyaan bagus. Di standar BEP proyek rumah sakit: jika diameter pipa &lt; 100mm dan di zona tengah bentang balok (1/3 bentang), web sleeve diperbolehkan dengan persetujuan lead struktur. Namun untuk koridor utama, rekomendasi kami adalah <span className="text-white underline font-semibold">lowering offset 150mm di bawah soffit balok</span> agar elevasi ceiling tetap rapi. File contoh potongan detail sudah saya upload di tab Family &amp; Template ya!
+                          {content?.mentorReply ||
+                            "Halo Mas Fikri! Pertanyaan bagus. Di standar BEP proyek rumah sakit: jika diameter pipa < 100mm dan di zona tengah bentang balok (1/3 bentang), web sleeve diperbolehkan dengan persetujuan lead struktur. Namun untuk koridor utama, rekomendasi kami adalah lowering offset 150mm di bawah soffit balok agar elevasi ceiling tetap rapi. File contoh potongan detail sudah saya upload di tab Family & Template ya!"}
                         </p>
-                        <div className="mt-2.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-[11px] text-zinc-300 font-mono">
-                          <FileCheck2 className="w-3.5 h-3.5" />
-                          <span>Detail_Clearance_MEP_vs_Beam_SNI.rvt (2.4 MB)</span>
-                        </div>
+                        {(content?.mentorAttachment ?? "Detail_Clearance_MEP_vs_Beam_SNI.rvt (2.4 MB)") && (
+                          <div className="mt-2.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-[11px] text-zinc-300 font-mono">
+                            <FileCheck2 className="w-3.5 h-3.5" />
+                            <span>
+                              {content?.mentorAttachment || "Detail_Clearance_MEP_vs_Beam_SNI.rvt (2.4 MB)"}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -315,15 +343,17 @@ export default function CommunitySection({
                         <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping shrink-0" />
                         <div>
                           <p className="text-xs font-bold text-white">
-                            Live Sharing: Bedah Proyek Stasiun LRT &amp; Koordinasi Tekla LOD 400
+                            {content?.liveBannerTitle ||
+                              "Live Sharing: Bedah Proyek Stasiun LRT & Koordinasi Tekla LOD 400"}
                           </p>
                           <p className="text-[10px] text-gray-300">
-                            Sabtu ini, 19:30 WIB • Bersama Budi Santoso (Principal Structural BIM)
+                            {content?.liveBannerSchedule ||
+                              "Sabtu ini, 19:30 WIB • Bersama Budi Santoso (Principal Structural BIM)"}
                           </p>
                         </div>
                       </div>
                       <span className="text-[10px] font-bold px-2.5 py-1 rounded bg-gradient-to-r from-amber-400 to-yellow-500 text-black shrink-0 shadow-xs">
-                        Khusus Member
+                        {content?.liveBannerBadge || "Khusus Member"}
                       </span>
                     </div>
                   </div>

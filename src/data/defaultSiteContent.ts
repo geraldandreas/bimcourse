@@ -112,6 +112,45 @@ export interface WebFaqItem {
   answer: string;
 }
 
+export interface WebRoadmapStep {
+  phase: string;
+  title: string;
+  description: string;
+  deliverable: string;
+}
+
+export interface WebRoadmapTrack {
+  id: string;
+  title: string;
+  subtitle: string;
+  duration: string;
+  targetRole: string;
+  salaryRange: string;
+  steps: WebRoadmapStep[];
+}
+
+export interface WebQuizBackground {
+  id: string;
+  label: string;
+  icon: string;
+}
+
+export interface WebQuizGoal {
+  id: string;
+  label: string;
+  desc: string;
+}
+
+export interface WebQuizRecommendation {
+  id: string;
+  title: string;
+  level: string;
+  match: string;
+  reason: string;
+  badge: string;
+  anchor: string;
+}
+
 export interface SiteContentConfig {
   sectionsVisibility: {
     hero: boolean;
@@ -135,6 +174,8 @@ export interface SiteContentConfig {
     statsStudents: string;
     primaryCtaText: string;
     secondaryCtaText: string;
+    videoUrl?: string;
+    posterImageUrl?: string;
   };
   features: {
     badge: string;
@@ -145,18 +186,29 @@ export interface SiteContentConfig {
     card1Desc: string;
     card1Tag1: string;
     card1Tag2: string;
+    card1ImageUrl?: string;
+    card1SoftwareTitle?: string;
+    card1SoftwareTags?: string[];
     card2Badge: string;
     card2Title: string;
     card2Desc: string;
+    card2BoxTitle?: string;
+    card2BoxBadge?: string;
     card2Step1: string;
     card2Step2: string;
     card2Step3: string;
     card3Badge: string;
     card3Title: string;
     card3Desc: string;
+    card3StatusTitle?: string;
+    card3StatusBadge?: string;
+    card3Avatar1?: string;
+    card3Avatar2?: string;
+    card3Avatar3?: string;
     card3ChatAuthor: string;
     card3ChatRole: string;
     card3ChatQuote: string;
+    card3MembersTag?: string;
     card3LinkText: string;
   };
   courses: {
@@ -169,6 +221,11 @@ export interface SiteContentConfig {
     badge: string;
     title: string;
     subtitle: string;
+    salaryLabel?: string;
+    salarySourceNote?: string;
+    ctaNote?: string;
+    ctaBtnPrefix?: string;
+    tracks?: WebRoadmapTrack[];
   };
   community: {
     badge: string;
@@ -178,6 +235,29 @@ export interface SiteContentConfig {
     mentorBadgeText: string;
     cardHeading: string;
     cardDescription: string;
+    liveBadge?: string;
+    bullet1?: string;
+    bullet2?: string;
+    bullet3?: string;
+    joinBtnText?: string;
+    instantAccessText?: string;
+    chatChannel?: string;
+    chatSubtitle?: string;
+    chatOnlineText?: string;
+    studentAvatar?: string;
+    studentName?: string;
+    studentBadge?: string;
+    studentTime?: string;
+    studentQuestion?: string;
+    mentorAvatar?: string;
+    mentorName?: string;
+    mentorBadgeLabel?: string;
+    mentorTime?: string;
+    mentorReply?: string;
+    mentorAttachment?: string;
+    liveBannerTitle?: string;
+    liveBannerSchedule?: string;
+    liveBannerBadge?: string;
     pillar1Badge: string;
     pillar1Title: string;
     pillar1Desc: string;
@@ -201,6 +281,10 @@ export interface SiteContentConfig {
     subtitle: string;
     step1Heading: string;
     step2Heading: string;
+    submitBtnText?: string;
+    backgrounds?: WebQuizBackground[];
+    goals?: WebQuizGoal[];
+    recommendations?: WebQuizRecommendation[];
   };
   testimonials: {
     badge: string;
@@ -240,6 +324,19 @@ export interface SiteContentConfig {
     address: string;
     email: string;
     phone: string;
+    popularCoursesTitle?: string;
+    popularCourses?: { label: string; href: string }[];
+    quickLinksTitle?: string;
+    quickLinks?: { label: string; href: string }[];
+  };
+  payment?: {
+    instructionNote?: string;
+    bankAccounts: {
+      id: string;
+      bankName: string;
+      accountNumber: string;
+      accountHolder: string;
+    }[];
   };
 }
 
@@ -267,6 +364,8 @@ export const DEFAULT_SITE_CONTENT: SiteContentConfig = {
     statsStudents: "18,500+ Mahasiswa & Insinyur Telah Bergabung",
     primaryCtaText: "Eksplor Semua Kelas",
     secondaryCtaText: "Tonton Video Pengenalan",
+    videoUrl: "/hero-bg.mp4",
+    posterImageUrl: "",
   },
   features: {
     badge: "Keunggulan Ekosistem BIMCourse",
@@ -279,10 +378,15 @@ export const DEFAULT_SITE_CONTENT: SiteContentConfig = {
       "Kurikulum kami mengacu langsung pada Permen PUPR No. 22/2018 dan ISO 19650. Anda tidak hanya belajar klik software, tapi memahami alur kerja tender riil.",
     card1Tag1: "ISO 19650 & Mandat PUPR",
     card1Tag2: "LOD 200 - 400",
+    card1ImageUrl: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=600&auto=format&fit=crop",
+    card1SoftwareTitle: "Stack Software Industri:",
+    card1SoftwareTags: ["Revit", "Navisworks", "Tekla", "Dynamo"],
     card2Badge: "Jalur Karier Spesifik",
     card2Title: "Your Goals, Our Support",
     card2Desc:
       "Dapatkan panduan langkah demi langkah dari pemula hingga siap lolos uji kompetensi atau promosi jabatan sebagai BIM Coordinator & Manager.",
+    card2BoxTitle: "Level Kompetensi & Progresi",
+    card2BoxBadge: "Terarah 100%",
     card2Step1: "BIM Modeler (Dasar s/d LOD 300)",
     card2Step2: "BIM Coordinator (Clash & 4D Time)",
     card2Step3: "BIM Manager (BEP & ISO 19650)",
@@ -290,10 +394,16 @@ export const DEFAULT_SITE_CONTENT: SiteContentConfig = {
     card3Title: "Terhubung Bersama Instruktur & Praktisi",
     card3Desc:
       "Tanya jawab langsung saat error modeling atau butuh review portfolio. Mentor kami adalah engineer dan arsitek aktif dari konsultan ternama.",
+    card3StatusTitle: "Instruktur Standby",
+    card3StatusBadge: "Aktif Setiap Hari",
+    card3Avatar1: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=80&auto=format&fit=crop",
+    card3Avatar2: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=80&auto=format&fit=crop",
+    card3Avatar3: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=80&auto=format&fit=crop",
     card3ChatAuthor: "Eddy Tuasikal, S.Ars",
     card3ChatRole: "Lead BIM Specialist",
     card3ChatQuote:
       "Family Revit kamu sudah rapi parameternya, tinggal perbaiki penamaan sub-kategori sesuai BEP tender.",
+    card3MembersTag: "18.500+ Member AEC",
     card3LinkText: "Gabung Komunitas",
   },
   courses: {
@@ -308,6 +418,96 @@ export const DEFAULT_SITE_CONTENT: SiteContentConfig = {
     title: "Peta Jalan Karier BIM Terstruktur",
     subtitle:
       "Jangan buang waktu belajar tanpa arah. Pilih jalur yang sesuai dengan latar belakang dan target posisi impian Anda di industri arsitektur & konstruksi.",
+    salaryLabel: "Estimasi Standar Gaji Industri",
+    salarySourceNote: "Berdasarkan survei BUMN & Konsultan AEC 2026",
+    ctaNote: "Termasuk bimbingan portfolio review 1-on-1 bersama instruktur berlisensi & simulasi tes teknis kerja.",
+    ctaBtnPrefix: "Ambil Paket",
+    tracks: [
+      {
+        id: "modeler",
+        title: "BIM Modeler Track",
+        subtitle: "Untuk Arsitek, Drafter 2D & Fresh Graduate",
+        duration: "6 - 8 Minggu",
+        targetRole: "Junior to Mid BIM Modeler (Arsitektur / Struktur / MEP)",
+        salaryRange: "Rp 6.000.000 - Rp 11.000.000 / bln",
+        steps: [
+          {
+            phase: "Tahap 1",
+            title: "Dasar Parametric 3D & Revit Fundamentals",
+            description: "Transisi dari mindset CAD 2D ke model parametrik cerdas. Menguasai grid, level, wall compound, dan standard families.",
+            deliverable: "Model Rumah Tinggal 2 Lantai (LOD 200)",
+          },
+          {
+            phase: "Tahap 2",
+            title: "Detailed Modeling & Custom Families (LOD 300)",
+            description: "Membuat elemen fasad, curtain wall, dan komponen parametrik custom dengan parameter dimensi fleksibel.",
+            deliverable: "Parametric Family Library siap pakai",
+          },
+          {
+            phase: "Tahap 3",
+            title: "DED Documentation & Automated BoQ",
+            description: "Pengaturan view templates, schedules quantity take-off, callouts, hingga penerbitan sheet DED siap konstruksi.",
+            deliverable: "Set Lengkap Dokumen DED & BoQ Volume",
+          },
+        ],
+      },
+      {
+        id: "coordinator",
+        title: "BIM Coordinator Track",
+        subtitle: "Untuk Site Engineer, Lead Drafter & Konsultan Pengawas",
+        duration: "8 - 10 Minggu",
+        targetRole: "BIM Coordinator / Multi-discipline Lead",
+        salaryRange: "Rp 12.000.000 - Rp 20.000.000 / bln",
+        steps: [
+          {
+            phase: "Tahap 1",
+            title: "Multi-Disciplinary Model Federation",
+            description: "Menggabungkan model Arsitektur, Struktur, dan MEP dalam satu koordinat georeferensi yang presisi di Navisworks & ACC.",
+            deliverable: "Federated Master Model Proyek Gedung",
+          },
+          {
+            phase: "Tahap 2",
+            title: "Clash Matrix & Resolution Management",
+            description: "Merumuskan kriteria toleransi benturan antar sistem pipa vs balok vs plafon dan menerbitkan laporan BCF ke tim kontraktor.",
+            deliverable: "Clash Report Matrix & Issue Tracker BCF",
+          },
+          {
+            phase: "Tahap 3",
+            title: "4D Schedule Integration & Constructability Review",
+            description: "Menghubungkan timeline Microsoft Project ke elemen 3D untuk simulasi tahapan kerja dan deteksi bottleneck logistik lapangan.",
+            deliverable: "Simulasi 4D TimeLiner & Presentasi Evaluasi",
+          },
+        ],
+      },
+      {
+        id: "manager",
+        title: "BIM Manager & Digital Lead",
+        subtitle: "Untuk Project Manager, Senior Architect & Principal",
+        duration: "10 - 12 Minggu",
+        targetRole: "BIM Manager / Head of Digital Engineering",
+        salaryRange: "Rp 22.000.000 - Rp 40.000.000+ / bln",
+        steps: [
+          {
+            phase: "Tahap 1",
+            title: "ISO 19650 Governance & Information Delivery",
+            description: "Menguasai siklus manajemen informasi standar internasional: OIR, AIR, PIR, dan penyusunan EIR untuk dokumen tender.",
+            deliverable: "Dokumen Template EIR Proyek Standar ISO",
+          },
+          {
+            phase: "Tahap 2",
+            title: "BEP Drafting, MIDP & Resource Allocation",
+            description: "Merancang dokumen BIM Execution Plan resmi pre & post-contract, matrix tanggung jawab RACI, dan jadwal pengiriman data MIDP.",
+            deliverable: "Dokumen Master BEP Siap Tender BUMN",
+          },
+          {
+            phase: "Tahap 3",
+            title: "CDE Architecture, Audit & As-Built Handover",
+            description: "Menyiapkan cloud infrastructure (ACC/Trimble), protokol keamanan data, proses audit kepatuhan model, dan serah terima AIM.",
+            deliverable: "CDE Deployment Plan & Audit Checklist",
+          },
+        ],
+      },
+    ],
   },
   community: {
     badge: "Ekosistem Belajar Kolaboratif",
@@ -319,6 +519,31 @@ export const DEFAULT_SITE_CONTENT: SiteContentConfig = {
     cardHeading: "Bukan Sekadar Nonton Video, Tapi Berproses Bareng Praktisinya",
     cardDescription:
       "Setiap member BIMCourse mendapatkan akses seumur hidup ke grup diskusi eksklusif bersama instruktur. Anda bisa melampirkan file .rvt, .nwc, atau .dyn untuk dibedah solusinya.",
+    liveBadge: "Live Sesi Mentoring Setiap Minggu",
+    bullet1: "Forum tanya-jawab aktif 7 hari seminggu bersama mentor & sesama praktisi",
+    bullet2: "Sesi bedah file model & konsultasi capstone sebelum diserahkan",
+    bullet3: "Jaringan alumni yang tersebar di BUMN, Konsultan Internasional, dan Kontraktor Tier-1",
+    joinBtnText: "Pilih Modul & Bergabung",
+    instantAccessText: "Akses langsung diberikan otomatis setelah registrasi kelas.",
+    chatChannel: "#qna-revit-dan-koordinasi",
+    chatSubtitle: "Komunitas BIMCourse • Didampingi Instruktur Aktif",
+    chatOnlineText: "1.240 Online",
+    studentAvatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=120&auto=format&fit=crop",
+    studentName: "Fikri Ramadhan",
+    studentBadge: "Siswa BIMCourse",
+    studentTime: "10:42 WIB",
+    studentQuestion:
+      "Izin bertanya Pak Hendra & Pak Budi, pas saya running Clash Detection di Navisworks untuk proyek RS 5 Lantai, pipa sprinkler banyak yang clash keras dengan balok induk struktur di koridor. Baiknya di-reroute atau minta web opening ke tim struktur?",
+    mentorAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=120&auto=format&fit=crop",
+    mentorName: "Ir. Hendra Wijaya, S.T.",
+    mentorBadgeLabel: "INSTRUKTUR UTAMA",
+    mentorTime: "10:48 WIB",
+    mentorReply:
+      "Halo Mas Fikri! Pertanyaan bagus. Di standar BEP proyek rumah sakit: jika diameter pipa < 100mm dan di zona tengah bentang balok (1/3 bentang), web sleeve diperbolehkan dengan persetujuan lead struktur. Namun untuk koridor utama, rekomendasi kami adalah lowering offset 150mm di bawah soffit balok agar elevasi ceiling tetap rapi. File contoh potongan detail sudah saya upload di tab Family & Template ya!",
+    mentorAttachment: "Detail_Clearance_MEP_vs_Beam_SNI.rvt (2.4 MB)",
+    liveBannerTitle: "Live Sharing: Bedah Proyek Stasiun LRT & Koordinasi Tekla LOD 400",
+    liveBannerSchedule: "Sabtu ini, 19:30 WIB • Bersama Budi Santoso (Principal Structural BIM)",
+    liveBannerBadge: "Khusus Member",
     pillar1Badge: "Q&A Tanpa Batas",
     pillar1Title: "Diskusi & Troubleshooting Kendala Modeling",
     pillar1Desc:
@@ -346,7 +571,90 @@ export const DEFAULT_SITE_CONTENT: SiteContentConfig = {
     subtitle:
       "Jawab 2 pertanyaan singkat ini. Kami rekomendasikan kelas yang paling efektif untuk target karier Anda.",
     step1Heading: "Pilih Latar Belakang / Profesi Anda Saat Ini:",
-    step2Heading: "Apa Target Utama Anda?",
+    step2Heading: "Apa Target Prioritas Anda Dalam 3 Bulan ke Depan?",
+    submitBtnText: "Lihat Rekomendasi Kelas Saya",
+    backgrounds: [
+      { id: "arch", label: "Arsitektur / Desain Interior", icon: "🏛️" },
+      { id: "civil", label: "Teknik Sipil / Struktur", icon: "🏗️" },
+      { id: "mep", label: "MEP / Mechanical Electrical", icon: "⚡" },
+      { id: "drafter", label: "Drafter AutoCAD 2D", icon: "📐" },
+      { id: "student", label: "Mahasiswa / Fresh Grad", icon: "🎓" },
+      { id: "pm", label: "Project Manager / Owner", icon: "💼" },
+    ],
+    goals: [
+      {
+        id: "job",
+        label: "Diterima Jadi BIM Modeler di BUMN/Konsultan",
+        desc: "Fokus modeling parametrik LOD 300 & DED",
+      },
+      {
+        id: "clash",
+        label: "Kuasai Clash Detection & Koordinasi",
+        desc: "Integrasi Navisworks & format BCF",
+      },
+      {
+        id: "auto",
+        label: "Otomatisasi Pekerjaan dengan Dynamo",
+        desc: "Batch parameter & generative facade",
+      },
+      {
+        id: "infra",
+        label: "BIM Proyek Jalan & Infrastruktur",
+        desc: "Civil 3D, cut & fill, dan kontur",
+      },
+      {
+        id: "iso",
+        label: "Pimpin Tender BIM & Standar ISO 19650",
+        desc: "BEP, EIR, CDE, dan audit proyek",
+      },
+    ],
+    recommendations: [
+      {
+        id: "auto",
+        title: "Dynamo Visual Programming for Revit",
+        level: "Intermediate",
+        match: "98% Sangat Cocok",
+        reason: "Sangat ideal untuk mempercepat workflow pemodelan dan eliminasi pekerjaan berulang hingga 5x lebih cepat.",
+        badge: "Otomasi Arsitek & Sipil",
+        anchor: "#courses",
+      },
+      {
+        id: "clash",
+        title: "BIM Coordination & Clash Detection Pro: Navisworks Manage",
+        level: "Intermediate",
+        match: "99% Paling Relevan",
+        reason: "Kombinasi penting untuk mengoordinasikan model multi-disiplin dan simulasi 4D jadwal proyek.",
+        badge: "BIM Coordinator Role",
+        anchor: "#courses",
+      },
+      {
+        id: "infra",
+        title: "Civil 3D & InfraWorks: Pemodelan Jalan & Earthwork Digital",
+        level: "Intermediate",
+        match: "96% Spesialisasi Sipil",
+        reason: "Wajib dimiliki untuk engineer sipil di proyek jalan tol, bendungan, dan infrastruktur strategis nasional.",
+        badge: "Civil BIM Track",
+        anchor: "#courses",
+      },
+      {
+        id: "iso",
+        title: "BIM Management Standar ISO 19650: Penyusunan BEP & CDE",
+        level: "Advanced",
+        match: "99% Management Focus",
+        reason: "Kualifikasi nomor 1 bagi Project Manager dan calon BIM Manager untuk memenangkan tender proyek pemerintah.",
+        badge: "Management Track",
+        anchor: "#courses",
+      },
+      {
+        id: "default",
+        title: "Revit Basic: Fondasi Pemodelan BIM & DED",
+        level: "Beginner",
+        match: "97% Fondasi Utama",
+        reason: "Langkah pertama terbaik untuk menguasai pondasi BIM standar industri dan membangun portofolio model siap kerja.",
+        badge: "Pondasi Utama BIM",
+        anchor: "/courses/revit-basic",
+      },
+    ],
   },
   enterprise: {
     badge: "Solusi Korporasi & Kontraktor",
@@ -379,8 +687,36 @@ export const DEFAULT_SITE_CONTENT: SiteContentConfig = {
     tagline:
       "Platform edukasi teknologi BIM terdepan di Indonesia. Berstandar ISO 19650 dan didampingi langsung oleh praktisi berpengalaman.",
     address: "Jakarta Selatan & BSD City, Indonesia",
-    email: "halo@bimcourse.id",
-    phone: "+62 821 1900 8890 (WhatsApp Student Advisor)",
+    email: "bim.courseacad@gmail.com",
+    phone: "+62 815 2417 3386 (WhatsApp Student Advisor)",
+    popularCoursesTitle: "Kelas Populer",
+    popularCourses: [
+      { label: "Revit Basic", href: "/courses/revit-basic" },
+      { label: "Semua Katalog Kelas", href: "/#courses" },
+      { label: "Roadmap Belajar BIM", href: "/#roadmaps" },
+    ],
+    quickLinksTitle: "Tautan Cepat",
+    quickLinks: [
+      { label: "Katalog Kelas", href: "/#courses" },
+      { label: "Roadmap Karier BIM", href: "/#roadmaps" },
+      { label: "Komunitas & Instruktur", href: "/#community" },
+      { label: "Portofolio Proyek", href: "/#projects" },
+      { label: "Tes Jalur BIM", href: "/#quiz" },
+      { label: "Testimoni Alumni", href: "/#testimonials" },
+      { label: "Untuk Perusahaan", href: "/#enterprise" },
+      { label: "FAQ", href: "/#faq" },
+    ],
+  },
+  payment: {
+    instructionNote: "Silakan transfer sesuai nominal kelas ke rekening tujuan di bawah ini, lalu unggah bukti transfer.",
+    bankAccounts: [
+      {
+        id: "bank-seabank",
+        bankName: "SeaBank",
+        accountNumber: "901477672201",
+        accountHolder: "Eddy Tuasikal",
+      },
+    ],
   },
   instructors: [
     {

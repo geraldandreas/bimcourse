@@ -27,6 +27,7 @@ model User {
   enrollments   Enrollment[]
   submissions   AssignmentSubmission[]
   transactions  Transaction[]
+  certificates  Certificate[]
   auditLogs     AuditLog[]
 }
 
@@ -63,6 +64,7 @@ model Course {
   enrollments   Enrollment[]
   submissions   AssignmentSubmission[]
   transactions  Transaction[]
+  certificates  Certificate[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
@@ -160,5 +162,31 @@ model Transaction {
   updatedAt       DateTime    @updatedAt
 
   @@index([userId])
+  @@index([status])
+}
+
+model Certificate {
+  id             String    @id @default(cuid())
+  certificateNo  String    @unique
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId       String
+  course         Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  studentName    String
+  studentEmail   String
+  courseTitle    String
+  instructorName String
+  ceoName        String    @default("Eddy Tuasikal, S.Ars")
+  ceoTitle       String    @default("Chief Executive Officer, BIMCourse Academy")
+  grade          String    @default("Kompeten / Lulus")
+  standards      String    @default("SKKNI BIM Level 6 • Mandat PUPR • ISO 19650")
+  issuedDate     DateTime  @default(now())
+  status         String    @default("REQUESTED") // REQUESTED, ISSUED
+  emailSentAt    DateTime?
+  notes          String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([userId, courseId])
   @@index([status])
 }

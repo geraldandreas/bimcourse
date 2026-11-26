@@ -1,16 +1,14 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   X,
   CheckCircle2,
   Copy,
   Upload,
-  QrCode,
   CreditCard,
   Building2,
-  ShieldCheck,
   ArrowRight,
   Clock,
   AlertTriangle,
@@ -18,6 +16,7 @@ import {
   Check,
 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { DEFAULT_SITE_CONTENT } from "@/data/defaultSiteContent";
 
 interface CourseCheckoutData {
   id: string;
@@ -45,18 +44,47 @@ export default function CheckoutModal({
   const router = useRouter();
   const { language } = useLanguage();
 
-  const [paymentMethod, setPaymentMethod] = useState<"QRIS" | "BANK_TRANSFER">("QRIS");
+  const paymentMethod = "BANK_TRANSFER" as const;
+  const [bankAccounts, setBankAccounts] = useState(
+    DEFAULT_SITE_CONTENT.payment?.bankAccounts || [
+      {
+        id: "bank-seabank",
+        bankName: "SeaBank",
+        accountNumber: "901477672201",
+        accountHolder: "Eddy Tuasikal",
+      },
+    ]
+  );
+  const [paymentNote, setPaymentNote] = useState(
+    DEFAULT_SITE_CONTENT.payment?.instructionNote ||
+      "Silakan transfer sesuai nominal kelas ke rekening tujuan di bawah ini, lalu unggah bukti transfer."
+  );
   const [senderName, setSenderName] = useState("");
   const [notes, setNotes] = useState("");
   const [proofFile, setProofFile] = useState<File | null>(null);
   const [proofPreview, setProofPreview] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copiedBank, setCopiedBank] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    fetch("/api/site-content")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        const pay = data?.content?.payment;
+        if (pay?.bankAccounts && Array.isArray(pay.bankAccounts) && pay.bankAccounts.length > 0) {
+          setBankAccounts(pay.bankAccounts);
+        }
+        if (pay?.instructionNote) {
+          setPaymentNote(pay.instructionNote);
+        }
+      })
+      .catch(() => {});
+  }, [isOpen]);
 
   if (!isOpen || !course) return null;
 
@@ -252,122 +280,64 @@ export default function CheckoutModal({
                 </div>
               </div>
 
-              {/* 2. Payment Method Switcher */}
-              <div>
-                <label className="block text-xs font-bold text-zinc-300 mb-2.5">
-                  Pilih Metode Pembayaran:
-                </label>
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("QRIS")}
-                    className={`p-3.5 rounded-2xl border text-left transition-all flex items-center gap-3 cursor-pointer ${
-                      paymentMethod === "QRIS"
-                        ? "bg-white/15 border-white text-white shadow-md ring-1 ring-white/30"
-                        : "bg-white/5 border-white/10 text-zinc-400 hover:bg-white/10 hover:text-white"
-                    }`}
-                  >
-                    <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                      <QrCode className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold">QRIS Instant</p>
-                      <p className="text-[10px] text-zinc-400">Semua E-Wallet & Bank</p>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("BANK_TRANSFER")}
-                    className={`p-3.5 rounded-2xl border text-left transition-all flex items-center gap-3 cursor-pointer ${
-                      paymentMethod === "BANK_TRANSFER"
-                        ? "bg-white/15 border-white text-white shadow-md ring-1 ring-white/30"
-                        : "bg-white/5 border-white/10 text-zinc-400 hover:bg-white/10 hover:text-white"
-                    }`}
-                  >
-                    <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+              {/* 2. Metode Pembayaran (Transfer Bank) */}
+              <div className="space-y-3">
+                <div className="p-3.5 rounded-2xl bg-white/10 border border-white/25 text-left flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
                       <Building2 className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <p className="text-xs font-bold">Transfer Bank</p>
-                      <p className="text-[10px] text-zinc-400">BCA & Mandiri Manual</p>
+                      <p className="text-xs font-bold text-white">Transfer Bank</p>
+                      <p className="text-[11px] text-zinc-400">
+                        {bankAccounts.map((b) => b.bankName).join(" / ")}
+                      </p>
                     </div>
-                  </button>
+                  </div>
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                    Aktif
+                  </span>
+                </div>
+
+                {/* 3. Rekening Tujuan Pembayaran */}
+                <div className="p-4 rounded-2xl bg-[#16181f] border border-white/10 space-y-3">
+                  <div>
+                    <p className="text-xs font-bold text-zinc-200">Rekening Tujuan Pembayaran:</p>
+                    {paymentNote && (
+                      <p className="text-[11px] text-zinc-400 mt-0.5">{paymentNote}</p>
+                    )}
+                  </div>
+
+                  {bankAccounts.map((bank) => (
+                    <div
+                      key={bank.id}
+                      className="p-3.5 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between gap-3"
+                    >
+                      <div>
+                        <p className="text-xs font-bold text-white">{bank.bankName}</p>
+                        <p className="text-base font-mono font-bold text-emerald-400 mt-0.5 tracking-wide">
+                          {bank.accountNumber}
+                        </p>
+                        <p className="text-[11px] text-zinc-300 mt-0.5">
+                          a.n. {bank.accountHolder}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => copyToClipboard(bank.accountNumber, bank.id)}
+                        className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
+                      >
+                        {copiedBank === bank.id ? (
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        ) : (
+                          <Copy className="w-3.5 h-3.5" />
+                        )}
+                        <span>{copiedBank === bank.id ? "Disalin!" : "Salin"}</span>
+                      </button>
+                    </div>
+                  ))}
                 </div>
               </div>
-
-              {/* 3. Payment Instructions (QRIS / Bank) */}
-              {paymentMethod === "QRIS" ? (
-                <div className="p-5 rounded-2xl bg-[#16181f] border border-white/10 text-center space-y-4">
-                  <div className="flex items-center justify-center gap-2">
-                    <span className="text-[10px] font-mono font-bold tracking-widest px-2.5 py-0.5 rounded bg-rose-600/20 text-rose-300 border border-rose-500/30">
-                      QRIS NASIONAL
-                    </span>
-                    <span className="text-[10px] text-zinc-400 font-mono">NMID: ID102938192839</span>
-                  </div>
-
-                  {/* QRIS Code Graphic */}
-                  <div className="w-48 h-48 bg-white p-3 rounded-2xl mx-auto shadow-xl flex flex-col items-center justify-center relative">
-                    <img
-                      src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BIMCourse-Payment-CourseID"
-                      alt="QRIS BIMCourse"
-                      className="w-full h-full object-contain"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <div className="px-2 py-1 rounded bg-black/85 text-[9px] font-bold font-mono tracking-wider text-white border border-white/20">
-                        BIMCOURSE
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="text-xs font-bold text-white">
-                      Total Tagihan: <span className="text-emerald-400 font-mono">Rp {course.price.toLocaleString("id-ID")}</span>
-                    </p>
-                    <p className="text-[11px] text-zinc-400 mt-1 max-w-sm mx-auto">
-                      Scan kode QRIS di atas menggunakan GoPay, OVO, Dana, ShopeePay, BCA Mobile, Livin' Mandiri, BRImo, atau aplikasi perbankan lainnya.
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="p-4 rounded-2xl bg-[#16181f] border border-white/10 space-y-3">
-                  <p className="text-xs font-bold text-zinc-300">Rekening Tujuan Pembayaran:</p>
-
-                  {/* BCA */}
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-bold text-white">Bank Central Asia (BCA)</p>
-                      <p className="text-sm font-mono font-bold text-emerald-400 mt-0.5">8040-1289-9182</p>
-                      <p className="text-[10px] text-zinc-400">a.n. PT BIMCOURSE TEKNOLOGI INDONESIA</p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => copyToClipboard("804012899182", "BCA")}
-                      className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer"
-                    >
-                      {copiedBank === "BCA" ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                      <span>{copiedBank === "BCA" ? "Disalin!" : "Salin"}</span>
-                    </button>
-                  </div>
-
-                  {/* Mandiri */}
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-bold text-white">Bank Mandiri</p>
-                      <p className="text-sm font-mono font-bold text-emerald-400 mt-0.5">137-00-2918291-2</p>
-                      <p className="text-[10px] text-zinc-400">a.n. PT BIMCOURSE TEKNOLOGI INDONESIA</p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => copyToClipboard("1370029182912", "MANDIRI")}
-                      className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer"
-                    >
-                      {copiedBank === "MANDIRI" ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                      <span>{copiedBank === "MANDIRI" ? "Disalin!" : "Salin"}</span>
-                    </button>
-                  </div>
-                </div>
-              )}
 
               {/* 4. Form Upload Bukti Transfer */}
               <div className="space-y-4 pt-2 border-t border-white/10">

@@ -153,6 +153,7 @@ export interface CurriculumModule {
   title: string;
   duration: string;
   summary: string;
+  isFinalModule?: boolean;
   sections: CurriculumSection[];
 }
 

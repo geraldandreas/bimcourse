@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { getSession, isAuthorized } from "@/lib/auth";
 import { BIM_MODULES } from "@/data/bimDocCurriculum";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);

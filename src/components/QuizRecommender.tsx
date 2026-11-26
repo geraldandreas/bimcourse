@@ -5,7 +5,7 @@ import { ArrowRight, RotateCcw, CheckCircle, Tag } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeIn } from "@/components/animations/MotionWrappers";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
-import { SiteContentConfig } from "@/data/defaultSiteContent";
+import { DEFAULT_SITE_CONTENT, SiteContentConfig } from "@/data/defaultSiteContent";
 
 interface QuizRecommenderProps {
   content?: SiteContentConfig["quiz"];
@@ -17,93 +17,76 @@ export default function QuizRecommender({ content }: QuizRecommenderProps) {
   const [goal, setGoal] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
-  const backgrounds = [
-    { id: "arch", label: language === "en" ? "Architecture / Interior Design" : "Arsitektur / Desain Interior", icon: "🏛️" },
-    { id: "civil", label: language === "en" ? "Civil Engineering / Structure" : "Teknik Sipil / Struktur", icon: "🏗️" },
-    { id: "mep", label: language === "en" ? "MEP / Mechanical Electrical" : "MEP / Mechanical Electrical", icon: "⚡" },
-    { id: "drafter", label: language === "en" ? "AutoCAD 2D Drafter" : "Drafter AutoCAD 2D", icon: "📐" },
-    { id: "student", label: language === "en" ? "Student / Fresh Graduate" : "Mahasiswa / Fresh Grad", icon: "🎓" },
-    { id: "pm", label: language === "en" ? "Project Manager / Owner" : "Project Manager / Owner", icon: "💼" },
-  ];
+  const backgrounds =
+    language !== "en" && content?.backgrounds && content.backgrounds.length > 0
+      ? content.backgrounds
+      : [
+          { id: "arch", label: language === "en" ? "Architecture / Interior Design" : "Arsitektur / Desain Interior", icon: "🏛️" },
+          { id: "civil", label: language === "en" ? "Civil Engineering / Structure" : "Teknik Sipil / Struktur", icon: "🏗️" },
+          { id: "mep", label: language === "en" ? "MEP / Mechanical Electrical" : "MEP / Mechanical Electrical", icon: "⚡" },
+          { id: "drafter", label: language === "en" ? "AutoCAD 2D Drafter" : "Drafter AutoCAD 2D", icon: "📐" },
+          { id: "student", label: language === "en" ? "Student / Fresh Graduate" : "Mahasiswa / Fresh Grad", icon: "🎓" },
+          { id: "pm", label: language === "en" ? "Project Manager / Owner" : "Project Manager / Owner", icon: "💼" },
+        ];
 
-  const goals = [
-    {
-      id: "job",
-      label: language === "en" ? "Become a BIM Modeler in Top AEC Firms" : "Diterima Jadi BIM Modeler di BUMN/Konsultan",
-      desc: language === "en" ? "Focus on parametric modeling LOD 300 & DED" : "Fokus modeling parametrik LOD 300 & DED",
-    },
-    {
-      id: "clash",
-      label: language === "en" ? "Master Clash Detection & Coordination" : "Kuasai Clash Detection & Koordinasi",
-      desc: language === "en" ? "Navisworks & BCF integration" : "Integrasi Navisworks & format BCF",
-    },
-    {
-      id: "auto",
-      label: language === "en" ? "Workflow Automation with Dynamo" : "Otomatisasi Pekerjaan dengan Dynamo",
-      desc: language === "en" ? "Batch parameters & generative facade" : "Batch parameter & generative facade",
-    },
-    {
-      id: "infra",
-      label: language === "en" ? "Roads & Infrastructure BIM" : "BIM Proyek Jalan & Infrastruktur",
-      desc: language === "en" ? "Civil 3D, cut & fill, and terrain" : "Civil 3D, cut & fill, dan kontur",
-    },
-    {
-      id: "iso",
-      label: language === "en" ? "Lead BIM Tenders & ISO 19650" : "Pimpin Tender BIM & Standar ISO 19650",
-      desc: language === "en" ? "BEP, EIR, CDE, and project audit" : "BEP, EIR, CDE, dan audit proyek",
-    },
-  ];
+  const goals =
+    language !== "en" && content?.goals && content.goals.length > 0
+      ? content.goals
+      : [
+          {
+            id: "job",
+            label: language === "en" ? "Become a BIM Modeler in Top AEC Firms" : "Diterima Jadi BIM Modeler di BUMN/Konsultan",
+            desc: language === "en" ? "Focus on parametric modeling LOD 300 & DED" : "Fokus modeling parametrik LOD 300 & DED",
+          },
+          {
+            id: "clash",
+            label: language === "en" ? "Master Clash Detection & Coordination" : "Kuasai Clash Detection & Koordinasi",
+            desc: language === "en" ? "Navisworks & BCF integration" : "Integrasi Navisworks & format BCF",
+          },
+          {
+            id: "auto",
+            label: language === "en" ? "Workflow Automation with Dynamo" : "Otomatisasi Pekerjaan dengan Dynamo",
+            desc: language === "en" ? "Batch parameters & generative facade" : "Batch parameter & generative facade",
+          },
+          {
+            id: "infra",
+            label: language === "en" ? "Roads & Infrastructure BIM" : "BIM Proyek Jalan & Infrastruktur",
+            desc: language === "en" ? "Civil 3D, cut & fill, and terrain" : "Civil 3D, cut & fill, dan kontur",
+          },
+          {
+            id: "iso",
+            label: language === "en" ? "Lead BIM Tenders & ISO 19650" : "Pimpin Tender BIM & Standar ISO 19650",
+            desc: language === "en" ? "BEP, EIR, CDE, and project audit" : "BEP, EIR, CDE, dan audit proyek",
+          },
+        ];
+
+  const recs =
+    content?.recommendations && content.recommendations.length > 0
+      ? content.recommendations
+      : DEFAULT_SITE_CONTENT.quiz.recommendations || [];
 
   const getRecommendation = () => {
-    if (goal === "auto") {
-      return {
-        title: "Dynamo Visual Programming for Revit",
-        level: "Intermediate",
-        match: "98% Sangat Cocok",
-        reason: "Sangat ideal untuk mempercepat workflow pemodelan dan eliminasi pekerjaan berulang hingga 5x lebih cepat.",
-        badge: "Otomasi Arsitek & Sipil",
-        anchor: "#courses",
-      };
-    }
-    if (goal === "clash") {
-      return {
-        title: "BIM Coordination & Clash Detection Pro: Navisworks Manage",
-        level: "Intermediate",
-        match: "99% Paling Relevan",
-        reason: "Kombinasi penting untuk mengoordinasikan model multi-disiplin dan simulasi 4D jadwal proyek.",
-        badge: "BIM Coordinator Role",
-        anchor: "#courses",
-      };
-    }
-    if (goal === "infra" || (background === "civil" && goal === "job")) {
-      return {
-        title: "Civil 3D & InfraWorks: Pemodelan Jalan & Earthwork Digital",
-        level: "Intermediate",
-        match: "96% Spesialisasi Sipil",
-        reason: "Wajib dimiliki untuk engineer sipil di proyek jalan tol, bendungan, dan infrastruktur strategis nasional.",
-        badge: "Civil BIM Track",
-        anchor: "#courses",
-      };
-    }
-    if (goal === "iso" || background === "pm") {
-      return {
-        title: "BIM Management Standar ISO 19650: Penyusunan BEP & CDE",
-        level: "Advanced",
-        match: "99% Management Focus",
-        reason: "Kualifikasi nomor 1 bagi Project Manager dan calon BIM Manager untuk memenangkan tender proyek pemerintah.",
-        badge: "Management Track",
-        anchor: "#courses",
-      };
-    }
+    const findRec = (id: string) => recs.find((r) => r.id === id);
 
-    return {
-      title: "Mastering Revit Architecture: Dari Desain ke DED & BoQ",
-      level: "Beginner",
-      match: "97% Fondasi Utama",
-      reason: "Langkah pertama terbaik untuk menguasai pondasi BIM standar industri dan membangun portofolio model siap kerja.",
-      badge: "Pondasi Utama BIM",
-      anchor: "#courses",
-    };
+    if (goal === "auto" && findRec("auto")) return findRec("auto")!;
+    if (goal === "clash" && findRec("clash")) return findRec("clash")!;
+    if ((goal === "infra" || (background === "civil" && goal === "job")) && findRec("infra"))
+      return findRec("infra")!;
+    if ((goal === "iso" || background === "pm") && findRec("iso")) return findRec("iso")!;
+
+    return (
+      findRec("default") ||
+      recs[0] || {
+        id: "default",
+        title: "Revit Basic: Fondasi Pemodelan BIM & DED",
+        level: "Beginner",
+        match: "97% Fondasi Utama",
+        reason:
+          "Langkah pertama terbaik untuk menguasai pondasi BIM standar industri dan membangun portofolio model siap kerja.",
+        badge: "Pondasi Utama BIM",
+        anchor: "/courses/revit-basic",
+      }
+    );
   };
 
   const recommendation = getRecommendation();
@@ -230,7 +213,7 @@ export default function QuizRecommender({ content }: QuizRecommenderProps) {
                           : "bg-white/10 text-gray-500 cursor-not-allowed"
                       }`}
                     >
-                      {language === "en" ? "View My Recommended Course" : "Lihat Rekomendasi Kelas Saya"}
+                      {language === "en" ? "View My Recommended Course" : (content?.submitBtnText || "Lihat Rekomendasi Kelas Saya")}
                       <ArrowRight className="w-4 h-4" />
                     </motion.button>
                   </div>

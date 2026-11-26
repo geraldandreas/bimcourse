@@ -26,7 +26,7 @@ export default function FaqSection({
     setOpenIdx(openIdx === idx ? null : idx);
   };
 
-  const items = content?.items && content.items.length > 0
+  const items = Array.isArray(content?.items)
     ? content.items
     : DEFAULT_SITE_CONTENT.faq.items;
 
